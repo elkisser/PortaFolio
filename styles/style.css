@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins";
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Asegura que el nav esté por encima del contenido */
+}
+
+.nav ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+.nav ul li {
+    display: inline;
+}
+
+
+.nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    position: relative; /* Necesario para posicionar la barra */
+}
+
+.nav ul li a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s ease; /* Animación de la barra */
+}
+
+.nav ul li a:hover::after, .nav ul li a.active::after {
+    width: calc(100% - 40px); /* Ancho de la barra (ancho del enlace menos padding) */
+}
+
+/* -----------MAIN----------- */
+
+/* ---INICIO---*/
+main {
+    margin: 0;
+    padding-top: 100px;
+    background-color: #333;
+}
+
+/* Estilos para la barrita de tipeo */
+#cursor,
+#cursor2 {
+    opacity: 1;
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+    50% {
+        opacity: 0;
+    }
+}
+
+.inicio {
+    background-color: #333; /* Color de fondo deseado */
+    color: white; /* Color de texto para contrastar con el fondo oscuro */
+    padding: 20px; /* Añade relleno alrededor del contenido */
+    margin: 0;
+
+}
+
+.home {
+    max-width: 800px; /* Ancho máximo del contenido */
+    margin: 0 auto; /* Centrar horizontalmente */
+    text-align: center; /* Centrar el texto */
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+/* Estilos para la imagen perfil */
+.perfil {
+    float: right; /* Flotar a la izquierda para colocarla al lado */
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+    margin-bottom: 20px; /* Espacio inferior entre la imagen y la descripción */
+    width: 200px; /* Ancho deseado para la imagen */
+    height: 200px; /* Altura deseada para la imagen */
+}
+
+.ini {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
+    padding-top: 150px;
+    margin-left: 100px;
+}
+
+.perfil img {
+    width: 500px; /* Asegura que la imagen ocupe todo el espacio del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina el espacio adicional debajo de la imagen */
+    position: relative;
+    bottom: 380px;
+    filter: grayscale(100%);
+    opacity: 80%;
+}
+
+/* Estilos para el párrafo dentro del div "home" */
+.home_p {
+    position: relative;
+    float: left;
+    right: 300px;
+    font-size: 30px;
+    margin-bottom: 0; /* Espacio inferior entre párrafos */
+}
+
+.boton-descarga {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    text-align: center; /* Centra el contenido horizontalmente */
+    margin-top: 20px; /* Espacio superior para separar del contenido anterior */
+}
+
+.boton {
+    display: inline-block;
+    padding: 10px 20px;
+    float: left;
+    position: relative;
+    right: 200px;
+    border: 2px solid #ffe600; /* Borde del botón */
+    color: #ffe600; /* Color del texto */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s; /* Transición suave */
+}
+
+.boton:hover {
+    border: 2px solid #fdf28b; /* Color de fondo al pasar el mouse */
+    color: #fdf28b; /* Cambia el color del texto */
+    transition: 2s;
+}
+
+.home h2 {
+    position: relative;  
+    float: left;
+    top: 450px;     
+    color: white;
+    right: 270px;
+    font-size: 25px;
+}
+
+/* Estilos para la sección de descripción */
+.descripcion {
+    color: white;
+    padding-top: 500px;
+    text-align: justify; /* Alinea el texto justificado */
+    line-height: 1.6; /* Espaciado de línea */
+}
+/* ---INICIO---*/
+
+/* ---HABILIDADES--- */
+.habilidades {
+    padding-top: 250px;
+}
+
+/* Estilos para las categorías y el menú desplegable */
+.category {
+    background-color: #f8f9fa; /* Color de fondo */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    cursor: pointer; /* Cambia el cursor al hacer hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
+}
+
+.category:hover {
+    background-color: #e9ecef; /* Cambia el color de fondo al hacer hover */
+    transform: translateY(-3px); /* Eleva ligeramente el elemento */
+}
+
+.category h2 {
+    margin: 0; /* Eliminar margen por defecto del h2 */
+    cursor: pointer; /* Cambiar cursor a pointer para indicar que es clickeable */
+}
+
+
+.category h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #333; /* Color de texto */
+}
+
+.habilidades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Columnas adaptables */
+    gap: 20px; /* Espacio entre las categorías */
+}
+
+/* Estilos para la lista de habilidades */
+.lista_habilidades {
+    display: none; /* Oculta la lista de habilidades inicialmente */
+    padding: 10px 0; /* Espaciado interno arriba y abajo */
+    text-align: center; /* Centra el contenido */
+}
+
+.lista_habilidades.show {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; /* Centra verticalmente */
+}
+
+.lista_habilidades img {
+    width: auto; /* Ancho fijo para las imágenes */
+    height: auto; /* Altura automática para mantener la proporción */
+    margin: 10px;
+    transition: transform 0.3s ease; /* Transición suave */
+}
+
+.lista_habilidades img:hover {
+    transform: scale(1.1); /* Efecto de escala al hacer hover */
+}
+/* ---HABILIDADES--- */
+
+/* -----------MAIN----------- */
