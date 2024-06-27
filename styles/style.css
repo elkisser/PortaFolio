@@ -226,6 +226,8 @@ main {
 
 .habilidad:hover {
     transform: translateY(-5px);
+    background-color: #3c3e57;
+    transition: 1s;
 }
 
 .habilidad img {
