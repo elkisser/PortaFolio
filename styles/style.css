@@ -1,3 +1,5 @@
+/* PALETA DE COLORES: https://paletadecolores.com.ar/paleta/3c3e57/2d2e41/1e1f2b/0f0f16/000000/ */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 * {
@@ -7,7 +9,7 @@
 }
 
 header {
-    background-color: #333;
+    background-color: #0f0f16;
     color: #fff;
     padding: 10px 0;
     position: fixed;
@@ -57,7 +59,7 @@ header {
 main {
     margin: 0;
     padding-top: 100px;
-    background-color: #333;
+    background-color: #0f0f16;
 }
 
 /* Estilos para la barrita de tipeo */
@@ -74,47 +76,25 @@ main {
 }
 
 .inicio {
-    background-color: #333; /* Color de fondo deseado */
     color: white; /* Color de texto para contrastar con el fondo oscuro */
     padding: 20px; /* Añade relleno alrededor del contenido */
     margin: 0;
+}
 
+#nombre {
+    color: #ffe600;
 }
 
 .home {
-    max-width: 800px; /* Ancho máximo del contenido */
-    margin: 0 auto; /* Centrar horizontalmente */
-    text-align: center; /* Centrar el texto */
-    padding: 20px;
-    padding-bottom: 100px;
-}
-
-/* Estilos para la imagen perfil */
-.perfil {
-    float: right; /* Flotar a la izquierda para colocarla al lado */
-    margin-right: 20px; /* Espacio entre la imagen y el texto */
-    margin-bottom: 20px; /* Espacio inferior entre la imagen y la descripción */
-    width: 200px; /* Ancho deseado para la imagen */
-    height: 200px; /* Altura deseada para la imagen */
-}
-
-.ini {
-    flex: 1;
+    background-color: #0f0f16;
+    min-height: 100vh;
+    text-align: center;
     display: flex;
-    flex-direction: column; /* Alinea los elementos en columna */
-    align-items: flex-start; /* Alinea los elementos a la izquierda */
-    padding-top: 150px;
-    margin-left: 100px;
-}
-
-.perfil img {
-    width: 500px; /* Asegura que la imagen ocupe todo el espacio del contenedor */
-    height: auto; /* Mantiene la proporción de la imagen */
-    display: block; /* Elimina el espacio adicional debajo de la imagen */
-    position: relative;
-    bottom: 380px;
-    filter: grayscale(100%);
-    opacity: 80%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra por debajo */
 }
 
 /* Estilos para el párrafo dentro del div "home" */
@@ -124,6 +104,35 @@ main {
     right: 300px;
     font-size: 30px;
     margin-bottom: 0; /* Espacio inferior entre párrafos */
+}
+
+/* Estilos para la imagen perfil */
+.ini {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
+    padding-top: 20px;
+    margin-left: 100px;
+}
+
+.perfil {
+    float: right; /* Flotar a la izquierda para colocarla al lado */
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+    margin-bottom: 20px; /* Espacio inferior entre la imagen y la descripción */
+    width: 200px; /* Ancho deseado para la imagen */
+    height: 200px; /* Altura deseada para la imagen */
+}
+
+.perfil img {
+    width: 650px; /* Asegura que la imagen ocupe todo el espacio del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    display: block; /* Elimina el espacio adicional debajo de la imagen */
+    position: relative;
+    bottom: 500px;
+    left: 20px;
+    filter: grayscale(100%);
+    opacity: 70%;
 }
 
 .boton-descarga {
@@ -152,88 +161,128 @@ main {
     transition: 2s;
 }
 
-.home h2 {
-    position: relative;  
-    float: left;
-    top: 450px;     
-    color: white;
-    right: 270px;
-    font-size: 25px;
-}
-
 /* Estilos para la sección de descripción */
 .descripcion {
-    color: white;
-    padding-top: 500px;
-    text-align: justify; /* Alinea el texto justificado */
-    line-height: 1.6; /* Espaciado de línea */
+    padding: 20px;
+    padding-bottom: 100px;
+    text-align: justify;
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
 }
+
 /* ---INICIO---*/
 
 /* ---HABILIDADES--- */
-.habilidades {
-    padding-top: 250px;
-}
-
-/* Estilos para las categorías y el menú desplegable */
-.category {
-    background-color: #f8f9fa; /* Color de fondo */
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    cursor: pointer; /* Cambia el cursor al hacer hover */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transiciones suaves */
-}
-
-.category:hover {
-    background-color: #e9ecef; /* Cambia el color de fondo al hacer hover */
-    transform: translateY(-3px); /* Eleva ligeramente el elemento */
-}
-
-.category h2 {
-    margin: 0; /* Eliminar margen por defecto del h2 */
-    cursor: pointer; /* Cambiar cursor a pointer para indicar que es clickeable */
-}
-
-
-.category h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
+.skills {
+    background-color: #252530;
+    min-height: 100vh;
+    padding: 50px 20px;
     text-align: center;
-    color: #333; /* Color de texto */
+    color: #fff;
+}
+
+.sobre_mi h2 {
+    padding-top: 100px;
+    position: relative;
+    right: 430px;
+    top: 20px;
+    color: #fff;
+    font-size: 25px;
+    margin-top: 20px;
 }
 
 .habilidades {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Columnas adaptables */
-    gap: 20px; /* Espacio entre las categorías */
-}
-
-/* Estilos para la lista de habilidades */
-.lista_habilidades {
-    display: none; /* Oculta la lista de habilidades inicialmente */
-    padding: 10px 0; /* Espaciado interno arriba y abajo */
-    text-align: center; /* Centra el contenido */
-}
-
-.lista_habilidades.show {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    align-items: center; /* Centra verticalmente */
 }
 
-.lista_habilidades img {
-    width: auto; /* Ancho fijo para las imágenes */
-    height: auto; /* Altura automática para mantener la proporción */
-    margin: 10px;
-    transition: transform 0.3s ease; /* Transición suave */
+.h2_habilidades {
+    font-size: 45px;
+    color: #fff;
+    text-align: center;
 }
 
-.lista_habilidades img:hover {
-    transform: scale(1.1); /* Efecto de escala al hacer hover */
+.category {
+    max-width: 800px;
+    width: 100%;
+}
+
+.lista_habilidades {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 20px;
+    padding-bottom: 50px;
+}
+
+.habilidad {
+    background-color: #1e1f2b;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.habilidad:hover {
+    transform: translateY(-5px);
+}
+
+.habilidad img {
+    width: auto; /* Tamaño deseado para las imágenes */
+    height: auto; /* Ajusta según sea necesario */
+    margin: 30px 10px 30px 10px;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .lista_habilidades {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .lista_habilidades {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .habilidad img {
+        width: 80px; /* Ajusta el tamaño de las imágenes en pantallas más pequeñas */
+        height: 80px; /* Ajusta el tamaño de las imágenes en pantallas más pequeñas */
+    }
 }
 /* ---HABILIDADES--- */
+
+/* ---EXPERIENCIA--- */
+.experiencia {
+    background-color: #1e1f2b;
+    min-height: 100vh;
+    padding: 50px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+/* ---EXPERIENCIA--- */
+
+/* ---RESEÑAS--- */
+    /*background-color: #0f0f16
+/* ---RESEÑAS--- */
+
+/* ---CONTACTO--- */
+.contacto {
+    background-color: #1e1f2b;
+    min-height: 100vh;
+    padding: 50px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+/* ---CONTACTO--- */
 
 /* -----------MAIN----------- */
