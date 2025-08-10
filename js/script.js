@@ -531,26 +531,26 @@ function initCustomCursor() {
 function initDownloadButtonAnimation() {
     const downloadBtn = document.querySelector('.btn.primary.download');
     if (!downloadBtn) return;
-    
+
     // Añadir efecto de hover para simular carga
     downloadBtn.addEventListener('mouseenter', () => {
         downloadBtn.classList.add('hover-animation');
     });
-    
+
     downloadBtn.addEventListener('mouseleave', () => {
         downloadBtn.classList.remove('hover-animation');
     });
-    
+
     // Animación de descarga al hacer clic
-    downloadBtn.addEventListener('click', (e) => {
+    downloadBtn.addEventListener('click', function(e) {
         // Prevenir la descarga inmediata para mostrar la animación
         if (!downloadBtn.classList.contains('downloading')) {
             e.preventDefault();
-            
+
             // Añadir clase para iniciar animación
             downloadBtn.classList.add('downloading');
             downloadBtn.setAttribute('disabled', 'true');
-            
+
             // Simular progreso de descarga
             let progress = 0;
             const interval = setInterval(() => {
@@ -559,18 +559,30 @@ function initDownloadButtonAnimation() {
                     clearInterval(interval);
                     downloadBtn.classList.remove('downloading');
                     downloadBtn.classList.add('downloaded');
-                    
+
                     // Después de completar la animación, permitir la descarga real
                     setTimeout(() => {
-                        downloadBtn.classList.remove('downloaded');
-                        downloadBtn.removeAttribute('disabled');
-                        
-                        // Iniciar la descarga real
+                        // Descargar el archivo usando un enlace temporal
                         const originalHref = downloadBtn.getAttribute('href');
+                        const originalDownload = downloadBtn.getAttribute('download');
                         if (originalHref) {
-                            window.location.href = originalHref;
+                            const tempLink = document.createElement('a');
+                            tempLink.href = originalHref;
+                            if (originalDownload !== null) {
+                                tempLink.setAttribute('download', originalDownload);
+                            } else {
+                                tempLink.setAttribute('download', '');
+                            }
+                            document.body.appendChild(tempLink);
+                            tempLink.click();
+                            document.body.removeChild(tempLink);
                         }
-                    }, 1000);
+                        // Suavizar la transición de color verde
+                        setTimeout(() => {
+                            downloadBtn.classList.remove('downloaded');
+                            downloadBtn.removeAttribute('disabled');
+                        }, 1200);
+                    }, 900);
                 }
             }, 50);
         }
