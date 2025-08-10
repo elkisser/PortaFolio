@@ -335,10 +335,9 @@ function setupWhatsappForm() {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
         const nombre = document.getElementById("nombreContacto").value.trim();
-        const email = document.getElementById("emailContacto").value.trim();
         const mensaje = document.getElementById("mensajeContacto").value.trim();
 
-        if (!nombre || !email || !mensaje) {
+        if (!nombre || !mensaje) {
             // Resaltar campos vacíos
             formInputs.forEach(input => {
                 if (!input.value.trim()) {
@@ -359,7 +358,7 @@ function setupWhatsappForm() {
         // Simular un pequeño retraso para mostrar la animación
         setTimeout(() => {
             // Construimos mensaje y abrimos WhatsApp
-            const msg = `Hola, soy ${nombre} (${email}).\n\n${mensaje}`;
+            const msg = `Hola, soy ${nombre} \n\n${mensaje}`;
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
             window.open(url, "_blank", "noopener");
             
