@@ -1,129 +1,351 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Portfolio — Sebastián Kisser</title>
+    <link rel="icon" href="./img/favicon.ico" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- estilos -->
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- script principal (deferred) -->
     <script src="./js/script.js" defer></script>
-    <title>PortFolio - Sebastián Kisser</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="nav">
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#proyectos">Proyectos</a></li>
-                    <li><a href="#habilidades">Habilidades</a></li>
-                    <li><a href="#experiencia">Experiencia</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
-            </div>
+    <!-- Custom cursor element -->
+    <div class="custom-cursor">
+        <div class="cursor-inner"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="nav container">
+            <a class="brand" href="#inicio">Sebastián Kisser</a>
+            <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+                <span class="menu-icon"></span>
+            </button>
+            <ul id="nav-list" class="nav-list">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#habilidades" class="nav-link">Habilidades</a></li>
+                <li><a href="#proyectos" class="nav-link">Proyectos</a></li>
+                <li><a href="#experiencia" class="nav-link">Experiencia</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
         </nav>
     </header>
 
-    <main id="inicio">
-        <div class="home">
-            <div class="inicio">
-                <section class="ini">
-                    <p class="home_p">Hola, soy <b id="nombre"></b><span id="cursor">|</span></p>
-                    <p class="home_p" style="font-size: 20px;">y soy <b id="rol"></b><span id="cursor2">|</span></p>
-                </section>
+    <main>
+        <!-- INICIO -->
+        <section id="inicio" class="home section fullpage-section">
+            <div class="home-inner container">
+                <div class="home-left reveal-left">
+                    <p class="home_sub">Hola, soy</p>
+                    <h1 class="home_title">
+                        <span id="nombre" class="typing-target"></span><span class="caret" id="cursor">|</span>
+                    </h1>
+                    <h2 class="home_role">
+                        <span class="home_sub">y soy</span>
+                        <span id="rol" class="typing-target small"></span><span class="caret" id="cursor2">|</span>
+                    </h2>
 
-                <section class="boton-descarga">
-                    <a href="./documentos/CV SEBASTIAN KISSER.pdf" download class="boton">Descargar CV</a>
-                </section>
-                    
-                <section class="perfil">
-                    <img src="./img/foto_perfil.png" alt="Foto PortFolio">
-                </section>
+                    <div class="home-cta">
+                        <a class="btn primary download" href="./documentos/CV SEBASTIAN KISSER.pdf" download>
+                            <span class="btn-text">Descargar CV</span>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </a>
+                        <a class="btn ghost" href="#contacto">
+                            <span class="btn-text">Contactar</span>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <p class="home-desc">
+                        Soy desarrollador Full Stack y diseñador gráfico. Me encanta construir soluciones limpias, con UX cuidada y estética moderna.
+                    </p>
+                </div>
+
+                <div class="home-right reveal-right" aria-hidden="false">
+                    <div class="profile-frame">
+                        <img src="./img/foto_perfil.png" alt="Foto de Sebastián" class="profile-img">
+                        <div class="profile-glow" aria-hidden="true"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="skills">
-            <div class="sobre_mi">
-                <h2>Sobre Mí</h2>
-
-                <section class="descripcion">
-                    <p>¡Hola! 👋 Soy Sebastián, un apasionado programador adolescente proveniente de la hermosa Argentina 🇦🇷. Con tan solo 22 años, tengo una voraz sed de conocimiento y un entusiasmo desbordante por sobresalir en el mundo de la programación.</p>
-                </section>
+            
+            <div class="scroll-indicator">
+                <span class="scroll-dot"></span>
             </div>
+        </section>
 
-            <h2 class="h2_habilidades">Mis habilidades</h2>
+        <!-- HABILIDADES / SOBRE MÍ -->
+        <section id="habilidades" class="skills section fullpage-section">
+            <div class="container">
+                <h2 class="section-title reveal-up">Sobre mí</h2>
+                <p class="lead reveal-up delay-1">
+                    ¡Hola! 👋 Soy Sebastián, un apasionado programador proveniente de Argentina 🇦🇷. Tengo 22 años y me especializo en desarrollo web, diseño y edición multimedia.
+                </p>
 
-            <div class="habilidades" id="habilidades">
-                <div class="category">
-                    <div class="lista_habilidades">
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+                <h3 class="section-subtitle reveal-up delay-2">Mis habilidades</h3>
+                <div class="badges-grid reveal-up delay-3" id="badges">
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+                        <div class="skill-name">HTML5</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 95%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+                        <div class="skill-name">CSS3</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 90%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
+                        <div class="skill-name">JavaScript</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 85%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
+                        <div class="skill-name">Java</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 80%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
+                        <div class="skill-name">PHP</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 75%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+                        <div class="skill-name">MySQL</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 85%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/adobe%20photoshop-%2331A8FF.svg?style=for-the-badge&logo=adobe%20photoshop&logoColor=white" alt="Adobe Photoshop">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
+                        <div class="skill-name">Symfony</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 70%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/adobe%20illustrator-%23FF9A00.svg?style=for-the-badge&logo=adobe%20illustrator&logoColor=white" alt="Adobe Illustrator">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
+                        <div class="skill-name">Bootstrap</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 90%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/Adobe%20Premiere%20Pro-9999FF.svg?style=for-the-badge&logo=Adobe%20Premiere%20Pro&logoColor=white" alt="Adobe Premiere Pro">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
+                        <div class="skill-name">Figma</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 80%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/Adobe%20After%20Effects-9999FF.svg?style=for-the-badge&logo=Adobe%20After%20Effects&logoColor=white" alt="Adobe After Effects">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/adobe%20photoshop-%2331A8FF.svg?style=for-the-badge&logo=adobe%20photoshop&logoColor=white" alt="Adobe Photoshop">
+                        <div class="skill-name">Photoshop</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 95%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white" alt="Canva">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/adobe%20illustrator-%23FF9A00.svg?style=for-the-badge&logo=adobe%20illustrator&logoColor=white" alt="Adobe Illustrator">
+                        <div class="skill-name">Illustrator</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 90%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/Adobe%20Premiere%20Pro-9999FF.svg?style=for-the-badge&logo=Adobe%20Premiere%20Pro&logoColor=white" alt="Adobe Premiere Pro">
+                        <div class="skill-name">Premiere Pro</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 85%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white" alt="Canva">
+                        <div class="skill-name">Canva</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 95%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+                        <div class="skill-name">Git</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 85%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+                        <div class="skill-name">GitHub</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 90%"></div>
                         </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
-                        </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
-                        </div>
-                        <div class="habilidad">
-                            <img src="https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
+                        <div class="skill-name">GitLab</div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--skill-level: 80%"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="proyectos" id="proyectos">
+        <!-- PROYECTOS -->
+        <section id="proyectos" class="projects section fullpage-section">
+            <div class="container">
+                <h2 class="section-title reveal-up">Proyectos destacados</h2>
+                <p class="muted reveal-up delay-1">Tarjetas con demo, tecnologías y acciones. Haz click en "Ver" para más.</p>
 
-        </div>
+                <div class="projects-grid reveal-grid delay-2">
+                    <article class="project-card">
+                        <div class="project-media" style="background-image:url('./img/project1.jpg')" aria-hidden="true"></div>
+                        <div class="project-body">
+                            <h3>App de Gestión</h3>
+                            <p>Panel administrativo con autenticación, permisos y reportes. Tecnologías: Symfony, MySQL, Bootstrap.</p>
+                            <div class="project-actions">
+                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver demo</a>
+                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
+                            </div>
+                        </div>
+                    </article>
 
-        <div class="experiencia" id="experiencia">
+                    <article class="project-card">
+                        <div class="project-media" style="background-image:url('./img/project2.jpg')" aria-hidden="true"></div>
+                        <div class="project-body">
+                            <h3>Portfolio Interactivo</h3>
+                            <p>Sitio personal con animaciones y optimización para SEO. Tecnologías: HTML, CSS, JS.</p>
+                            <div class="project-actions">
+                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver</a>
+                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
+                            </div>
+                        </div>
+                    </article>
 
-        </div>
+                    <article class="project-card">
+                        <div class="project-media" style="background-image:url('./img/project3.jpg')" aria-hidden="true"></div>
+                        <div class="project-body">
+                            <h3>Editor de Video</h3>
+                            <p>Workflows de edición y automatización de tareas multimedia. Tecnologías: Premiere, After Effects, scripts.</p>
+                            <div class="project-actions">
+                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver</a>
+                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCIA: TIMELINE VERTICAL ANIMADO -->
+        <section id="experiencia" class="experiencia section fullpage-section">
+            <div class="container">
+                <h2 class="section-title reveal-up">Experiencia</h2>
+                <p class="muted reveal-up delay-1">Linea de tiempo vertical con animación y marcadores grandes.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item reveal-timeline left">
+                        <div class="timeline-marker-right">✔</div>
+                        <div class="timeline-panel">
+                            <h3>2023 — Presente</h3>
+                            <p><strong>Full Stack Developer</strong><br>Proyectos personales y freelance (apps web, APIs, dashboards).</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal-timeline right">
+                        <div class="timeline-marker-left">★</div>
+                        <div class="timeline-panel">
+                            <h3>2021 — 2023</h3>
+                            <p><strong>Diseñador Gráfico & Editor</strong><br>Identidad visual, motion graphics y edición para redes sociales.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item reveal-timeline left">
+                        <div class="timeline-marker-right">⚙</div>
+                        <div class="timeline-panel">
+                            <h3>2019 — 2021</h3>
+                            <p><strong>Formación y proyectos</strong><br>Estudios y proyectos personales en programación web y diseño.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section id="contacto" class="contacto section fullpage-section">
+            <div class="container narrow">
+                <h2 class="section-title reveal-up">Contacto</h2>
+                <p class="lead reveal-up delay-1">Dejanos un mensaje y te respondo por WhatsApp.</p>
+
+                <form id="whatsappForm" class="contact-form reveal-up delay-2" autocomplete="off">
+                    <div class="form-row">
+                        <div class="input-container">
+                            <input id="nombreContacto" name="nombre" type="text" placeholder=" " required>
+                            <label for="nombreContacto">Tu nombre</label>
+                        </div>
+                        <div class="input-container">
+                            <input id="emailContacto" name="email" type="email" placeholder=" " required>
+                            <label for="emailContacto">Tu email</label>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <textarea id="mensajeContacto" name="mensaje" rows="5" placeholder=" " required></textarea>
+                        <label for="mensajeContacto">Tu mensaje...</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary">
+                            <span class="btn-text">Enviar por WhatsApp</span>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 2L11 13"></path>
+                                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                            </svg>
+                        </button>
+                        <a class="btn ghost" href="https://wa.me/543435086453" target="_blank" rel="noopener">
+                            <span class="btn-text">Abrir WhatsApp</span>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 20.01L3.01 19.99"></path>
+                                <path d="M5.93 17.07A10 10 0 1 1 17.07 5.93"></path>
+                                <path d="M12 8v4l3 3"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <p class="muted small">Al enviar se abrirá WhatsApp con tu mensaje compilado. Número destino: <strong>+54 343 508 6453</strong></p>
+                </form>
+            </div>
+        </section>
     </main>
 
-    <footer>
-
+    <footer class="site-footer">
+        <div class="container">
+            <p>© <span id="year"></span> Sebastián Kisser — Hecho con ❤️</p>
+        </div>
     </footer>
 </body>
 </html>
