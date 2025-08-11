@@ -1,3 +1,50 @@
+/* SoMoS slider autoplay */
+function initSomosSlider() {
+    const slider = document.querySelector('.somos-slider');
+    if (!slider) return;
+    const slides = slider.querySelectorAll('.somos-slide');
+    let idx = 0;
+    function showSlide(i) {
+        slides.forEach((s, j) => s.classList.toggle('active', i === j));
+    }
+    showSlide(idx);
+    let autoplay = true;
+    let interval = setInterval(nextSlide, 3400);
+    function nextSlide() {
+        idx = (idx + 1) % slides.length;
+        showSlide(idx);
+    }
+    // Efecto de opacidad según mouse
+    slider.addEventListener('mousemove', e => {
+        const rect = slider.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const active = slider.querySelector('.somos-slide.active');
+        if (active) {
+            // Opacidad máxima cerca del mouse, mínima lejos
+            const op = 0.45 + 0.55 * Math.pow(1 - Math.abs(x - 0.5) * 2, 2);
+            active.style.opacity = op;
+        }
+        autoplay = false;
+        clearInterval(interval);
+    });
+    slider.addEventListener('mouseleave', () => {
+        const active = slider.querySelector('.somos-slide.active');
+        if (active) active.style.opacity = 0.45;
+        autoplay = true;
+        interval = setInterval(nextSlide, 3400);
+    });
+    slider.addEventListener('mouseenter', () => {
+        const active = slider.querySelector('.somos-slide.active');
+        if (active) active.style.opacity = 1;
+        autoplay = false;
+        clearInterval(interval);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing code...
+    initSomosSlider();
+});
 /* js/script.js
    Portfolio — Sebastián Kisser
    - Autotype sin romper layout
@@ -145,7 +192,24 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Download button animation
     initDownloadButtonAnimation();
-}); // Todas las funciones están siendo llamadas correctamente
+    
+    // Animate skills on load
+    animateSkills();
+});
+
+/* ANIMATE SKILLS */
+function animateSkills() {
+    const skillItems = document.querySelectorAll('.skill-item');
+    skillItems.forEach((item, index) => {
+        setTimeout(() => {
+            item.classList.add('animate-in');
+            const progress = item.querySelector('.skill-progress');
+            if (progress) {
+                progress.style.width = progress.style.getPropertyValue('--skill-level');
+            }
+        }, index * 100);
+    });
+}
 
 /* GENERIC SCROLL REVEAL - aplica a clases .reveal-*
    Para elementos con delay se respetan las clases delay-N
@@ -483,7 +547,7 @@ function initCustomCursor() {
     animateCursor();
     
     // Efecto hover en elementos interactivos
-    const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-left, .timeline-marker-right, input, textarea, .contact-form');
+    const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-left, .timeline-marker-right, input, textarea, .contact-form, .btn-view');
     interactiveElements.forEach(el => {
         el.addEventListener('mouseenter', () => {
             cursor.classList.add('hover');
@@ -531,59 +595,69 @@ function initDownloadButtonAnimation() {
     const downloadBtn = document.querySelector('.btn.primary.download');
     if (!downloadBtn) return;
 
-    // Añadir efecto de hover para simular carga
+    // Efecto de hover
     downloadBtn.addEventListener('mouseenter', () => {
         downloadBtn.classList.add('hover-animation');
     });
-
     downloadBtn.addEventListener('mouseleave', () => {
         downloadBtn.classList.remove('hover-animation');
     });
 
     // Animación de descarga al hacer clic
     downloadBtn.addEventListener('click', function(e) {
-        // Prevenir la descarga inmediata para mostrar la animación
         if (!downloadBtn.classList.contains('downloading')) {
             e.preventDefault();
-
-            // Añadir clase para iniciar animación
-            downloadBtn.classList.add('downloading');
+            downloadBtn.classList.remove('downloaded', 'flash-success', 'bump', 'text-fadeout', 'text-fadein');
+            downloadBtn.classList.add('downloading', 'text-fadeout');
             downloadBtn.setAttribute('disabled', 'true');
-
-            // Simular progreso de descarga
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    downloadBtn.classList.remove('downloading');
-                    downloadBtn.classList.add('downloaded');
-
-                    // Después de completar la animación, permitir la descarga real
+            const progressBar = downloadBtn.querySelector('.progress-bar-bottom');
+            const btnText = downloadBtn.querySelector('.btn-text');
+            if (progressBar) {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = 'width 1.2s cubic-bezier(.2,.9,.3,1)';
+                    progressBar.style.width = '100%';
+                }, 20);
+            }
+            // Loading spinner visible
+            setTimeout(() => {
+                downloadBtn.classList.remove('text-fadeout');
+                if (btnText) btnText.textContent = 'Descargando...';
+                downloadBtn.classList.add('text-fadein');
+            }, 200);
+            setTimeout(() => {
+                downloadBtn.classList.remove('downloading', 'text-fadein');
+                downloadBtn.classList.add('downloaded', 'bump', 'text-fadeout');
+                if (btnText) btnText.textContent = 'Descargado';
+                setTimeout(() => {
+                    downloadBtn.classList.remove('text-fadeout');
+                    downloadBtn.classList.add('text-fadein');
+                }, 200);
+                // Descargar el archivo
+                setTimeout(() => {
+                    const fileUrl = downloadBtn.getAttribute('data-href');
+                    if (fileUrl) {
+                        const tempLink = document.createElement('a');
+                        tempLink.href = fileUrl;
+                        tempLink.setAttribute('download', 'CV SEBASTIAN KISSER.pdf');
+                        tempLink.setAttribute('target', '_blank');
+                        document.body.appendChild(tempLink);
+                        tempLink.click();
+                        document.body.removeChild(tempLink);
+                    }
                     setTimeout(() => {
-                        // Descargar el archivo usando un enlace temporal
-                        const originalHref = downloadBtn.getAttribute('href');
-                        const originalDownload = downloadBtn.getAttribute('download');
-                        if (originalHref) {
-                            const tempLink = document.createElement('a');
-                            tempLink.href = originalHref;
-                            if (originalDownload !== null) {
-                                tempLink.setAttribute('download', originalDownload);
-                            } else {
-                                tempLink.setAttribute('download', '');
-                            }
-                            document.body.appendChild(tempLink);
-                            tempLink.click();
-                            document.body.removeChild(tempLink);
+                        downloadBtn.classList.remove('downloaded', 'bump', 'text-fadein');
+                        downloadBtn.removeAttribute('disabled');
+                        if (btnText) btnText.textContent = 'Descargar CV';
+                        if (progressBar) {
+                            progressBar.style.transition = 'none';
+                            progressBar.style.width = '0%';
+                            progressBar.style.background = 'linear-gradient(120deg, #ffe600 0%, #fdf28b 30%, #4CAF50 60%, #8BC34A 100%)';
                         }
-                        // Suavizar la transición de color verde
-                        setTimeout(() => {
-                            downloadBtn.classList.remove('downloaded');
-                            downloadBtn.removeAttribute('disabled');
-                        }, 1200);
-                    }, 900);
-                }
-            }, 50);
+                    }, 1200);
+                }, 400);
+            }, 1400);
         }
     });
 }

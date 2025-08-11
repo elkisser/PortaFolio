@@ -55,14 +55,21 @@
                     </h2>
 
                     <div class="home-cta">
-                        <a class="btn primary download" href="./documentos/CV SEBASTIAN KISSER.pdf" download target="_blank">
+                        <button type="button" class="btn primary download" data-href="./documentos/CV SEBASTIAN KISSER.pdf">
+                            <span class="progress-bar-bottom"></span>
                             <span class="btn-text">Descargar CV</span>
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            <span class="icon-loading" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 50 50">
+                                    <circle cx="25" cy="25" r="20" fill="none" stroke="#ffe600" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 94.2"/>
+                                </svg>
+                            </span>
+                            <svg class="icon download-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path class="icon-download" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline class="icon-download" points="7 10 12 15 17 10"></polyline>
+                                <line class="icon-download" x1="12" y1="15" x2="12" y2="3"></line>
+                                <polyline class="icon-check" points="6 12 11 17 18 10" style="opacity:0;stroke:#4CAF50;"></polyline>
                             </svg>
-                        </a>
+                        </button>
                         <a class="btn ghost" href="#contacto">
                             <span class="btn-text">Contactar</span>
                             <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,7 +86,7 @@
 
                 <div class="home-right reveal-right" aria-hidden="false">
                     <div class="profile-frame">
-                        <img src="./img/foto_perfil.png" alt="Foto de Sebastián" class="profile-img">
+                        <img src="./img/foto-perfil.png" alt="Foto de Sebastián" class="profile-img">
                         <div class="profile-glow" aria-hidden="true"></div>
                     </div>
                 </div>
@@ -98,118 +105,217 @@
                     ¡Hola! 👋 Soy Sebastián, un apasionado programador proveniente de Argentina 🇦🇷. Tengo 22 años y me especializo en desarrollo web, diseño y edición multimedia.
                 </p>
 
-                <h3 class="section-subtitle reveal-up delay-2">Mis habilidades</h3>
-                <div class="badges-grid reveal-up delay-3" id="badges">
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-                        <div class="skill-name">HTML5</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 95%"></div>
+                <h3 class="section-subtitle reveal-up delay-2">Habilidades Técnicas</h3>
+                <div class="skills-grid reveal-up delay-3">
+                    <div class="skills-category">
+                        <h4 class="skills-category-title">Backend</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
+                                <div class="skill-name">Java</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
+                                <div class="skill-name">PHP</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
+                                <div class="skill-name">Symfony</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/doctrine%20orm-FF6D00.svg?style=for-the-badge&logo=doctrine&logoColor=white" alt="Doctrine ORM">
+                                <div class="skill-name">Doctrine ORM</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 70%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-                        <div class="skill-name">CSS3</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 90%"></div>
+
+                    <div class="skills-category">
+                        <h4 class="skills-category-title">Frontend</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/twig-3C873A.svg?style=for-the-badge&logo=twig&logoColor=white" alt="Twig">
+                                <div class="skill-name">Twig</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
+                                <div class="skill-name">Bootstrap</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+                                <div class="skill-name">HTML5</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
+                                <div class="skill-name">CSS3</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" style="margin-bottom: 20px">
+                                <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
+                                <div class="skill-name">JavaScript</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
-                        <div class="skill-name">JavaScript</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 85%"></div>
+
+                    <div class="skills-category">
+                        <h4 class="skills-category-title">Base de Datos</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
+                                <div class="skill-name">MySQL</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+                                <div class="skill-name">PostgreSQL</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 75%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
-                        <div class="skill-name">Java</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 80%"></div>
+
+                    <div class="skills-category">
+                        <h4 class="skills-category-title">Herramientas</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+                                <div class="skill-name">Git</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+                                <div class="skill-name">GitHub</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
+                                <div class="skill-name">GitLab</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/composer-%23F28D1A.svg?style=for-the-badge&logo=composer&logoColor=white" alt="Composer">
+                                <div class="skill-name">Composer</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/xdebug-2B71B1.svg?style=for-the-badge&logo=xdebug&logoColor=white" alt="Xdebug">
+                                <div class="skill-name">Xdebug</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 70%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <img src="https://img.shields.io/badge/postman-FF6C37.svg?style=for-the-badge&logo=postman&logoColor=white" alt="Postman">
+                                <div class="skill-name">Postman</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
-                        <div class="skill-name">PHP</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 75%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-                        <div class="skill-name">MySQL</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
-                        <div class="skill-name">Symfony</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 70%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
-                        <div class="skill-name">Bootstrap</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" alt="Figma">
-                        <div class="skill-name">Figma</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 80%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/adobe%20photoshop-%2331A8FF.svg?style=for-the-badge&logo=adobe%20photoshop&logoColor=white" alt="Adobe Photoshop">
-                        <div class="skill-name">Photoshop</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 95%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/adobe%20illustrator-%23FF9A00.svg?style=for-the-badge&logo=adobe%20illustrator&logoColor=white" alt="Adobe Illustrator">
-                        <div class="skill-name">Illustrator</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/Adobe%20Premiere%20Pro-9999FF.svg?style=for-the-badge&logo=Adobe%20Premiere%20Pro&logoColor=white" alt="Adobe Premiere Pro">
-                        <div class="skill-name">Premiere Pro</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white" alt="Canva">
-                        <div class="skill-name">Canva</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 95%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
-                        <div class="skill-name">Git</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-                        <div class="skill-name">GitHub</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
-                        <div class="skill-name">GitLab</div>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--skill-level: 80%"></div>
+
+                    <div class="skills-category">
+                        <h4 class="skills-category-title">Otras Habilidades</h4>
+                        <div class="skills-list">
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-code-branch"></i></div>
+                                <div class="skill-name">Validaciones personalizadas</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-lock"></i></div>
+                                <div class="skill-name">Autenticación por sesión</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-file-alt"></i></div>
+                                <div class="skill-name">Paginación</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-upload"></i></div>
+                                <div class="skill-name">Carga de archivos</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-code"></i></div>
+                                <div class="skill-name">Macros Twig</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
+                                <div class="skill-name">Personalización de vistas</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-cogs"></i></div>
+                                <div class="skill-name">Refactorización de entidades</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon"><i class="fas fa-server"></i></div>
+                                <div class="skill-name">Controladores REST</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item" style="margin-bottom: 20px">
+                                <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
+                                <div class="skill-name">Arquitectura MVC</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="--skill-level: 85%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -224,37 +330,30 @@
 
                 <div class="projects-grid reveal-grid delay-2">
                     <article class="project-card">
-                        <div class="project-media" style="background-image:url('./img/project1.jpg')" aria-hidden="true"></div>
-                        <div class="project-body">
-                            <h3>App de Gestión</h3>
-                            <p>Panel administrativo con autenticación, permisos y reportes. Tecnologías: Symfony, MySQL, Bootstrap.</p>
-                            <div class="project-actions">
-                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver demo</a>
-                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
-                            </div>
+                        <div class="project-media somos-slider" aria-hidden="true">
+                            <div class="somos-slide" style="background-image:url('./img/SoMoS/somos1.png')"></div>
+                            <div class="somos-slide" style="background-image:url('./img/SoMoS/somos2.png')"></div>
+                            <div class="somos-slide" style="background-image:url('./img/SoMoS/somos3.png')"></div>
+                            <div class="somos-slide" style="background-image:url('./img/SoMoS/somos4.png')"></div>
+                            <div class="somos-slide" style="background-image:url('./img/SoMoS/somos5.png')"></div>
                         </div>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-media" style="background-image:url('./img/project2.jpg')" aria-hidden="true"></div>
                         <div class="project-body">
-                            <h3>Portfolio Interactivo</h3>
-                            <p>Sitio personal con animaciones y optimización para SEO. Tecnologías: HTML, CSS, JS.</p>
-                            <div class="project-actions">
-                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver</a>
-                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
+                            <h3>SoMoS Web</h3>
+                            <p>Página web para venta de servicios de diseño gráfico, páginas web, sistemas de gestión y todo lo necesario para mejorar tu marca.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Symfony</span>
+                                <span class="tech-tag">MySQL</span>
+                                <span class="tech-tag">Bootstrap</span>
+                                <span class="tech-tag">Twig</span>
                             </div>
-                        </div>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-media" style="background-image:url('./img/project3.jpg')" aria-hidden="true"></div>
-                        <div class="project-body">
-                            <h3>Editor de Video</h3>
-                            <p>Workflows de edición y automatización de tareas multimedia. Tecnologías: Premiere, After Effects, scripts.</p>
                             <div class="project-actions">
-                                <a class="btn small" href="#" target="_blank" rel="noopener">Ver</a>
-                                <a class="btn small ghost" href="#" target="_blank" rel="noopener">Repo</a>
+                                <a class="btn-view" href="https://www.somos.env" target="_blank" rel="noopener">
+                                    <span class="btn-view-text">Ver proyecto</span>
+                                    <svg class="btn-view-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </article>
@@ -272,24 +371,24 @@
                     <div class="timeline-item reveal-timeline left">
                         <div class="timeline-marker-right">✔</div>
                         <div class="timeline-panel right">
-                            <h3>2023 — Presente</h3>
-                            <p><strong>Full Stack Developer</strong><br>Proyectos personales y freelance (apps web, APIs, dashboards).</p>
+                            <h3>2024 — Actualidad</h3>
+                            <p><strong>Ministerio de Infraestructura Servicios Públicos y Habitat</strong><br>Desarrollo de aplicaciones web con Symfony, Twig y bases de datos relacionales. Experiencia en backend y frontend, formularios complejos, gestión de entidades y lógicas de negocio. Manejo de Bootstrap y JavaScript para interfaces dinámicas, accesibles y responsivas.</p>
                         </div>
                     </div>
 
                     <div class="timeline-item reveal-timeline right">
                         <div class="timeline-marker-left">★</div>
                         <div class="timeline-panel left">
-                            <h3>2021 — 2023</h3>
-                            <p><strong>Diseñador Gráfico & Editor</strong><br>Identidad visual, motion graphics y edición para redes sociales.</p>
+                            <h3>2021 — Actualidad</h3>
+                            <p><strong>Full Stack Developer</strong><br>Proyectos personales y freelance (apps web, APIs, dashboards).</p>
                         </div>
                     </div>
 
                     <div class="timeline-item reveal-timeline left">
                         <div class="timeline-marker-right">⚙</div>
                         <div class="timeline-panel">
-                            <h3>2019 — 2021</h3>
-                            <p><strong>Formación y proyectos</strong><br>Estudios y proyectos personales en programación web y diseño.</p>
+                            <h3>2016 — Actualidad</h3>
+                            <p><strong>Diseñador Gráfico & Editor</strong><br>Identidad visual, motion graphics y edición para redes sociales.</p>
                         </div>
                     </div>
                 </div>

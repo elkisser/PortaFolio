@@ -1,3 +1,47 @@
+/* SoMoS slider */
+.somos-slider {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    min-height: 220px;
+    border-radius: 18px 18px 0 0;
+    overflow: hidden;
+    background: #222;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 8px 32px 0 #0002;
+}
+.somos-slider .somos-slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(.2,.9,.3,1);
+    z-index: 1;
+}
+.somos-slider .somos-slide.active {
+    opacity: 0.45;
+    z-index: 2;
+    transition: opacity 0.7s cubic-bezier(.2,.9,.3,1);
+}
+.somos-slider:hover .somos-slide.active {
+    opacity: 1;
+    transition: opacity 0.3s cubic-bezier(.2,.9,.3,1);
+}
+}
+.somos-slider::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,rgba(0,0,0,0.18) 60%,rgba(0,0,0,0.38) 100%);
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 18px 18px 0 0;
+}
+@media (max-width: 600px) {
+    .somos-slider { height: 180px; min-height: 120px; }
+}
 /* Paleta (tu paleta): */
 :root{
     --bg-900: #0f0f16;
@@ -383,7 +427,7 @@ body{
     border-color: rgba(255,255,255,0.2);
 }
 
-/* SKILLS / BADGES GRID */
+/* SKILLS SECTION */
 .skills{
     background:var(--bg-800);
 }
@@ -417,76 +461,94 @@ body{
     font-size: 1.125rem;
     line-height: 1.6;
 }
-.badges-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-    gap:14px;
-    margin-top:18px;
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
 }
-.badges-grid img{
-    width:100%;
-    height:56px;
-    object-fit:contain;
-    background:var(--glass);
-    padding:8px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,0.02);
+
+.skills-category {
+    background: var(--glass);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
     transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
-.badges-grid img::after {
+
+.skills-category:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    border-color: rgba(255,230,0,0.2);
+}
+
+.skills-category-title {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+}
+
+.skills-category-title::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
-    width: 0;
-    height: 3px;
+    width: 40px;
+    height: 2px;
     background: var(--accent);
-    transition: width 0.5s ease;
+    transition: width var(--transition);
 }
-.badges-grid img:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    border-color: rgba(255,255,255,0.1);
+
+.skills-category:hover .skills-category-title::after {
+    width: 80px;
 }
-.badges-grid img:hover::after {
-    width: 100%;
-    animation: skill-progress 1s ease forwards;
-}
-@keyframes skill-progress {
-    0% { width: 0; }
-    100% { width: 100%; }
+
+.skills-list {
+    display: grid;
+    gap: 12px;
 }
 
 .skill-item {
     position: relative;
-    background: var(--glass);
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
     padding: 12px;
     transition: all var(--transition);
     overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.03);
 }
 
 .skill-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    border-color: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    border-color: rgba(255,230,0,0.15);
 }
 
-.skill-item img {
-    width: 100%;
-    height: 40px;
+.skill-item img, .skill-icon {
+    width: 24px;
+    height: 24px;
     object-fit: contain;
-    margin-bottom: 8px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.skill-icon {
+    color: var(--accent);
+    font-size: 1.1rem;
 }
 
 .skill-name {
-    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.95rem;
     font-weight: 500;
-    text-align: center;
-    margin-bottom: 8px;
+    color: rgba(255,255,255,0.9);
 }
 
 .skill-bar {
@@ -495,6 +557,7 @@ body{
     border-radius: 2px;
     overflow: hidden;
     position: relative;
+    margin-top: 8px;
 }
 
 .skill-progress {
@@ -515,11 +578,28 @@ body{
     to { width: var(--skill-level); }
 }
 
-/* PROJECTS */
+/* PROJECTS SECTION */
+.projects{
+    background: var(--bg-900);
+    position: relative;
+    overflow: hidden;
+}
+
+.projects::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 70% 30%, rgba(255,230,0,0.03), transparent 60%);
+    pointer-events: none;
+}
+
 .projects-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:22px;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:24px;
     margin-top:30px;
 }
 .project-card{
@@ -601,10 +681,96 @@ body{
     color:rgba(255,255,255,0.8);
     font-size: 0.95rem;
 }
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.tech-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+    transition: all var(--transition);
+}
+
+.project-card:hover .tech-tag {
+    background: rgba(255,230,0,0.1);
+    border-color: rgba(255,230,0,0.3);
+    color: var(--accent-2);
+}
+
 .project-actions{
     display:flex;
     gap:10px;
     align-items:center;
+}
+
+/* New View Button Style */
+.btn-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 230, 0, 0.1), transparent);
+    transition: none;
+}
+
+.btn-view:hover {
+    background: rgba(255,230,0,0.1);
+    border-color: rgba(255,230,0,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.btn-view:hover::before {
+    animation: loading-shine 1.5s infinite;
+}
+
+.btn-view-text {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.btn-view-icon {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-view:hover .btn-view-text {
+    transform: translateX(4px);
+}
+
+.btn-view:hover .btn-view-icon {
+    transform: translateX(6px) scale(1.1);
+    color: var(--accent);
 }
 
 /* TIMELINE ANIMATED */
@@ -1047,7 +1213,7 @@ html {
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.3s, height 0.3s;
-    box-shadow: 0 0 10px rgba(255, 230, 0, 0.5);
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.5));
 }
 
 .custom-cursor.hover {
@@ -1065,7 +1231,7 @@ html {
     width: 14px;
     height: 14px;
     background-color: var(--accent);
-    box-shadow: 0 0 15px rgba(255, 230, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 230, 0, 0.8));
 }
 
 /* Ocultar cursor nativo en todo el sitio */
@@ -1101,6 +1267,154 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
 .btn.primary.download {
     position: relative;
     overflow: hidden;
+    transition: background 0.3s cubic-bezier(.2,.9,.3,1);
+}
+
+.btn.primary.download .progress-bar-bottom {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(120deg, #ffe600 0%, #fdf28b 30%, #4CAF50 60%, #8BC34A 100%);
+    border-radius: 0 0 12px 12px;
+    transition: width 1.2s cubic-bezier(.2,.9,.3,1), background 0.3s;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+}
+.btn.primary.download.downloading .progress-bar-bottom {
+    width: 100%;
+    animation: shimmer 1.2s linear infinite;
+}
+@keyframes shimmer {
+    0% { background-position: -100px 0; }
+    100% { background-position: 200px 0; }
+}
+}
+.btn.primary.download.downloading .progress-bar-bottom {
+    width: 100%;
+}
+.btn.primary.download.downloaded .progress-bar-bottom {
+    width: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+.btn.primary.download.flash-success {
+    background: #4CAF50 !important;
+    transition: background 0.3s cubic-bezier(.2,.9,.3,1);
+}
+.btn.primary.download .btn-text, .btn.primary.download .icon {
+    position: relative;
+    z-index: 4;
+    transition: opacity 0.3s;
+}
+.btn.primary.download .btn-text {
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+.btn.primary.download.text-fadeout .btn-text {
+    opacity: 0;
+}
+.btn.primary.download.text-fadein .btn-text {
+    opacity: 1;
+}
+.btn.primary.download .icon-loading {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    pointer-events: none;
+}
+.btn.primary.download.downloading .icon-loading {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.btn.primary.download .icon-check {
+    opacity: 0;
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: opacity 0.2s, stroke-dashoffset 0.4s cubic-bezier(.2,.9,.3,1), filter 0.2s;
+    filter: drop-shadow(0 2px 6px #4CAF5080);
+}
+.btn.primary.download.downloaded .icon-check {
+    opacity: 1 !important;
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 4px 12px #4CAF5080);
+    animation: pop-check 0.4s cubic-bezier(.2,1.5,.3,1) 1;
+}
+@keyframes pop-check {
+    0% { transform: scale(0.7); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+.btn.primary.download.downloaded .icon-download {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.btn.primary.download.bump {
+    animation: bump 0.25s cubic-bezier(.2,1.5,.3,1) 1;
+}
+@keyframes bump {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+}
+.btn.primary.download[disabled] {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+.btn.primary.download .icon-check {
+    opacity: 0;
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: opacity 0.2s, stroke-dashoffset 0.4s cubic-bezier(.2,.9,.3,1);
+}
+.btn.primary.download.downloaded .icon-check {
+    opacity: 1 !important;
+    stroke-dashoffset: 0;
+}
+.btn.primary.download.downloaded .icon-download {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+}
+
+.btn.primary.download .progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffe600, #fdf28b, #4CAF50 60%, #8BC34A 100%);
+    z-index: 1;
+    border-radius: 12px;
+    transition: width 0.5s cubic-bezier(.2,.9,.3,1);
+    pointer-events: none;
+}
+.btn.primary.download.downloading .progress-bar {
+    width: 100%;
+    transition: width 1.2s cubic-bezier(.2,.9,.3,1);
+}
+.btn.primary.download.downloaded .progress-bar {
+    width: 100%;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    transition: background 0.5s cubic-bezier(.2,.9,.3,1);
+}
+.btn.primary.download .btn-text, .btn.primary.download .icon {
+    position: relative;
+    z-index: 2;
+}
+.btn.primary.download[disabled] {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
 }
 
 .btn.primary.download.hover-animation::before {
@@ -1115,42 +1429,20 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
 }
 
 .btn.primary.downloading {
-    position: relative;
-    overflow: hidden;
     pointer-events: none;
 }
 
 .btn.primary.downloading::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 4px;
-    background: rgba(0, 0, 0, 0.3);
-    width: 100%;
-    animation: download-progress 2s linear forwards;
+    /* Eliminado: ahora la barra es un div interno */
 }
 
 .btn.primary.downloaded {
     background: linear-gradient(90deg, #4CAF50, #8BC34A);
-    animation: download-success-bg 1.2s cubic-bezier(.2,.9,.3,1) forwards;
     box-shadow: 0 0 0 0 #4CAF50;
 }
 
 @keyframes download-success-bg {
-    0% {
-        background: linear-gradient(90deg, var(--accent), var(--accent-2));
-        box-shadow: 0 0 0 0 #4CAF50;
-    }
-    60% {
-        background: linear-gradient(90deg, #ffe600, #fdf28b, #4CAF50 60%, #8BC34A 100%);
-        box-shadow: 0 0 16px 4px #4CAF5044;
-    }
-    100% {
-        background: linear-gradient(90deg, #4CAF50, #8BC34A);
-        box-shadow: 0 0 24px 0 #4CAF5088;
-    }
-}
+    /* Eliminado: la transición es con .progress-bar y background directo */
 }
 
 @keyframes loading-shine {
@@ -1406,8 +1698,12 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     .home_role {
         font-size: 1.25rem;
     }
-    .badges-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    
+    .skills-category {
+        padding: 16px;
     }
 }
 
@@ -1424,5 +1720,18 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     }
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-body {
+        padding: 16px;
+    }
+    
+    .btn-view {
+        width: 100%;
+        justify-content: space-between;
     }
 }
