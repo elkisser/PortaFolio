@@ -29,7 +29,13 @@
         <nav class="nav container">
             <a class="brand" href="#inicio">Sebastián Kisser</a>
             <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
-                <span class="menu-icon"></span>
+                <span class="menu-icon" aria-hidden="true">
+                    <svg class="hamburger-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect class="bar bar1" x="4" y="8" width="20" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect class="bar bar2" x="4" y="13" width="20" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect class="bar bar3" x="4" y="18" width="20" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg>
+                </span>
             </button>
             <ul id="nav-list" class="nav-list">
                 <li><a href="#inicio" class="nav-link">Inicio</a></li>
@@ -370,7 +376,7 @@
 
                 <div class="timeline">
                     <div class="timeline-item reveal-timeline left">
-                        <div class="timeline-marker-right">✔</div>
+                        <div class="timeline-marker-right" style="top: 50px">✔</div>
                         <div class="timeline-panel right">
                             <h3>2024 — Actualidad</h3>
                             <p><strong>Ministerio de Infraestructura Servicios Públicos y Habitat</strong><br>Desarrollo de aplicaciones web con Symfony, Twig y bases de datos relacionales. Experiencia en backend y frontend, formularios complejos, gestión de entidades y lógicas de negocio. Manejo de Bootstrap y JavaScript para interfaces dinámicas, accesibles y responsivas.</p>
@@ -378,7 +384,7 @@
                     </div>
 
                     <div class="timeline-item reveal-timeline right">
-                        <div class="timeline-marker-left">★</div>
+                        <div class="timeline-marker-left" style="top: 50px">★</div>
                         <div class="timeline-panel left">
                             <h3>2021 — Actualidad</h3>
                             <p><strong>Full Stack Developer</strong><br>Proyectos personales y freelance (apps web, APIs, dashboards).</p>
@@ -386,7 +392,7 @@
                     </div>
 
                     <div class="timeline-item reveal-timeline left">
-                        <div class="timeline-marker-right">⚙</div>
+                        <div class="timeline-marker-right" style="top: 50px">⚙</div>
                         <div class="timeline-panel">
                             <h3>2016 — Actualidad</h3>
                             <p><strong>Diseñador Gráfico & Editor</strong><br>Identidad visual, motion graphics y edición para redes sociales.</p>

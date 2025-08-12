@@ -329,21 +329,26 @@ function initScrollSpy() {
 
     if (!sections.length || !navLinks.length) return;
 
-    const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.id;
-                navLinks.forEach(a => {
-                    a.classList.toggle("active", a.getAttribute("href") === `#${id}`);
-                });
+    function updateActive() {
+        let minDist = Infinity;
+        let activeId = null;
+        const winMid = window.scrollY + window.innerHeight / 2;
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const secMid = rect.top + window.scrollY + rect.height / 2;
+            const dist = Math.abs(winMid - secMid);
+            if (dist < minDist) {
+                minDist = dist;
+                activeId = section.id;
             }
         });
-    }, { 
-        threshold: 0.45,
-        rootMargin: "-100px 0px -100px 0px"
-    });
-
-    sections.forEach(s => io.observe(s));
+        navLinks.forEach(a => {
+            a.classList.toggle("active", a.getAttribute("href") === `#${activeId}`);
+        });
+    }
+    window.addEventListener('scroll', updateActive, {passive:true});
+    window.addEventListener('resize', updateActive);
+    updateActive();
 }
 
 /* WHATSAPP FORM */

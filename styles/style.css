@@ -110,63 +110,94 @@ body{
     font-size: 1.25rem;
 }
 #menu-toggle{
-    display:none;
-    background:transparent;
-    border:0;
-    color:var(--text);
+    display: none;
+    background: transparent;
+    border: 0;
+    color: var(--text);
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     position: relative;
     z-index: 1000;
+    outline: none;
+    transition: color var(--transition);
 }
 .menu-icon {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: none;
+    transition: color var(--transition);
+}
+.hamburger-icon {
+    width: 28px;
+    height: 28px;
     display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--text);
-    transition: all var(--transition);
 }
-.menu-icon::before, .menu-icon::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: var(--text);
-    transition: all var(--transition);
+.hamburger-icon .bar {
+    transition: transform 0.35s cubic-bezier(.4,2,.6,1), opacity 0.25s;
+    transform-origin: center;
 }
-.menu-icon::before {
-    top: -8px;
+#menu-toggle[aria-expanded="true"] .hamburger-icon .bar1 {
+    transform: translateY(5px) rotate(45deg);
 }
-.menu-icon::after {
-    bottom: -8px;
+#menu-toggle[aria-expanded="true"] .hamburger-icon .bar2 {
+    opacity: 0;
 }
-#menu-toggle[aria-expanded="true"] .menu-icon {
-    background: transparent;
+#menu-toggle[aria-expanded="true"] .hamburger-icon .bar3 {
+    transform: translateY(-5px) rotate(-45deg);
 }
-#menu-toggle[aria-expanded="true"] .menu-icon::before {
-    transform: rotate(45deg);
-    top: 0;
-}
-#menu-toggle[aria-expanded="true"] .menu-icon::after {
-    transform: rotate(-45deg);
-    bottom: 0;
-}
-/* Estilos para el menú de escritorio */
+/* Estilos para el menú de escritorio y animación responsive */
 .nav-list{
-    list-style:none;
-    display:flex;
-    gap:12px;
-    margin:0;
-    padding:0;
-    align-items:center;
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
     transition: all var(--transition);
-    pointer-events: auto; /* Asegurar que siempre sea interactivo en escritorio */
-    /* Asegurar que estos estilos solo apliquen en escritorio */
+    pointer-events: auto;
     position: static;
     opacity: 1;
     visibility: visible;
+    transform: none;
+}
+@media (max-width: 900px) {
+    #menu-toggle {
+        display: flex;
+    }
+    .nav-list {
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80vw;
+        max-width: 340px;
+        height: 100vh;
+        background: var(--bg-800);
+        box-shadow: -8px 0 32px #0005;
+        padding: 80px 32px 32px 32px;
+        gap: 24px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateX(100%);
+        transition: all 0.45s cubic-bezier(.4,2,.6,1);
+    }
+    .nav-list.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+    body.menu-open {
+        overflow: hidden;
+    }
 }
 .nav-link{
     color:var(--text);
