@@ -44,6 +44,7 @@ function initSomosSlider() {
 document.addEventListener('DOMContentLoaded', () => {
     // ...existing code...
     initSomosSlider();
+
 });
 /* js/script.js
    Portfolio — Sebastián Kisser
@@ -445,7 +446,7 @@ function setupWhatsappForm() {
 /* PARALLAX EFFECT */
 function initParallaxEffect() {
     // Elementos que tendrán efecto parallax al hacer scroll
-    const parallaxElements = document.querySelectorAll('.profile-frame, .project-card, .skill-item');
+    const parallaxElements = document.querySelectorAll('.profile-frame, .project-card');
     
     // Evitar transformaciones conflictivas
     parallaxElements.forEach(element => {
@@ -485,8 +486,8 @@ function initParallaxEffect() {
         // Efecto parallax en elementos de fondo
         const sections = document.querySelectorAll('.fullpage-section, .home-section, .skills-section, .projects-section');
         sections.forEach(section => {
-            // Buscar elementos de fondo que pueden tener parallax
-            const sectionBg = section.querySelector('.profile-glow, .project-media, .profile-frame img, .skill-item img');
+            // Buscar elementos de fondo que pueden tener parallax (sin skill-item img)
+            const sectionBg = section.querySelector('.profile-glow, .project-media, .profile-frame img');
             if (sectionBg) {
                 sectionBg.style.transform = `translate(${mouseX * 15}px, ${mouseY * 15}px)`;
             }

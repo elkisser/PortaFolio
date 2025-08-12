@@ -1277,7 +1277,8 @@ html {
 }
 
 /* Ocultar cursor nativo en todo el sitio */
-a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-left, .timeline-marker-right, input, textarea, .contact-form {
+/* Ocultar cursor nativo solo en elementos interactivos, NO en .skill-item */
+a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timeline-marker-right, input, textarea, .contact-form {
     cursor: none !important;
 }
 
