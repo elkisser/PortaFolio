@@ -16,8 +16,284 @@
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- script principal (deferred) -->
-    <script src="./js/script.js" defer></script>
+        <!-- script principal (deferred) -->
+        <script src="./js/script.js" defer></script>
+        <script defer>
+        // Traducciones completas ES/EN
+        const translations = {
+            es: {
+                nav: ["Inicio", "Habilidades", "Proyectos", "Experiencia", "Contacto"],
+                menuAria: "Abrir menú",
+                home_hello: "Hola, soy",
+                home_and: "y soy",
+                home_cv: "Descargar CV",
+                home_contact: "Contactar",
+                home_desc: "Soy desarrollador Full Stack y diseñador gráfico. Me encanta construir soluciones limpias, con UX cuidada y estética moderna.",
+                about_title: "Sobre mí",
+                about_lead: "¡Hola! 👋 Soy Sebastián, un apasionado programador proveniente de Argentina 🇦🇷. Tengo 23 años y me especializo en desarrollo web, diseño y edición multimedia.",
+                about_subtitle: "Habilidades Técnicas",
+                skills: {
+                    Backend: "Backend",
+                    Frontend: "Frontend",
+                    Database: "Base de Datos",
+                    Tools: "Herramientas",
+                    Other: "Otras Habilidades",
+                    PHP: "PHP",
+                    Symfony: "Symfony",
+                    Doctrine: "Doctrine ORM",
+                    Java: "Java",
+                    Twig: "Twig",
+                    Bootstrap: "Bootstrap",
+                    HTML5: "HTML5",
+                    CSS3: "CSS3",
+                    JavaScript: "JavaScript",
+                    MySQL: "MySQL",
+                    PostgreSQL: "PostgreSQL",
+                    Git: "Git",
+                    GitHub: "GitHub",
+                    GitLab: "GitLab",
+                    Composer: "Composer",
+                    Xdebug: "Xdebug",
+                    Postman: "Postman",
+                    Validations: "Validaciones personalizadas",
+                    Auth: "Autenticación por sesión",
+                    Pagination: "Paginación",
+                    Upload: "Carga de archivos",
+                    TwigMacros: "Macros Twig",
+                    Views: "Personalización de vistas",
+                    Refactor: "Refactorización de entidades",
+                    REST: "Controladores REST",
+                    MVC: "Arquitectura MVC"
+                },
+                projects_title: "Proyectos destacados",
+                projects_lead: "Tarjetas con demo, tecnologías y acciones. Haz click en 'Ver' para más.",
+                project1_title: "SoMoS Web",
+                project1_desc: "Página web para venta de servicios de diseño gráfico, páginas web, sistemas de gestión y todo lo necesario para mejorar tu marca.",
+                project1_see: "Ver proyecto",
+                experience_title: "Experiencia",
+                experience_lead: "Linea de tiempo vertical con animación y marcadores grandes.",
+                exp1_date: "2024 — Actualidad",
+                exp1_title: "Ministerio de Infraestructura Servicios Públicos y Habitat",
+                exp1_desc: "Desarrollo de aplicaciones web con Symfony, Twig y bases de datos relacionales. Experiencia en backend y frontend, formularios complejos, gestión de entidades y lógicas de negocio. Manejo de Bootstrap y JavaScript para interfaces dinámicas, accesibles y responsivas.",
+                exp2_date: "2021 — Actualidad",
+                exp2_title: "Full Stack Developer",
+                exp2_desc: "Proyectos personales y freelance (apps web, APIs, dashboards).",
+                exp3_date: "2016 — Actualidad",
+                exp3_title: "Diseñador Gráfico & Editor",
+                exp3_desc: "Identidad visual, motion graphics y edición para redes sociales.",
+                contact_title: "Contacto",
+                contact_lead: "Dejanos un mensaje y te respondo por WhatsApp.",
+                contact_name: "Tu nombre",
+                contact_msg: "Tu mensaje...",
+                contact_btn: "Enviar por WhatsApp",
+                contact_note: "Al enviar se abrirá WhatsApp con tu mensaje compilado. Número destino: ",
+                footer: "Hecho con ❤️"
+            },
+            en: {
+                nav: ["Home", "Skills", "Projects", "Experience", "Contact"],
+                menuAria: "Open menu",
+                home_hello: "Hi, I'm",
+                home_and: "and I'm",
+                home_cv: "Download CV",
+                home_contact: "Contact",
+                home_desc: "I'm a Full Stack developer and graphic designer. I love building clean solutions with a careful UX and modern aesthetics.",
+                about_title: "About me",
+                about_lead: "Hi! 👋 I'm Sebastián, a passionate programmer from Argentina 🇦🇷. I'm 23 years old and specialize in web development, design, and multimedia editing.",
+                about_subtitle: "Technical Skills",
+                skills: {
+                    Backend: "Backend",
+                    Frontend: "Frontend",
+                    Database: "Database",
+                    Tools: "Tools",
+                    Other: "Other Skills",
+                    PHP: "PHP",
+                    Symfony: "Symfony",
+                    Doctrine: "Doctrine ORM",
+                    Java: "Java",
+                    Twig: "Twig",
+                    Bootstrap: "Bootstrap",
+                    HTML5: "HTML5",
+                    CSS3: "CSS3",
+                    JavaScript: "JavaScript",
+                    MySQL: "MySQL",
+                    PostgreSQL: "PostgreSQL",
+                    Git: "Git",
+                    GitHub: "GitHub",
+                    GitLab: "GitLab",
+                    Composer: "Composer",
+                    Xdebug: "Xdebug",
+                    Postman: "Postman",
+                    Validations: "Custom validations",
+                    Auth: "Session authentication",
+                    Pagination: "Pagination",
+                    Upload: "File upload",
+                    TwigMacros: "Twig Macros",
+                    Views: "View customization",
+                    Refactor: "Entity refactoring",
+                    REST: "REST Controllers",
+                    MVC: "MVC Architecture"
+                },
+                projects_title: "Featured Projects",
+                projects_lead: "Cards with demo, technologies and actions. Click 'See' for more.",
+                project1_title: "SoMoS Web",
+                project1_desc: "Website for selling graphic design services, web pages, management systems and everything you need to improve your brand.",
+                project1_see: "See project",
+                experience_title: "Experience",
+                experience_lead: "Vertical timeline with animation and large markers.",
+                exp1_date: "2024 — Present",
+                exp1_title: "Ministry of Infrastructure, Public Services and Habitat",
+                exp1_desc: "Development of web applications with Symfony, Twig and relational databases. Experience in backend and frontend, complex forms, entity management and business logic. Use of Bootstrap and JavaScript for dynamic, accessible and responsive interfaces.",
+                exp2_date: "2021 — Present",
+                exp2_title: "Full Stack Developer",
+                exp2_desc: "Personal and freelance projects (web apps, APIs, dashboards).",
+                exp3_date: "2016 — Present",
+                exp3_title: "Graphic Designer & Editor",
+                exp3_desc: "Visual identity, motion graphics and editing for social media.",
+                contact_title: "Contact",
+                contact_lead: "Leave me a message and I'll reply via WhatsApp.",
+                contact_name: "Your name",
+                contact_msg: "Your message...",
+                contact_btn: "Send via WhatsApp",
+                contact_note: "When you send, WhatsApp will open with your compiled message. Destination number: ",
+                footer: "Made with ❤️"
+            }
+        };
+
+        function getLang() {
+            // Permite override manual por localStorage
+            const stored = localStorage.getItem('lang');
+            if (stored) return stored;
+            const nav = navigator.language || navigator.userLanguage || 'es';
+            return nav.startsWith('en') ? 'en' : 'es';
+        }
+
+        function translatePortfolio() {
+            const lang = getLang();
+            const t = translations[lang];
+            if (!t) return;
+            // Nav
+            document.querySelectorAll('#nav-list .nav-link').forEach((el, i) => { el.textContent = t.nav[i]; });
+            document.getElementById('menu-toggle').setAttribute('aria-label', t.menuAria);
+            // Home
+            document.querySelector('.home_sub').textContent = t.home_hello;
+            document.querySelector('.home_role .home_sub').textContent = t.home_and;
+            document.querySelector('.btn.primary.download .btn-text').textContent = t.home_cv;
+            document.querySelector('.btn.ghost .btn-text').textContent = t.home_contact;
+            document.querySelector('.home-desc').textContent = t.home_desc;
+            // About
+            document.querySelector('#habilidades .section-title').textContent = t.about_title;
+            document.querySelector('#habilidades .lead').textContent = t.about_lead;
+            document.querySelector('#habilidades .section-subtitle').textContent = t.about_subtitle;
+            // Skills titles
+            const cats = document.querySelectorAll('.skills-category-title');
+            if (cats.length >= 5) {
+                cats[0].textContent = t.skills.Backend;
+                cats[1].textContent = t.skills.Frontend;
+                cats[2].textContent = t.skills.Database;
+                cats[3].textContent = t.skills.Tools;
+                cats[4].textContent = t.skills.Other;
+            }
+            // Skills names (robusto: usa data-key si existe, si no, fallback al texto)
+            document.querySelectorAll('.skill-item .skill-name').forEach(el => {
+                const key = el.dataset.key || el.textContent.trim();
+                if (t.skills[key]) el.textContent = t.skills[key];
+            });
+            // Projects
+            document.querySelector('#proyectos .section-title').textContent = t.projects_title;
+            document.querySelector('#proyectos .muted').textContent = t.projects_lead;
+            document.querySelector('.project-card h3').textContent = t.project1_title;
+            document.querySelector('.project-card p').textContent = t.project1_desc;
+            document.querySelector('.btn-view-text').textContent = t.project1_see;
+            // Experiencia
+            document.querySelector('#experiencia .section-title').textContent = t.experience_title;
+            document.querySelector('#experiencia .muted').textContent = t.experience_lead;
+            const exp = document.querySelectorAll('.timeline-item');
+            if (exp.length >= 3) {
+                exp[0].querySelector('h3').textContent = t.exp1_date;
+                exp[0].querySelector('strong').textContent = t.exp1_title;
+                exp[0].querySelector('p').childNodes[2].textContent = t.exp1_desc;
+                exp[1].querySelector('h3').textContent = t.exp2_date;
+                exp[1].querySelector('strong').textContent = t.exp2_title;
+                exp[1].querySelector('p').childNodes[2].textContent = t.exp2_desc;
+                exp[2].querySelector('h3').textContent = t.exp3_date;
+                exp[2].querySelector('strong').textContent = t.exp3_title;
+                exp[2].querySelector('p').childNodes[2].textContent = t.exp3_desc;
+            }
+            // Contacto
+            document.querySelector('#contacto .section-title').textContent = t.contact_title;
+            document.querySelector('#contacto .lead').textContent = t.contact_lead;
+            document.querySelector('label[for="nombreContacto"]').textContent = t.contact_name;
+            document.querySelector('label[for="mensajeContacto"]').textContent = t.contact_msg;
+            document.querySelector('#contacto .btn.primary .btn-text').textContent = t.contact_btn;
+            document.querySelector('#contacto .muted.small').innerHTML = t.contact_note + '<strong>+54 343 508 6453</strong>';
+            // Footer
+            document.querySelector('.site-footer p').innerHTML = `© <span id="year"></span> Sebastián Kisser — ${t.footer}`;
+            // Actualiza selector visual
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.style.opacity = btn.dataset.lang === lang ? '1' : '.6';
+                btn.disabled = btn.dataset.lang === lang;
+            });
+            // Actualiza autotype
+            if (window.autotypeNombre && window.autotypeRol) {
+                window.autotypeNombre.restart(t.home_name || 'Sebastián Kisser');
+                window.autotypeRol.restart(t.home_role || 'Full Stack Developer & Graphic Designer');
+            }
+        }
+
+        // Autotype robusto y reiniciable
+        class Autotype {
+            constructor(el, text, speed = 60) {
+                this.el = el;
+                this.text = text;
+                this.speed = speed;
+                this.idx = 0;
+                this.timer = null;
+            }
+            type() {
+                if (!this.el) return;
+                this.el.textContent = '';
+                this.idx = 0;
+                this._typeNext();
+            }
+            _typeNext() {
+                if (this.idx <= this.text.length) {
+                    this.el.textContent = this.text.slice(0, this.idx);
+                    this.idx++;
+                    this.timer = setTimeout(() => this._typeNext(), this.speed);
+                }
+            }
+            restart(newText) {
+                if (this.timer) clearTimeout(this.timer);
+                this.text = newText;
+                this.type();
+            }
+        }
+
+        function setupAutotype() {
+            const lang = getLang();
+            const t = translations[lang];
+            const nombreEl = document.getElementById('nombre');
+            const rolEl = document.getElementById('rol');
+            window.autotypeNombre = new Autotype(nombreEl, t.home_name || 'Sebastián Kisser', 60);
+            window.autotypeRol = new Autotype(rolEl, t.home_role || 'Full Stack Developer & Graphic Designer', 40);
+            window.autotypeNombre.type();
+            window.autotypeRol.type();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupAutotype();
+            translatePortfolio();
+            // Selector de idioma
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    const lang = btn.dataset.lang;
+                    localStorage.setItem('lang', lang);
+                    setupAutotype();
+                    translatePortfolio();
+                });
+            });
+        });
+        </script>
 </head>
 <body>
     <!-- Custom cursor element -->
@@ -28,6 +304,11 @@
     <header class="site-header">
         <nav class="nav container">
             <a class="brand" href="#inicio">Sebastián Kisser</a>
+            <div class="lang-switcher" style="display:flex;gap:8px;align-items:center;margin-left:auto;">
+                <button class="lang-btn" data-lang="es" aria-label="Español">ES</button>
+                <span class="lang-divider">|</span>
+                <button class="lang-btn" data-lang="en" aria-label="English">EN</button>
+            </div>
             <button id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
                 <span class="menu-icon" aria-hidden="true">
                     <img src="./img/favicon.svg" alt="Logo" class="menu-favicon" draggable="false" />
@@ -120,28 +401,28 @@
                         <div class="skills-list">
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
-                                <div class="skill-name">PHP</div>
+                                <div class="skill-name" data-key="PHP">PHP</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
-                                <div class="skill-name">Symfony</div>
+                                <div class="skill-name" data-key="Symfony">Symfony</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/doctrine%20orm-FF6D00.svg?style=for-the-badge&logo=doctrine&logoColor=white" alt="Doctrine ORM">
-                                <div class="skill-name">Doctrine ORM</div>
+                                <div class="skill-name" data-key="Doctrine ORM">Doctrine ORM</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
-                                <div class="skill-name">Java</div>
+                                <div class="skill-name" data-key="Java">Java</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 60%"></div>
                                 </div>
@@ -154,35 +435,35 @@
                         <div class="skills-list">
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/twig-3C873A.svg?style=for-the-badge&logo=twig&logoColor=white" alt="Twig">
-                                <div class="skill-name">Twig</div>
+                                <div class="skill-name" data-key="Twig">Twig</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 95%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
-                                <div class="skill-name">Bootstrap</div>
+                                <div class="skill-name" data-key="Bootstrap">Bootstrap</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
-                                <div class="skill-name">HTML5</div>
+                                <div class="skill-name" data-key="HTML5">HTML5</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 95%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-                                <div class="skill-name">CSS3</div>
+                                <div class="skill-name" data-key="CSS3">CSS3</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item" style="margin-bottom: 20px">
                                 <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
-                                <div class="skill-name">JavaScript</div>
+                                <div class="skill-name" data-key="JavaScript">JavaScript</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 80%"></div>
                                 </div>
@@ -195,14 +476,14 @@
                         <div class="skills-list">
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
-                                <div class="skill-name">MySQL</div>
+                                <div class="skill-name" data-key="MySQL">MySQL</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
-                                <div class="skill-name">PostgreSQL</div>
+                                <div class="skill-name" data-key="PostgreSQL">PostgreSQL</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 75%"></div>
                                 </div>
@@ -215,42 +496,42 @@
                         <div class="skills-list">
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
-                                <div class="skill-name">Git</div>
+                                <div class="skill-name" data-key="Git">Git</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-                                <div class="skill-name">GitHub</div>
+                                <div class="skill-name" data-key="GitHub">GitHub</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
-                                <div class="skill-name">GitLab</div>
+                                <div class="skill-name" data-key="GitLab">GitLab</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/composer-%23F28D1A.svg?style=for-the-badge&logo=composer&logoColor=white" alt="Composer">
-                                <div class="skill-name">Composer</div>
+                                <div class="skill-name" data-key="Composer">Composer</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 75%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/xdebug-2B71B1.svg?style=for-the-badge&logo=xdebug&logoColor=white" alt="Xdebug">
-                                <div class="skill-name">Xdebug</div>
+                                <div class="skill-name" data-key="Xdebug">Xdebug</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 70%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/postman-FF6C37.svg?style=for-the-badge&logo=postman&logoColor=white" alt="Postman">
-                                <div class="skill-name">Postman</div>
+                                <div class="skill-name" data-key="Postman">Postman</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 50%"></div>
                                 </div>
@@ -263,63 +544,63 @@
                         <div class="skills-list">
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-code-branch"></i></div>
-                                <div class="skill-name">Validaciones personalizadas</div>
+                                <div class="skill-name" data-key="Validations">Validaciones personalizadas</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 80%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-lock"></i></div>
-                                <div class="skill-name">Autenticación por sesión</div>
+                                <div class="skill-name" data-key="Auth">Autenticación por sesión</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-file-alt"></i></div>
-                                <div class="skill-name">Paginación</div>
+                                <div class="skill-name" data-key="Pagination">Paginación</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 90%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-upload"></i></div>
-                                <div class="skill-name">Carga de archivos</div>
+                                <div class="skill-name" data-key="Upload">Carga de archivos</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-code"></i></div>
-                                <div class="skill-name">Macros Twig</div>
+                                <div class="skill-name" data-key="TwigMacros">Macros Twig</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
-                                <div class="skill-name">Personalización de vistas</div>
+                                <div class="skill-name" data-key="Views">Personalización de vistas</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-cogs"></i></div>
-                                <div class="skill-name">Refactorización de entidades</div>
+                                <div class="skill-name" data-key="Refactor">Refactorización de entidades</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 80%"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-server"></i></div>
-                                <div class="skill-name">Controladores REST</div>
+                                <div class="skill-name" data-key="REST">Controladores REST</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 75%"></div>
                                 </div>
                             </div>
                             <div class="skill-item" style="margin-bottom: 20px">
                                 <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
-                                <div class="skill-name">Arquitectura MVC</div>
+                                <div class="skill-name" data-key="MVC">Arquitectura MVC</div>
                                 <div class="skill-bar">
                                     <div class="skill-progress" style="--skill-level: 85%"></div>
                                 </div>
