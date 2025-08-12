@@ -29,7 +29,7 @@
     opacity: 1;
     transition: opacity 0.3s cubic-bezier(.2,.9,.3,1);
 }
-}
+
 .somos-slider::after {
     content: '';
     position: absolute;
@@ -141,12 +141,7 @@ body{
     filter: drop-shadow(0 1px 2px #0005);
     pointer-events: none;
 }
-@media (max-width: 900px) {
-    .menu-favicon {
-        display: inline-block;
-    }
-}
-}
+
 .hamburger-icon {
     width: 28px;
     height: 28px;
@@ -1260,7 +1255,7 @@ html {
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.3s, height 0.3s;
-    box-shadow: 0 0 10px rgba(255, 230, 0, 0.5));
+    box-shadow: 0 0 10px rgba(255, 230, 0, 0.5);
 }
 
 .custom-cursor.hover {
@@ -1278,7 +1273,7 @@ html {
     width: 14px;
     height: 14px;
     background-color: var(--accent);
-    box-shadow: 0 0 15px rgba(255, 230, 0, 0.8));
+    box-shadow: 0 0 15px rgba(255, 230, 0, 0.8);
 }
 
 /* Ocultar cursor nativo en todo el sitio */
@@ -1338,7 +1333,7 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     0% { background-position: -100px 0; }
     100% { background-position: 200px 0; }
 }
-}
+
 .btn.primary.download.downloading .progress-bar-bottom {
     width: 100%;
 }
@@ -1412,7 +1407,7 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     40% { transform: scale(1.08); }
     100% { transform: scale(1); }
 }
-}
+
 .btn.primary.download[disabled] {
     cursor: not-allowed;
     opacity: 0.8;
@@ -1431,7 +1426,7 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     opacity: 0;
     transition: opacity 0.2s;
 }
-}
+
 
 .btn.primary.download .progress-bar {
     position: absolute;
@@ -1462,7 +1457,6 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     cursor: not-allowed;
     opacity: 0.8;
 }
-}
 
 .btn.primary.download.hover-animation::before {
     content: '';
@@ -1477,10 +1471,6 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
 
 .btn.primary.downloading {
     pointer-events: none;
-}
-
-.btn.primary.downloading::after {
-    /* Eliminado: ahora la barra es un div interno */
 }
 
 .btn.primary.downloaded {
@@ -1647,6 +1637,9 @@ a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-l
     .nav-link:hover::after, .nav-link.active::after {
         width: 3px;
         height: 80%;
+    }
+    .skills-list {
+        margin-bottom: 50px;
     }
     .form-row{
         flex-direction:column;
