@@ -1,3 +1,40 @@
+@media (max-width: 600px) {
+    .home-inner {
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+        padding-top: 32px;
+        padding-bottom: 32px;
+    }
+    .home-left, .home-right {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+    .profile-frame {
+        width: 90vw;
+        height: 90vw;
+        min-width: 180px;
+        min-height: 180px;
+        max-width: 340px;
+        max-height: 340px;
+        margin: 0 auto;
+    }
+    .home_title {
+        font-size: 2.1rem;
+        word-break: break-word;
+    }
+    .home_role {
+        font-size: 1.1rem;
+        flex-wrap: wrap;
+        word-break: break-word;
+    }
+    .home-desc {
+        font-size: 1rem;
+        max-width: 100%;
+        word-break: break-word;
+    }
+}
 /* Selector de idioma moderno */
 .lang-switcher {
     display: flex;
@@ -8,6 +45,13 @@
     border-radius: 999px;
     padding: 2px 10px;
     box-shadow: 0 2px 8px 0 #0002;
+    transition: box-shadow 0.4s cubic-bezier(.2,.9,.3,1), background 0.4s cubic-bezier(.2,.9,.3,1), transform 0.4s cubic-bezier(.2,.9,.3,1);
+}
+.lang-switcher.switch-anim {
+    box-shadow: 0 0 0 4px var(--accent), 0 2px 16px 0 #ffe60055;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+    transform: scale(1.06) rotate(-1deg);
+    transition: box-shadow 0.4s cubic-bezier(.2,.9,.3,1), background 0.4s cubic-bezier(.2,.9,.3,1), transform 0.4s cubic-bezier(.2,.9,.3,1);
 }
 .lang-divider {
     color: #888;
@@ -28,6 +72,10 @@
     position: relative;
 }
 .lang-btn:focus-visible {
+        /* Ocultar el selector de idioma cuando el menú móvil está abierto */
+        body.menu-open .lang-switcher {
+            display: none !important;
+        }
     box-shadow: 0 0 0 2px var(--accent);
 }
 .lang-btn[disabled], .lang-btn.active {
@@ -891,7 +939,7 @@ body{
 
 .timeline-item{
     position:relative;
-    width:50%;
+    width:80%;
     padding:18px 30px 18px 30px;
     opacity:0;
     transform:translateY(30px);
@@ -899,7 +947,7 @@ body{
     margin-bottom: 40px;
 }
 .timeline-item.left{
-    left:0;
+    left:-30%;
     text-align:right;
 }
 .timeline-item.right{
@@ -978,12 +1026,12 @@ body{
 }
 
 .timeline-marker-left {
-    left:calc(50% - 11.3rem) !important;
+    left:calc(50% - 17.4rem) !important;
     top:24px;
 }
 
 .timeline-marker-right {
-    left:calc(50% - -9rem) !important;
+    left:calc(50% - -15.1rem) !important;
     top:24px;
 }
 
@@ -1610,12 +1658,10 @@ a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timelin
     #menu-toggle{
         display:inline-block;
     }
-    /* Ocultar la lista de navegación por defecto en móvil */
-    .nav-list{
-        /* Anular los estilos de escritorio */
-        display: none !important;
+    /* Menú móvil: oculto por defecto, visible con .open */
+    .nav-list {
         position: fixed;
-        right: -280px; /* Inicialmente fuera de la pantalla */
+        right: -280px;
         top: 0;
         bottom: 0;
         width: 280px;
@@ -1628,16 +1674,18 @@ a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timelin
         transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 998;
         border-left: 3px solid var(--accent);
-        pointer-events: none; /* Deshabilitar interacción cuando está oculto */
-        visibility: hidden; /* Ocultar completamente cuando no está abierto */
-        opacity: 0; /* Transparente cuando está oculto */
+        pointer-events: none;
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
     }
-    .nav-list.open{
-        right: 0; /* Mover a la posición visible */
-        pointer-events: auto; /* Habilitar interacción cuando está abierto */
-        visibility: visible; /* Hacer visible cuando está abierto */
-        opacity: 1; /* Totalmente visible cuando está abierto */
-        display: flex !important; /* Mostrar cuando está abierto */
+    .nav-list.open {
+        right: 0;
+        height: 300px;
+        pointer-events: auto;
+        visibility: visible;
+        opacity: 1;
+        display: flex;
     }
     /* Overlay para cuando el menú está abierto */
     body.menu-open::before {
@@ -1660,13 +1708,15 @@ a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timelin
         visibility: visible;
     }
     .nav-link {
-        padding: 14px 18px;
-        display: block;
+        padding: 16px 18px;
         font-size: 1.1rem;
         border-radius: 12px;
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.03);
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
         transition: all 0.3s ease;
+        text-align: left;
     }
     .nav-link:hover, .nav-link.active {
         background: rgba(255,255,255,0.05);

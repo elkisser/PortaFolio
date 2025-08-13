@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
 */
 
 /* CONFIG */
-const NOMBRE = "Sebastián Kisser";
-const ROL = "Full Stack Developer & Diseñador Gráfico";
+const NOMBRE = "";
+const ROL = "";
 const WHATSAPP_NUMBER = "543435086453"; // sin '+' ni espacios
 
 /* SMOOTH SCROLL para enlaces internos */
@@ -516,41 +516,13 @@ function initCustomCursor() {
         cursor.appendChild(cursorInner);
     }
     
-    // Variables para suavizar el movimiento
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    
-    // Mover el cursor con el mouse con suavizado
+    // Movimiento instantáneo del cursor
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Mostrar el cursor cuando se mueve el mouse
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+        cursor.style.transform = `translate(-50%, -50%)`;
         cursor.style.opacity = '1';
     });
-    
-    // Función de animación para suavizar el movimiento
-    function animateCursor() {
-        // Calcular la posición con efecto de suavizado
-        const easeFactor = 0.15; // Ajustar para más o menos suavidad
-        cursorX += (mouseX - cursorX) * easeFactor;
-        cursorY += (mouseY - cursorY) * easeFactor;
-        
-        // Aplicar la posición al cursor con translate3d para mejor rendimiento
-        cursor.style.left = `${cursorX}px`;
-        cursor.style.top = `${cursorY}px`;
-        cursor.style.transform = `translate(-50%, -50%)`;
-        // Asegurarse de que el cursor esté visible en todo momento
-        if (cursorX > 0 && cursorY > 0) {
-            cursor.style.opacity = '1';
-        }
-        
-        // Continuar la animación
-        requestAnimationFrame(animateCursor);
-    }
-    
-    // Iniciar la animación
-    animateCursor();
     
     // Efecto hover en elementos interactivos
     const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-item, .btn, .timeline-panel, .timeline-marker-left, .timeline-marker-right, input, textarea, .contact-form, .btn-view');

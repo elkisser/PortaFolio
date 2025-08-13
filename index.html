@@ -71,7 +71,7 @@
                 project1_desc: "Página web para venta de servicios de diseño gráfico, páginas web, sistemas de gestión y todo lo necesario para mejorar tu marca.",
                 project1_see: "Ver proyecto",
                 experience_title: "Experiencia",
-                experience_lead: "Linea de tiempo vertical con animación y marcadores grandes.",
+                experience_lead: "Linea de tiempo de mi experiencia laboral.",
                 exp1_date: "2024 — Actualidad",
                 exp1_title: "Ministerio de Infraestructura Servicios Públicos y Habitat",
                 exp1_desc: "Desarrollo de aplicaciones web con Symfony, Twig y bases de datos relacionales. Experiencia en backend y frontend, formularios complejos, gestión de entidades y lógicas de negocio. Manejo de Bootstrap y JavaScript para interfaces dinámicas, accesibles y responsivas.",
@@ -139,7 +139,7 @@
                 project1_desc: "Website for selling graphic design services, web pages, management systems and everything you need to improve your brand.",
                 project1_see: "See project",
                 experience_title: "Experience",
-                experience_lead: "Vertical timeline with animation and large markers.",
+                experience_lead: "Timeline of My Work Experience.",
                 exp1_date: "2024 — Present",
                 exp1_title: "Ministry of Infrastructure, Public Services and Habitat",
                 exp1_desc: "Development of web applications with Symfony, Twig and relational databases. Experience in backend and frontend, complex forms, entity management and business logic. Use of Bootstrap and JavaScript for dynamic, accessible and responsive interfaces.",
@@ -238,6 +238,15 @@
                 window.autotypeNombre.restart(t.home_name || 'Sebastián Kisser');
                 window.autotypeRol.restart(t.home_role || 'Full Stack Developer & Graphic Designer');
             }
+            // Cambia el archivo de CV según idioma
+            const cvBtn = document.querySelector('.btn.primary.download');
+            if (cvBtn) {
+                if (lang === 'en') {
+                    cvBtn.setAttribute('data-href', './documentos/CV SEBA-DEV-EN.pdf');
+                } else {
+                    cvBtn.setAttribute('data-href', './documentos/CV SEBA-DEV-ES.pdf');
+                }
+            }
         }
 
         // Autotype robusto y reiniciable
@@ -283,13 +292,28 @@
         window.addEventListener('DOMContentLoaded', () => {
             setupAutotype();
             translatePortfolio();
-            // Selector de idioma
+            // Mostrar autotype solo cuando está listo
+            document.getElementById('nombre').style.opacity = '1';
+            document.getElementById('nombre').style.visibility = 'visible';
+            document.getElementById('rol').style.opacity = '1';
+            document.getElementById('rol').style.visibility = 'visible';
+            // Selector de idioma con animación
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', e => {
                     const lang = btn.dataset.lang;
                     localStorage.setItem('lang', lang);
+                    // Animación de cambio
+                    const switcher = btn.closest('.lang-switcher');
+                    if (switcher) {
+                        switcher.classList.add('switch-anim');
+                        setTimeout(() => switcher.classList.remove('switch-anim'), 400);
+                    }
                     setupAutotype();
                     translatePortfolio();
+                    document.getElementById('nombre').style.opacity = '1';
+                    document.getElementById('nombre').style.visibility = 'visible';
+                    document.getElementById('rol').style.opacity = '1';
+                    document.getElementById('rol').style.visibility = 'visible';
                 });
             });
         });
@@ -344,7 +368,7 @@
                     </h2>
 
                     <div class="home-cta">
-                        <button type="button" class="btn primary download" data-href="./documentos/CV SEBASTIAN KISSER.pdf">
+                        <button type="button" class="btn primary download" data-href="./documentos/CV SEBA-DEV-ES.pdf">
                             <span class="progress-bar-bottom"></span>
                             <span class="btn-text">Descargar CV</span>
                             <span class="icon-loading" aria-hidden="true">
@@ -390,7 +414,7 @@
         <section id="habilidades" class="skills section fullpage-section">
             <div class="container">
                 <h2 class="section-title reveal-up">Sobre mí</h2>
-                <p class="lead reveal-up delay-1">
+                <p class="lead reveal-up delay-1" style="padding: 30px 0">
                     ¡Hola! 👋 Soy Sebastián, un apasionado programador proveniente de Argentina 🇦🇷. Tengo 22 años y me especializo en desarrollo web, diseño y edición multimedia.
                 </p>
 
@@ -615,7 +639,7 @@
         <section id="proyectos" class="projects section fullpage-section">
             <div class="container">
                 <h2 class="section-title reveal-up">Proyectos destacados</h2>
-                <p class="muted reveal-up delay-1">Tarjetas con demo, tecnologías y acciones. Haz click en "Ver" para más.</p>
+                <p class="muted reveal-up delay-1" style="padding-top: 30px">Tarjetas con demo, tecnologías y acciones. Haz click en "Ver" para más.</p>
 
                 <div class="projects-grid reveal-grid delay-2">
                     <article class="project-card">
@@ -654,7 +678,7 @@
         <section id="experiencia" class="experiencia section fullpage-section">
             <div class="container">
                 <h2 class="section-title reveal-up">Experiencia</h2>
-                <p class="muted reveal-up delay-1">Linea de tiempo vertical con animación y marcadores grandes.</p>
+                <p class="muted reveal-up delay-1" style="padding-top: 30px">Linea de tiempo de mi experiencia laboral.</p>
 
                 <div class="timeline">
                     <div class="timeline-item reveal-timeline left">
@@ -688,7 +712,7 @@
         <section id="contacto" class="contacto section fullpage-section">
             <div class="container narrow">
                 <h2 class="section-title reveal-up">Contacto</h2>
-                <p class="lead reveal-up delay-1">Dejanos un mensaje y te respondo por WhatsApp.</p>
+                <p class="lead reveal-up delay-1" style="padding-top: 30px">Dejanos un mensaje y te respondo por WhatsApp.</p>
 
                 <form id="whatsappForm" class="contact-form reveal-up delay-2" autocomplete="off">
                     <div class="form-row">
