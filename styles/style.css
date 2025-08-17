@@ -1867,6 +1867,10 @@ a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timelin
     .project-body {
         padding: 16px;
     }
+
+    .project-card {
+        margin-bottom: 60px;
+    }
     
     .btn-view {
         width: 100%;
