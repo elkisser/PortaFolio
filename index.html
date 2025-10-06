@@ -65,11 +65,22 @@
                     REST: "Controladores REST",
                     MVC: "Arquitectura MVC"
                 },
+                skillLevels: {
+                    Basic: "Básico",
+                    Intermediate: "Intermedio",
+                    Advanced: "Avanzado"
+                },
                 projects_title: "Proyectos destacados",
                 projects_lead: "Tarjetas con demo, tecnologías y acciones. Haz click en 'Ver' para más.",
                 project1_title: "SoMoS Web",
                 project1_desc: "Página web para venta de servicios de diseño gráfico, páginas web, sistemas de gestión y todo lo necesario para mejorar tu marca.",
                 project1_see: "Ver proyecto",
+                project2_title: "LuminaEdit",
+                project2_desc: "Aplicación web avanzada de eliminación de fondos con IA 100% local y privada. Combina TensorFlow.js con aceleración WebGL para procesamiento en tiempo real sin comprometer la privacidad del usuario.",
+                project2_see: "Ver proyecto",
+                project3_title: "TheWordIsBeautiful",
+                project3_desc: "Plataforma de escritura creativa con herramientas de formato avanzadas y comunidad de escritores.",
+                project3_see: "Ver proyecto",
                 experience_title: "Experiencia",
                 experience_lead: "Linea de tiempo de mi experiencia laboral.",
                 exp1_date: "2024 — Actualidad",
@@ -133,11 +144,22 @@
                     REST: "REST Controllers",
                     MVC: "MVC Architecture"
                 },
+                skillLevels: {
+                    Basic: "Basic",
+                    Intermediate: "Intermediate",
+                    Advanced: "Advanced"
+                },
                 projects_title: "Featured Projects",
                 projects_lead: "Cards with demo, technologies and actions. Click 'See' for more.",
                 project1_title: "SoMoS Web",
                 project1_desc: "Website for selling graphic design services, web pages, management systems and everything you need to improve your brand.",
                 project1_see: "See project",
+                project2_title: "LuminaEdit",
+                project2_desc: "Advanced web application for background removal with 100% local and private AI. Combines TensorFlow.js with WebGL acceleration for real-time processing without compromising user privacy.",
+                project2_see: "See project",
+                project3_title: "TheWordIsBeautiful",
+                project3_desc: "Creative writing platform with advanced formatting tools and writer community.",
+                project3_see: "See project",
                 experience_title: "Experience",
                 experience_lead: "Timeline of My Work Experience.",
                 exp1_date: "2024 — Present",
@@ -198,12 +220,30 @@
                 const key = el.dataset.key || el.textContent.trim();
                 if (t.skills[key]) el.textContent = t.skills[key];
             });
+            // Skill levels
+            document.querySelectorAll('.skill-level').forEach(el => {
+                const level = el.dataset.level;
+                if (t.skillLevels[level]) el.textContent = t.skillLevels[level];
+            });
             // Projects
             document.querySelector('#proyectos .section-title').textContent = t.projects_title;
             document.querySelector('#proyectos .muted').textContent = t.projects_lead;
-            document.querySelector('.project-card h3').textContent = t.project1_title;
-            document.querySelector('.project-card p').textContent = t.project1_desc;
-            document.querySelector('.btn-view-text').textContent = t.project1_see;
+            const projectCards = document.querySelectorAll('.project-card');
+            if (projectCards.length >= 1) {
+                projectCards[0].querySelector('h3').textContent = t.project1_title;
+                projectCards[0].querySelector('p').textContent = t.project1_desc;
+                projectCards[0].querySelector('.btn-view-text').textContent = t.project1_see;
+            }
+            if (projectCards.length >= 2) {
+                projectCards[1].querySelector('h3').textContent = t.project2_title;
+                projectCards[1].querySelector('p').textContent = t.project2_desc;
+                projectCards[1].querySelector('.btn-view-text').textContent = t.project2_see;
+            }
+            if (projectCards.length >= 3) {
+                projectCards[2].querySelector('h3').textContent = t.project3_title;
+                projectCards[2].querySelector('p').textContent = t.project3_desc;
+                projectCards[2].querySelector('.btn-view-text').textContent = t.project3_see;
+            }
             // Experiencia
             document.querySelector('#experiencia .section-title').textContent = t.experience_title;
             document.querySelector('#experiencia .muted').textContent = t.experience_lead;
@@ -426,30 +466,22 @@
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
                                 <div class="skill-name" data-key="PHP">PHP</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/symfony-%23000000.svg?style=for-the-badge&logo=symfony&logoColor=white" alt="Symfony">
                                 <div class="skill-name" data-key="Symfony">Symfony</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/doctrine%20orm-FF6D00.svg?style=for-the-badge&logo=doctrine&logoColor=white" alt="Doctrine ORM">
                                 <div class="skill-name" data-key="Doctrine ORM">Doctrine ORM</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java">
                                 <div class="skill-name" data-key="Java">Java</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 60%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Intermediate">Intermedio</div>
                             </div>
                         </div>
                     </div>
@@ -460,37 +492,27 @@
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/twig-3C873A.svg?style=for-the-badge&logo=twig&logoColor=white" alt="Twig">
                                 <div class="skill-name" data-key="Twig">Twig</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 95%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
                                 <div class="skill-name" data-key="Bootstrap">Bootstrap</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
                                 <div class="skill-name" data-key="HTML5">HTML5</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 95%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
                                 <div class="skill-name" data-key="CSS3">CSS3</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item" style="margin-bottom: 20px">
                                 <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
                                 <div class="skill-name" data-key="JavaScript">JavaScript</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 80%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                         </div>
                     </div>
@@ -501,16 +523,12 @@
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
                                 <div class="skill-name" data-key="MySQL">MySQL</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
                                 <div class="skill-name" data-key="PostgreSQL">PostgreSQL</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 75%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Intermediate">Intermedio</div>
                             </div>
                         </div>
                     </div>
@@ -521,44 +539,32 @@
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git">
                                 <div class="skill-name" data-key="Git">Git</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
                                 <div class="skill-name" data-key="GitHub">GitHub</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab">
                                 <div class="skill-name" data-key="GitLab">GitLab</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/composer-%23F28D1A.svg?style=for-the-badge&logo=composer&logoColor=white" alt="Composer">
                                 <div class="skill-name" data-key="Composer">Composer</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 75%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Intermediate">Intermedio</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/xdebug-2B71B1.svg?style=for-the-badge&logo=xdebug&logoColor=white" alt="Xdebug">
                                 <div class="skill-name" data-key="Xdebug">Xdebug</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 70%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Intermediate">Intermedio</div>
                             </div>
                             <div class="skill-item">
                                 <img src="https://img.shields.io/badge/postman-FF6C37.svg?style=for-the-badge&logo=postman&logoColor=white" alt="Postman">
                                 <div class="skill-name" data-key="Postman">Postman</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 50%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Basic">Básico</div>
                             </div>
                         </div>
                     </div>
@@ -569,65 +575,47 @@
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-code-branch"></i></div>
                                 <div class="skill-name" data-key="Validations">Validaciones personalizadas</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 80%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-lock"></i></div>
                                 <div class="skill-name" data-key="Auth">Autenticación por sesión</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-file-alt"></i></div>
                                 <div class="skill-name" data-key="Pagination">Paginación</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 90%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-upload"></i></div>
                                 <div class="skill-name" data-key="Upload">Carga de archivos</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-code"></i></div>
                                 <div class="skill-name" data-key="TwigMacros">Macros Twig</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-paint-brush"></i></div>
                                 <div class="skill-name" data-key="Views">Personalización de vistas</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-cogs"></i></div>
                                 <div class="skill-name" data-key="Refactor">Refactorización de entidades</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 80%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                             <div class="skill-item">
                                 <div class="skill-icon"><i class="fas fa-server"></i></div>
                                 <div class="skill-name" data-key="REST">Controladores REST</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 75%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Intermediate">Intermedio</div>
                             </div>
                             <div class="skill-item" style="margin-bottom: 20px">
                                 <div class="skill-icon"><i class="fas fa-project-diagram"></i></div>
                                 <div class="skill-name" data-key="MVC">Arquitectura MVC</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="--skill-level: 85%"></div>
-                                </div>
+                                <div class="skill-level" data-level="Advanced">Avanzado</div>
                             </div>
                         </div>
                     </div>
@@ -661,6 +649,60 @@
                             </div>
                             <div class="project-actions">
                                 <a class="btn-view" href="https://www.somos.env" target="_blank" rel="noopener">
+                                    <span class="btn-view-text">Ver proyecto</span>
+                                    <svg class="btn-view-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-media" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                            <div style="color: white; text-align: center; font-size: 2.5rem; font-weight: bold; z-index: 2;">LuminaEdit</div>
+                            <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: white; z-index: 3;">🤖 IA Local</div>
+                            <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: white; z-index: 3;">🔒 100% Privado</div>
+                        </div>
+                        <div class="project-body">
+                            <h3>LuminaEdit</h3>
+                            <p>Aplicación web avanzada de eliminación de fondos con IA 100% local y privada. Combina TensorFlow.js con aceleración WebGL para procesamiento en tiempo real sin comprometer la privacidad del usuario.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">TensorFlow.js</span>
+                                <span class="tech-tag">JavaScript ES6+</span>
+                                <span class="tech-tag">Tailwind CSS</span>
+                                <span class="tech-tag">Netlify</span>
+                                <span class="tech-tag">WebGL</span>
+                                <span class="tech-tag">Node.js</span>
+                            </div>
+                            <div class="project-actions">
+                                <a class="btn-view" href="luminaedit.netlify.app" target="_blank" rel="noopener">
+                                    <span class="btn-view-text">Ver proyecto</span>
+                                    <svg class="btn-view-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-media" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center;">
+                            <div style="color: white; text-align: center; font-size: 2.5rem; font-weight: bold;">TheWordIsBeautiful</div>
+                        </div>
+                        <div class="project-body">
+                            <h3>TheWordIsBeautiful</h3>
+                            <p>Plataforma de escritura creativa con herramientas de formato avanzadas y comunidad de escritores.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">PHP</span>
+                                <span class="tech-tag">Symfony</span>
+                                <span class="tech-tag">MySQL</span>
+                                <span class="tech-tag">Bootstrap</span>
+                            </div>
+                            <div class="project-actions">
+                                <a class="btn-view" href="thewordisbeautiful.netlify.app" target="_blank" rel="noopener">
                                     <span class="btn-view-text">Ver proyecto</span>
                                     <svg class="btn-view-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>

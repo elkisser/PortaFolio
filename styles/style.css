@@ -688,31 +688,55 @@ body{
     color: rgba(255,255,255,0.9);
 }
 
-.skill-bar {
-    height: 4px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    position: relative;
+.skill-level {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     margin-top: 8px;
+    transition: all var(--transition);
+    border: 1px solid transparent;
 }
 
-.skill-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: var(--accent);
-    width: 0;
-    transition: width 1s ease;
+.skill-level[data-level="Basic"] {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+    border-color: rgba(255, 193, 7, 0.3);
 }
 
-.skill-item:hover .skill-progress {
-    animation: skill-fill 1s forwards;
+.skill-level[data-level="Intermediate"] {
+    background: rgba(255, 152, 0, 0.1);
+    color: #ff9800;
+    border-color: rgba(255, 152, 0, 0.3);
 }
 
-@keyframes skill-fill {
-    to { width: var(--skill-level); }
+.skill-level[data-level="Advanced"] {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border-color: rgba(76, 175, 80, 0.3);
+}
+
+.skill-item:hover .skill-level {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.skill-item:hover .skill-level[data-level="Basic"] {
+    background: rgba(255, 193, 7, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.skill-item:hover .skill-level[data-level="Intermediate"] {
+    background: rgba(255, 152, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+}
+
+.skill-item:hover .skill-level[data-level="Advanced"] {
+    background: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
 /* PROJECTS SECTION */
