@@ -658,6 +658,9 @@ body{
     transition: all var(--transition);
     overflow: hidden;
     border: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .skill-item:hover {
@@ -670,9 +673,14 @@ body{
     width: 24px;
     height: 24px;
     object-fit: contain;
-    margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
+}
+
+.skill-item .skill-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .skill-icon {
@@ -681,11 +689,10 @@ body{
 }
 
 .skill-name {
-    display: inline-block;
-    vertical-align: middle;
     font-size: 0.95rem;
     font-weight: 500;
     color: rgba(255,255,255,0.9);
+    flex: 1;
 }
 
 .skill-level {
@@ -696,9 +703,9 @@ body{
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 8px;
     transition: all var(--transition);
     border: 1px solid transparent;
+    align-self: flex-start;
 }
 
 .skill-level[data-level="Basic"] {
@@ -1605,6 +1612,90 @@ a, button, .project-card, .btn, .timeline-panel, .timeline-marker-left, .timelin
 @keyframes loading-shine {
     0% { left: -100%; }
     100% { left: 100%; }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Project video styles */
+.project-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    transition: opacity 0.6s ease;
+}
+
+.project-card:hover .project-video {
+    opacity: 1;
+}
+
+.luminaedit-video-container,
+.thewordisbeautiful-video-container,
+.somos-video-container {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+    min-height: 220px;
+    border-radius: 18px 18px 0 0;
+    background: #222;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 8px 32px 0 #0002;
+}
+
+.luminaedit-video-container::after,
+.thewordisbeautiful-video-container::after,
+.somos-video-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,rgba(0,0,0,0.18) 60%,rgba(0,0,0,0.38) 100%);
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 18px 18px 0 0;
+}
+
+/* Fallback slider para SoMoS cuando no hay video */
+.somos-slider-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.somos-slider-fallback .somos-slide {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(.2,.9,.3,1);
+    z-index: 1;
+}
+
+.somos-slider-fallback .somos-slide.active {
+    opacity: 0.4;
+    z-index: 2;
+    transition: opacity 0.7s cubic-bezier(.2,.9,.3,1);
+}
+
+.somos-video-container:hover .somos-slider-fallback .somos-slide.active {
+    opacity: 1;
+    transition: opacity 0.3s cubic-bezier(.2,.9,.3,1);
+}
+
+@media (max-width: 600px) {
+    .luminaedit-video-container,
+    .thewordisbeautiful-video-container,
+    .somos-video-container { 
+        height: 180px; 
+        min-height: 120px; 
+    }
 }
 
 @keyframes download-progress {

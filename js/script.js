@@ -196,7 +196,70 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Animate skills on load
     animateSkills();
+    
+    // Initialize portfolio components
+    initializePortfolio();
 });
+
+// Initialize portfolio components
+function initializePortfolio() {
+    // Setup autotype and translations
+    setupAutotype();
+    translatePortfolio();
+    
+    // Show autotype elements when ready
+    const nombreEl = document.getElementById('nombre');
+    const rolEl = document.getElementById('rol');
+    if (nombreEl) {
+        nombreEl.style.opacity = '1';
+        nombreEl.style.visibility = 'visible';
+    }
+    if (rolEl) {
+        rolEl.style.opacity = '1';
+        rolEl.style.visibility = 'visible';
+    }
+    
+    // Setup video loops
+    const luminaEditVideo = document.querySelector('.luminaedit-video');
+    const theWordIsBeautifulVideo = document.querySelector('.thewordisbeautiful-video');
+    const somosVideo = document.querySelector('.somos-video');
+    
+    if (luminaEditVideo) setupVideoLoop(luminaEditVideo);
+    if (theWordIsBeautifulVideo) setupVideoLoop(theWordIsBeautifulVideo);
+    if (somosVideo) setupVideoLoop(somosVideo);
+    
+    // Setup SoMoS slider fallback
+    setupSomosSlider();
+    
+    // Language selector with animation
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const lang = btn.dataset.lang;
+            localStorage.setItem('lang', lang);
+            
+            // Animation effect
+            const switcher = btn.closest('.lang-switcher');
+            if (switcher) {
+                switcher.classList.add('switch-anim');
+                setTimeout(() => switcher.classList.remove('switch-anim'), 400);
+            }
+            
+            // Restart autotype and translations
+            setupAutotype();
+            translatePortfolio();
+            
+            // Show autotype elements again
+            if (nombreEl) {
+                nombreEl.style.opacity = '1';
+                nombreEl.style.visibility = 'visible';
+            }
+            if (rolEl) {
+                rolEl.style.opacity = '1';
+                rolEl.style.visibility = 'visible';
+            }
+        });
+    });
+}
 
 /* ANIMATE SKILLS */
 function animateSkills() {
