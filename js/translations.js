@@ -51,16 +51,21 @@ const translations = {
         },
         projects_title: "Proyectos destacados",
         projects_lead: "Tarjetas con demo, tecnologías y acciones. Haz click en 'Ver' para más.",
-        project1_title: "SoMoS - Portfolio de Agencia Digital",
-        project1_desc: "Sitio web portfolio moderno para agencia de desarrollo digital que se especializa en crear experiencias digitales únicas. Combina diseño elegante con funcionalidad avanzada, presentando servicios y trabajos de manera atractiva e interactiva.",
+        project1_title: "Chromora - Generador Inteligente de Paletas",
+        project1_desc: "Aplicación moderna para crear paletas de colores hermosas y útiles. Combina generación manual con 6 tipos de paletas armónicas y generación asistida por IA a partir de prompts en lenguaje natural. Incluye exportación, historial persistente y reescalado armónico LCH.",
         project1_see: "Ver proyecto",
-        project2_title: "LuminaEdit",
-        project2_desc: "Aplicación web avanzada de eliminación de fondos con IA 100% local y privada. Combina TensorFlow.js con aceleración WebGL para procesamiento en tiempo real sin comprometer la privacidad del usuario.",
+        project2_title: "SoMoS - Portfolio de Agencia Digital",
+        project2_desc: "Sitio web portfolio moderno para agencia de desarrollo digital que se especializa en crear experiencias digitales únicas. Combina diseño elegante con funcionalidad avanzada, presentando servicios y trabajos de manera atractiva e interactiva.",
         project2_see: "Ver proyecto",
-        project3_title: "TheWordIsBeautiful",
-        project3_desc: "Experiencia web inmersiva e interactiva que te lleva en un viaje épico a través del sistema solar. Explora cada planeta con animaciones fluidas, información detallada y efectos visuales espectaculares.",
+        project3_title: "LuminaEdit",
+        project3_desc: "Aplicación web avanzada de eliminación de fondos con IA 100% local y privada. Combina TensorFlow.js con aceleración WebGL para procesamiento en tiempo real sin comprometer la privacidad del usuario.",
         project3_see: "Ver proyecto",
+        project4_title: "TheWordIsBeautiful",
+        project4_desc: "Experiencia web inmersiva e interactiva que te lleva en un viaje épico a través del sistema solar. Explora cada planeta con animaciones fluidas, información detallada y efectos visuales espectaculares.",
+        project4_see: "Ver proyecto",
         badges: {
+            chromora_ai: "🎨 IA + Manual",
+            chromora_lch: "🌈 Paletas LCH",
             somos_services: "⚡ Astro 5",
             somos_entrepreneurs: "🎨 Agencia Digital",
             lumina_ai: "🤖 IA Local",
@@ -138,16 +143,21 @@ const translations = {
         },
         projects_title: "Featured Projects",
         projects_lead: "Cards with demo, technologies and actions. Click 'See' for more.",
-        project1_title: "SoMoS - Digital Agency Portfolio",
-        project1_desc: "Modern portfolio website for a digital development agency specializing in creating unique digital experiences. Combines elegant design with advanced functionality, showcasing services and work in an attractive and interactive way.",
+        project1_title: "Chromora - Intelligent Color Palette Generator",
+        project1_desc: "Modern application for creating beautiful and useful color palettes. Combines manual generation with 6 types of harmonic palettes and AI-assisted generation from natural language prompts. Includes export, persistent history and harmonic LCH rescaling.",
         project1_see: "See project",
-        project2_title: "LuminaEdit",
-        project2_desc: "Advanced web application for background removal with 100% local and private AI. Combines TensorFlow.js with WebGL acceleration for real-time processing without compromising user privacy.",
+        project2_title: "SoMoS - Digital Agency Portfolio",
+        project2_desc: "Modern portfolio website for a digital development agency specializing in creating unique digital experiences. Combines elegant design with advanced functionality, showcasing services and work in an attractive and interactive way.",
         project2_see: "See project",
-        project3_title: "TheWordIsBeautiful",
-        project3_desc: "Immersive and interactive web experience that takes you on an epic journey through the solar system. Explore each planet with smooth animations, detailed information and spectacular visual effects.",
+        project3_title: "LuminaEdit",
+        project3_desc: "Advanced web application for background removal with 100% local and private AI. Combines TensorFlow.js with WebGL acceleration for real-time processing without compromising user privacy.",
         project3_see: "See project",
+        project4_title: "TheWordIsBeautiful",
+        project4_desc: "Immersive and interactive web experience that takes you on an epic journey through the solar system. Explore each planet with smooth animations, detailed information and spectacular visual effects.",
+        project4_see: "See project",
         badges: {
+            chromora_ai: "🎨 AI + Manual",
+            chromora_lch: "🌈 LCH Palettes",
             somos_services: "⚡ Astro 5",
             somos_entrepreneurs: "🎨 Digital Agency",
             lumina_ai: "🤖 Local AI",
@@ -248,14 +258,25 @@ function translatePortfolio() {
         projectCards[2].querySelector('p').textContent = t.project3_desc;
         projectCards[2].querySelector('.btn-view-text').textContent = t.project3_see;
     }
+    if (projectCards.length >= 4) {
+        projectCards[3].querySelector('h3').textContent = t.project4_title;
+        projectCards[3].querySelector('p').textContent = t.project4_desc;
+        projectCards[3].querySelector('.btn-view-text').textContent = t.project4_see;
+    }
     
     // Update project badges
+    const chromoraBadge1 = document.querySelector('.chromora-badge-1');
+    const chromoraBadge2 = document.querySelector('.chromora-badge-2');
     const somosBadge1 = document.querySelector('.somos-badge-1');
     const somosBadge2 = document.querySelector('.somos-badge-2');
     const luminaBadge1 = document.querySelector('.lumina-badge-1');
     const luminaBadge2 = document.querySelector('.lumina-badge-2');
     const thewordBadge1 = document.querySelector('.theword-badge-1');
     const thewordBadge2 = document.querySelector('.theword-badge-2');
+    
+    // Chromora badges
+    if (chromoraBadge1) chromoraBadge1.textContent = t.badges.chromora_ai;
+    if (chromoraBadge2) chromoraBadge2.textContent = t.badges.chromora_lch;
     
     // SoMoS badges
     if (somosBadge1) somosBadge1.textContent = t.badges.somos_services;
