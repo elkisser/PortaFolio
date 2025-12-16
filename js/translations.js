@@ -20,20 +20,32 @@ const translations = {
             PHP: "PHP",
             Symfony: "Symfony",
             Doctrine: "Doctrine ORM",
+            "Doctrine ORM": "Doctrine ORM",
             Java: "Java",
+            "Node.js": "Node.js",
             Twig: "Twig",
             Bootstrap: "Bootstrap",
             HTML5: "HTML5",
             CSS3: "CSS3",
             JavaScript: "JavaScript",
+            TypeScript: "TypeScript",
+            React: "React",
+            "Next.js": "Next.js",
+            "Tailwind CSS": "Tailwind CSS",
+            Astro: "Astro",
+            Vite: "Vite",
+            "React Router": "React Router",
+            "Framer Motion": "Framer Motion",
             MySQL: "MySQL",
             PostgreSQL: "PostgreSQL",
+            Firebase: "Firebase",
             Git: "Git",
             GitHub: "GitHub",
             GitLab: "GitLab",
             Composer: "Composer",
             Xdebug: "Xdebug",
             Postman: "Postman",
+            Netlify: "Netlify",
             Validations: "Validaciones personalizadas",
             Auth: "Autenticación por sesión",
             Pagination: "Paginación",
@@ -42,7 +54,12 @@ const translations = {
             Views: "Personalización de vistas",
             Refactor: "Refactorización de entidades",
             REST: "Controladores REST",
-            MVC: "Arquitectura MVC"
+            MVC: "Arquitectura MVC",
+            "TensorFlow.js": "TensorFlow.js",
+            WebGL: "WebGL",
+            "Anime.js": "Anime.js",
+            "Chroma.js": "Chroma.js",
+            "Context API": "Context API"
         },
         skillLevels: {
             Basic: "Básico",
@@ -63,6 +80,9 @@ const translations = {
         project4_title: "TheWordIsBeautiful",
         project4_desc: "Experiencia web inmersiva e interactiva que te lleva en un viaje épico a través del sistema solar. Explora cada planeta con animaciones fluidas, información detallada y efectos visuales espectaculares.",
         project4_see: "Ver proyecto",
+        project5_title: "The Cookie Box – Sitio de E-Commerce Artesanal",
+        project5_desc: "Experiencia web para The Cookie Box (Santa Fe, Argentina) con catálogo filtrable, carrito animado y panel de administración seguro. Incluye conversión automática de imágenes a WebP, animaciones suaves con Framer Motion y conexión directa a Instagram y WhatsApp.",
+        project5_see: "Ver proyecto",
         badges: {
             chromora_ai: "🎨 IA + Manual",
             chromora_lch: "🌈 Paletas LCH",
@@ -71,7 +91,9 @@ const translations = {
             lumina_ai: "🤖 IA Local",
             lumina_private: "🔒 100% Privado",
             theword_solar: "🌌 Sistema Solar",
-            theword_interactive: "🚀 Interactivo"
+            theword_interactive: "🚀 Interactivo",
+            cookiebox_ecommerce: "🛒 E-Commerce React",
+            cookiebox_firebase: "🍪 Firebase + Animaciones"
         },
         experience_title: "Experiencia",
         experience_lead: "Linea de tiempo de mi experiencia laboral.",
@@ -112,20 +134,32 @@ const translations = {
             PHP: "PHP",
             Symfony: "Symfony",
             Doctrine: "Doctrine ORM",
+            "Doctrine ORM": "Doctrine ORM",
             Java: "Java",
+            "Node.js": "Node.js",
             Twig: "Twig",
             Bootstrap: "Bootstrap",
             HTML5: "HTML5",
             CSS3: "CSS3",
             JavaScript: "JavaScript",
+            TypeScript: "TypeScript",
+            React: "React",
+            "Next.js": "Next.js",
+            "Tailwind CSS": "Tailwind CSS",
+            Astro: "Astro",
+            Vite: "Vite",
+            "React Router": "React Router",
+            "Framer Motion": "Framer Motion",
             MySQL: "MySQL",
             PostgreSQL: "PostgreSQL",
+            Firebase: "Firebase",
             Git: "Git",
             GitHub: "GitHub",
             GitLab: "GitLab",
             Composer: "Composer",
             Xdebug: "Xdebug",
             Postman: "Postman",
+            Netlify: "Netlify",
             Validations: "Custom validations",
             Auth: "Session authentication",
             Pagination: "Pagination",
@@ -134,7 +168,12 @@ const translations = {
             Views: "View customization",
             Refactor: "Entity refactoring",
             REST: "REST Controllers",
-            MVC: "MVC Architecture"
+            MVC: "MVC Architecture",
+            "TensorFlow.js": "TensorFlow.js",
+            WebGL: "WebGL",
+            "Anime.js": "Anime.js",
+            "Chroma.js": "Chroma.js",
+            "Context API": "Context API"
         },
         skillLevels: {
             Basic: "Basic",
@@ -155,6 +194,9 @@ const translations = {
         project4_title: "TheWordIsBeautiful",
         project4_desc: "Immersive and interactive web experience that takes you on an epic journey through the solar system. Explore each planet with smooth animations, detailed information and spectacular visual effects.",
         project4_see: "See project",
+        project5_title: "The Cookie Box – Artisan E-Commerce Website",
+        project5_desc: "Web experience for The Cookie Box (Santa Fe, Argentina) with a filterable catalog, animated cart and a secure admin panel. Includes automatic WebP image conversion, smooth animations with Framer Motion, and direct integration with Instagram and WhatsApp.",
+        project5_see: "See project",
         badges: {
             chromora_ai: "🎨 AI + Manual",
             chromora_lch: "🌈 LCH Palettes",
@@ -163,7 +205,9 @@ const translations = {
             lumina_ai: "🤖 Local AI",
             lumina_private: "🔒 100% Private",
             theword_solar: "🌌 Solar System",
-            theword_interactive: "🚀 Interactive"
+            theword_interactive: "🚀 Interactive",
+            cookiebox_ecommerce: "🛒 React E-Commerce",
+            cookiebox_firebase: "🍪 Firebase + Animations"
         },
         experience_title: "Experience",
         experience_lead: "Timeline of My Work Experience.",
@@ -263,6 +307,11 @@ function translatePortfolio() {
         projectCards[3].querySelector('p').textContent = t.project4_desc;
         projectCards[3].querySelector('.btn-view-text').textContent = t.project4_see;
     }
+    if (projectCards.length >= 5) {
+        projectCards[4].querySelector('h3').textContent = t.project5_title;
+        projectCards[4].querySelector('p').textContent = t.project5_desc;
+        projectCards[4].querySelector('.btn-view-text').textContent = t.project5_see;
+    }
     
     // Update project badges
     const chromoraBadge1 = document.querySelector('.chromora-badge-1');
@@ -273,6 +322,8 @@ function translatePortfolio() {
     const luminaBadge2 = document.querySelector('.lumina-badge-2');
     const thewordBadge1 = document.querySelector('.theword-badge-1');
     const thewordBadge2 = document.querySelector('.theword-badge-2');
+    const cookieboxBadge1 = document.querySelector('.cookiebox-badge-1');
+    const cookieboxBadge2 = document.querySelector('.cookiebox-badge-2');
     
     // Chromora badges
     if (chromoraBadge1) chromoraBadge1.textContent = t.badges.chromora_ai;
@@ -289,6 +340,10 @@ function translatePortfolio() {
     // TheWordIsBeautiful badges
     if (thewordBadge1) thewordBadge1.textContent = t.badges.theword_solar;
     if (thewordBadge2) thewordBadge2.textContent = t.badges.theword_interactive;
+
+    // The Cookie Box badges
+    if (cookieboxBadge1) cookieboxBadge1.textContent = t.badges.cookiebox_ecommerce;
+    if (cookieboxBadge2) cookieboxBadge2.textContent = t.badges.cookiebox_firebase;
     
     // Experiencia
     document.querySelector('#experiencia .section-title').textContent = t.experience_title;
