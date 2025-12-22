@@ -83,6 +83,10 @@ const translations = {
         project5_title: "The Cookie Box – Sitio de E-Commerce Artesanal",
         project5_desc: "Experiencia web para The Cookie Box (Santa Fe, Argentina) con catálogo filtrable, carrito animado y panel de administración seguro. Incluye conversión automática de imágenes a WebP, animaciones suaves con Framer Motion y conexión directa a Instagram y WhatsApp.",
         project5_see: "Ver proyecto",
+        project6_title: "Yo No Fui - Juego de Misterio",
+        project6_desc:
+            "Juego web inmersivo de misterio y deducción donde te convertís en detective. Analizá pistas, interrogá sospechosos y resolvé casos únicos generados dinámicamente con distintos niveles de dificultad.",
+        project6_see: "Ver proyecto",
         badges: {
             chromora_ai: "🎨 IA + Manual",
             chromora_lch: "🌈 Paletas LCH",
@@ -93,7 +97,9 @@ const translations = {
             theword_solar: "🌌 Sistema Solar",
             theword_interactive: "🚀 Interactivo",
             cookiebox_ecommerce: "🛒 E-Commerce React",
-            cookiebox_firebase: "🍪 Firebase + Animaciones"
+            cookiebox_firebase: "🍪 Firebase + Animaciones",
+            yonofui_detective: "🕵️‍♂️ Juego de Misterio",
+yonofui_ai: "🤖 IA + Deducción",
         },
         experience_title: "Experiencia",
         experience_lead: "Linea de tiempo de mi experiencia laboral.",
@@ -197,6 +203,10 @@ const translations = {
         project5_title: "The Cookie Box – Artisan E-Commerce Website",
         project5_desc: "Web experience for The Cookie Box (Santa Fe, Argentina) with a filterable catalog, animated cart and a secure admin panel. Includes automatic WebP image conversion, smooth animations with Framer Motion, and direct integration with Instagram and WhatsApp.",
         project5_see: "See project",
+        project6_title: "Yo No Fui - Mystery Game",
+        project6_desc:
+            "Immersive mystery and deduction web game where you become a detective. Analyze clues, interrogate suspects and solve dynamically generated cases with different difficulty levels.",
+        project6_see: "See project",
         badges: {
             chromora_ai: "🎨 AI + Manual",
             chromora_lch: "🌈 LCH Palettes",
@@ -207,7 +217,9 @@ const translations = {
             theword_solar: "🌌 Solar System",
             theword_interactive: "🚀 Interactive",
             cookiebox_ecommerce: "🛒 React E-Commerce",
-            cookiebox_firebase: "🍪 Firebase + Animations"
+            cookiebox_firebase: "🍪 Firebase + Animations",
+            yonofui_detective: "🕵️‍♂️ Mystery Game",
+    yonofui_ai: "🤖 AI + Deduction",
         },
         experience_title: "Experience",
         experience_lead: "Timeline of My Work Experience.",
