@@ -298,32 +298,12 @@ function translatePortfolio() {
     // Projects
     document.querySelector('#proyectos .section-title').textContent = t.projects_title;
     document.querySelector('#proyectos .muted').textContent = t.projects_lead;
-    const projectCards = document.querySelectorAll('.project-card');
-    if (projectCards.length >= 1) {
-        projectCards[0].querySelector('h3').textContent = t.project1_title;
-        projectCards[0].querySelector('p').textContent = t.project1_desc;
-        projectCards[0].querySelector('.btn-view-text').textContent = t.project1_see;
-    }
-    if (projectCards.length >= 2) {
-        projectCards[1].querySelector('h3').textContent = t.project2_title;
-        projectCards[1].querySelector('p').textContent = t.project2_desc;
-        projectCards[1].querySelector('.btn-view-text').textContent = t.project2_see;
-    }
-    if (projectCards.length >= 3) {
-        projectCards[2].querySelector('h3').textContent = t.project3_title;
-        projectCards[2].querySelector('p').textContent = t.project3_desc;
-        projectCards[2].querySelector('.btn-view-text').textContent = t.project3_see;
-    }
-    if (projectCards.length >= 4) {
-        projectCards[3].querySelector('h3').textContent = t.project4_title;
-        projectCards[3].querySelector('p').textContent = t.project4_desc;
-        projectCards[3].querySelector('.btn-view-text').textContent = t.project4_see;
-    }
-    if (projectCards.length >= 5) {
-        projectCards[4].querySelector('h3').textContent = t.project5_title;
-        projectCards[4].querySelector('p').textContent = t.project5_desc;
-        projectCards[4].querySelector('.btn-view-text').textContent = t.project5_see;
-    }
+    
+    // Generic data-i18n handler for projects (and others)
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+    });
     
     // Update project badges
     const chromoraBadge1 = document.querySelector('.chromora-badge-1');
@@ -336,6 +316,8 @@ function translatePortfolio() {
     const thewordBadge2 = document.querySelector('.theword-badge-2');
     const cookieboxBadge1 = document.querySelector('.cookiebox-badge-1');
     const cookieboxBadge2 = document.querySelector('.cookiebox-badge-2');
+    const yonofuiBadge1 = document.querySelector('.yonofui-badge-1');
+    const yonofuiBadge2 = document.querySelector('.yonofui-badge-2');
     
     // Chromora badges
     if (chromoraBadge1) chromoraBadge1.textContent = t.badges.chromora_ai;
@@ -356,6 +338,10 @@ function translatePortfolio() {
     // The Cookie Box badges
     if (cookieboxBadge1) cookieboxBadge1.textContent = t.badges.cookiebox_ecommerce;
     if (cookieboxBadge2) cookieboxBadge2.textContent = t.badges.cookiebox_firebase;
+
+    // Yo No Fui badges
+    if (yonofuiBadge1) yonofuiBadge1.textContent = t.badges.yonofui_detective;
+    if (yonofuiBadge2) yonofuiBadge2.textContent = t.badges.yonofui_ai;
     
     // Experiencia
     document.querySelector('#experiencia .section-title').textContent = t.experience_title;

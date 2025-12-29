@@ -194,11 +194,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Download button animation
     initDownloadButtonAnimation();
     
-    // Animate skills on load
-    animateSkills();
-    
     // Initialize portfolio components
     initializePortfolio();
+    
+    // Initialize skills animation
+    initSkillsAnimation();
 });
 
 // Initialize portfolio components
@@ -235,44 +235,98 @@ function initializePortfolio() {
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', e => {
             const lang = btn.dataset.lang;
+            if (lang === localStorage.getItem('lang')) return;
+            
             localStorage.setItem('lang', lang);
             
-            // Animation effect
+            // Animation effect for button
             const switcher = btn.closest('.lang-switcher');
             if (switcher) {
                 switcher.classList.add('switch-anim');
                 setTimeout(() => switcher.classList.remove('switch-anim'), 400);
             }
             
-            // Restart autotype and translations
-            setupAutotype();
-            translatePortfolio();
+            // Page transition effect: "Blow Up"
+            const mainContent = document.querySelector('main');
+            const navList = document.querySelector('.nav-list');
+            const footer = document.querySelector('.site-footer');
             
-            // Show autotype elements again
-            if (nombreEl) {
-                nombreEl.style.opacity = '1';
-                nombreEl.style.visibility = 'visible';
+            // 1. Hide content
+            if(mainContent) {
+                mainContent.classList.remove('blowup-anim');
+                mainContent.classList.add('content-hidden');
             }
-            if (rolEl) {
-                rolEl.style.opacity = '1';
-                rolEl.style.visibility = 'visible';
+            if(navList) {
+                navList.classList.remove('blowup-anim-nav');
+                navList.classList.add('content-hidden');
             }
+            if(footer) {
+                footer.classList.remove('blowup-anim');
+                footer.classList.add('content-hidden');
+            }
+            
+            setTimeout(() => {
+                // 2. Translate content
+                setupAutotype();
+                translatePortfolio();
+                
+                // Show autotype elements again
+                if (nombreEl) {
+                    nombreEl.style.opacity = '1';
+                    nombreEl.style.visibility = 'visible';
+                }
+                if (rolEl) {
+                    rolEl.style.opacity = '1';
+                    rolEl.style.visibility = 'visible';
+                }
+                
+                // 3. Trigger Animations
+                if(mainContent) {
+                    mainContent.classList.remove('content-hidden');
+                    mainContent.classList.add('blowup-anim');
+                }
+                if(navList) {
+                    navList.classList.remove('content-hidden');
+                    navList.classList.add('blowup-anim-nav');
+                }
+                if(footer) {
+                    footer.classList.remove('content-hidden');
+                    footer.classList.add('blowup-anim');
+                }
+                
+            }, 250); // Short delay for hiding
         });
     });
 }
 
-/* ANIMATE SKILLS */
-function animateSkills() {
-    const skillItems = document.querySelectorAll('.skill-item');
-    skillItems.forEach((item, index) => {
-        setTimeout(() => {
-            item.classList.add('animate-in');
-            const progress = item.querySelector('.skill-progress');
-            if (progress) {
-                progress.style.width = progress.style.getPropertyValue('--skill-level');
+/* ANIMATE SKILLS - Progressive Stagger */
+function initSkillsAnimation() {
+    const categories = document.querySelectorAll('.skills-category');
+    if (!categories.length) return;
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Reveal category
+                entry.target.classList.add('reveal-visible');
+                
+                // Stagger items inside
+                const items = entry.target.querySelectorAll('.skill-item');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('reveal-visible');
+                    }, 100 + (index * 60)); // Stagger delay
+                });
+
+                io.unobserve(entry.target);
             }
-        }, index * 100);
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
     });
+
+    categories.forEach(cat => io.observe(cat));
 }
 
 /* GENERIC SCROLL REVEAL - aplica a clases .reveal-*
