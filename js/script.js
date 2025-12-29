@@ -545,7 +545,7 @@ function setupWhatsappForm() {
         // Simular un pequeño retraso para mostrar la animación
         setTimeout(() => {
             // Construimos mensaje y abrimos WhatsApp
-            const msg = `Hola, soy ${nombre} \n\n${mensaje}`;
+            const msg = `Hola, soy ${nombre}, \n\n${mensaje}`;
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
             window.open(url, "_blank", "noopener");
             
