@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Yo No Fui: la respuesta de la IA se valida contra un esquema antes de entrar al estado del caso">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">04 — YO NO FUI</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">IA → ESTADO VALIDADO</text>
+
+  <text x="120" y="220" class="mono" font-size="20" fill="#a6a5a0">LA IA PROPONE · EL ESQUEMA DECIDE</text>
+
+  <!-- Caja: salida del modelo -->
+  <rect x="120" y="270" width="520" height="360" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <text x="152" y="316" class="mono" font-size="18" fill="#a6a5a0">SALIDA DEL MODELO</text>
+  <g class="mono" font-size="18" fill="#f3f2ee">
+    <text x="152" y="364">{</text>
+    <text x="184" y="402">"caso": "robo en el museo",</text>
+    <text x="184" y="440">"sospechosos": [ 3 ],</text>
+    <text x="184" y="478">"pistas": [ 5 ],</text>
+    <text x="184" y="516">"culpable": "el socio",</text>
+    <text x="184" y="554">"dificultad": "detective"</text>
+    <text x="152" y="592">}</text>
+  </g>
+
+  <!-- Conector -->
+  <g stroke="#e8b75c" stroke-width="2" fill="none">
+    <line x1="640" y1="450" x2="760" y2="450"/>
+    <path d="M760 450 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
+  </g>
+  <text x="700" y="430" class="mono" font-size="14" fill="#a6a5a0" text-anchor="middle">valida</text>
+
+  <!-- Caja: estado del juego -->
+  <rect x="780" y="270" width="560" height="360" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <text x="812" y="316" class="mono" font-size="18" fill="#a6a5a0">ESTADO DEL JUEGO · ZUSTAND</text>
+  <g class="body" font-size="20" fill="#f3f2ee">
+    <text x="812" y="372">Caso cargado</text><text x="1308" y="372" class="mono" fill="#5fd38a" text-anchor="end">OK</text>
+    <line x1="812" y1="396" x2="1308" y2="396" stroke="rgba(255,255,255,0.09)"/>
+    <text x="812" y="444">Sospechosos coherentes</text><text x="1308" y="444" class="mono" fill="#5fd38a" text-anchor="end">OK</text>
+    <line x1="812" y1="468" x2="1308" y2="468" stroke="rgba(255,255,255,0.09)"/>
+    <text x="812" y="516">Pistas enlazadas</text><text x="1308" y="516" class="mono" fill="#5fd38a" text-anchor="end">OK</text>
+    <line x1="812" y1="540" x2="1308" y2="540" stroke="rgba(255,255,255,0.09)"/>
+    <text x="812" y="588">Respuesta inválida</text><text x="1308" y="588" class="mono" fill="#e8b75c" text-anchor="end">SE DESCARTA</text>
+  </g>
+
+  <text x="120" y="848" class="mono" font-size="20" fill="#a6a5a0">SI EL MODELO ALUCINA, EL CASO NO ENTRA AL ESTADO</text>
+</svg>

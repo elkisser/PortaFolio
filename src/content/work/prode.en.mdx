@@ -1,0 +1,57 @@
+---
+# Prode — real case study (EN). Follows the slice-1 standard (Chromora; task 13, Req 5.2/6.2).
+#
+# ----------------------------------------------------------------------------
+# Media decision (design.md §2.5 — reuse-vs-recompose rule, documented per project):
+# There is NO source video for Prode under `img/` (unlike other legacy projects),
+# so there is nothing to "reuse": we RECOMPOSE with composed stills (vector SVG,
+# crisp at any density ≥2×, intentional composition coherent with the identity —
+# ink-900 + a single amber + a status green) under `public/media/prode/`, which
+# resolve at build time and satisfy the §8 schema (non-empty alt + explicit
+# width/height → CLS 0).
+# REAL MEDIA STILL PENDING: actual screenshots/loop of the deployed product
+# (prode-bay.vercel.app) showing a private league and a live match, once they pass
+# the §2.5 criteria (sharp, no debug UI, poster, ≤12s).
+# ----------------------------------------------------------------------------
+title: "Prode"
+year: 2026
+category: ["fullstack"]
+summary: "Real-time sports predictions: private leagues, real match data via API and automatic scoring."
+problem: "Groups of friends who run a prediction pool usually track picks and scores by hand, in spreadsheets or chats. It is tedious, error-prone and goes stale the moment matches kick off. What was missing was a product that pulls real results on its own and keeps the standings up to date without anyone recomputing anything."
+role: "Solo full-stack development: data model, authentication, sports-API integration, scoring logic, the realtime layer and the full UI. Deployment and maintenance included."
+decisions:
+  - decision: "Use Supabase (Postgres + Auth + Realtime) as the backend instead of building a custom server."
+    rationale: "A single-developer project does not need to maintain auth, database and websockets separately. Supabase provides them integrated, and its realtime subscriptions let the standings update themselves on the client with no manual polling or page reloads."
+  - decision: "Compute scoring on the server from the official API results, not from manual entry."
+    rationale: "If points were entered by hand, the system would inherit the very error it set out to remove. By taking the real result from the API and comparing it against each prediction, the score is objective, auditable and identical for everyone."
+  - decision: "Model leagues as private and invite-based rather than an open global ranking."
+    rationale: "The point of a prediction pool is competing with your own group. Private leagues keep the social experience focused and relevant, and avoid the moderation and spam that an open public ranking brings."
+challenges:
+  - "Keeping the table consistent when several matches close almost at once: scoring derives from the official result, not from the arrival order of events."
+  - "Syncing live state across clients without reloads: realtime subscriptions push changes and the UI reserves its space so it doesn't jump (CLS)."
+  - "Handling external sports data that can arrive late or incomplete without breaking the user experience."
+result: "Prode is a deployed full-stack product where a group creates its league, enters predictions and watches the table update itself with real results. It demonstrates external data integration, real time and objective scoring logic end to end."
+stack: ["TypeScript", "Supabase", "PostgreSQL", "Sports APIs", "Realtime"]
+media:
+  - type: "image"
+    src: "/media/prode/cover.svg"
+    alt: "A Prode screen with a live match (2–1, 67th minute), the user's prediction earning 3 points and a private league's standings on the right."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/prode/architecture.svg"
+    alt: "Prode data-flow diagram: from the sports API to Supabase (auth, Postgres, realtime) and on to automatic scoring, with no manual polling."
+    width: 1600
+    height: 900
+links:
+  demo: "https://prode-bay.vercel.app"
+  repo: "https://github.com/elkisser/prode"
+featured: true
+order: 2
+lang: en
+---
+
+Prode started from something everyday: the prediction pool among friends that always
+ends up in a spreadsheet nobody wants to update. The idea was to turn that ritual into a
+product that maintains itself. You enter your pick, real results arrive via API, and your
+private league's table updates live, with nobody adding up points by hand.

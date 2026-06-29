@@ -9,10 +9,14 @@ import {
   ogLocale,
   openGraphTags,
   twitterTags,
+  bcp47,
   buildPersonJsonLd,
   personJsonLdString,
+  buildCreativeWorkJsonLd,
+  creativeWorkJsonLdString,
   PERSON,
   type ResolvedSeo,
+  type CaseStudySeoInput,
 } from '../src/lib/seo';
 
 const SITE = 'https://elkisser.github.io';
@@ -82,6 +86,17 @@ describe('seo: ogLocale', () => {
   });
 });
 
+describe('seo: bcp47', () => {
+  it('derives a BCP 47 language tag from the og:locale mapping', () => {
+    expect(bcp47('es')).toBe('es-AR');
+    expect(bcp47('en')).toBe('en-US');
+  });
+
+  it('falls back to the language code itself when unmapped', () => {
+    expect(bcp47('fr')).toBe('fr');
+  });
+});
+
 const baseSeo: ResolvedSeo = {
   title: 'Work — Sebastián Kisser',
   description: 'desc',
@@ -131,5 +146,82 @@ describe('seo: Person JSON-LD', () => {
     const parsed = JSON.parse(json);
     expect(parsed['@type']).toBe('Person');
     expect(parsed.knowsAbout).toEqual(PERSON.knowsAbout);
+  });
+});
+
+describe('seo: CreativeWork JSON-LD (Req 8.3)', () => {
+  const input: CaseStudySeoInput = {
+    title: 'Chromora',
+    summary: 'IA que traduce lenguaje natural a paletas de color.',
+    lang: 'es',
+    year: 2024,
+    stack: ['Next.js', 'TypeScript', 'Chroma.js'],
+    path: '/es/work/chromora',
+    imagePath: '/img/chromora/cover.webp',
+    links: { demo: 'https://chromora.app', repo: 'https://github.com/elkisser/chromora' },
+  };
+
+  it('builds a localized schema.org CreativeWork with resolved url/image', () => {
+    const ld = buildCreativeWorkJsonLd(input, SITE);
+    expect(ld['@context']).toBe('https://schema.org');
+    expect(ld['@type']).toBe('CreativeWork');
+    expect(ld.name).toBe('Chromora');
+    expect(ld.description).toBe(input.summary);
+    expect(ld.inLanguage).toBe('es-AR');
+    expect(ld.url).toBe('https://elkisser.github.io/es/work/chromora');
+    expect(ld.datePublished).toBe('2024');
+    expect(ld.keywords).toEqual(['Next.js', 'TypeScript', 'Chroma.js']);
+    expect(ld.image).toBe('https://elkisser.github.io/img/chromora/cover.webp');
+  });
+
+  it('embeds the Person author pointing at the site home', () => {
+    const ld = buildCreativeWorkJsonLd(input, SITE);
+    expect(ld.author['@type']).toBe('Person');
+    expect(ld.author.name).toBe(PERSON.name);
+    expect(ld.author.url).toBe('https://elkisser.github.io/');
+  });
+
+  it('lists demo and repo as sameAs links', () => {
+    const ld = buildCreativeWorkJsonLd(input, SITE);
+    expect(ld.sameAs).toEqual(['https://chromora.app', 'https://github.com/elkisser/chromora']);
+  });
+
+  it('omits image and sameAs when no media/links are provided', () => {
+    const minimal: CaseStudySeoInput = {
+      title: 'Untitled',
+      summary: 's',
+      lang: 'en',
+      year: 2023,
+      stack: ['Astro'],
+      path: '/en/work/untitled',
+      links: {},
+    };
+    const ld = buildCreativeWorkJsonLd(minimal, SITE);
+    expect(ld.inLanguage).toBe('en-US');
+    expect('image' in ld).toBe(false);
+    expect('sameAs' in ld).toBe(false);
+  });
+
+  it('serializes to parseable JSON', () => {
+    const parsed = JSON.parse(creativeWorkJsonLdString(input, SITE));
+    expect(parsed['@type']).toBe('CreativeWork');
+    expect(parsed.url).toBe('https://elkisser.github.io/es/work/chromora');
+  });
+
+  it('always yields an absolute CreativeWork url on the configured origin (property)', () => {
+    const slugArb = fc
+      .array(fc.string({ minLength: 1, maxLength: 8 }).map((s) => encodeURIComponent(s)), {
+        minLength: 1,
+      })
+      .map((segs) => `/${segs.join('/')}`);
+    fc.assert(
+      fc.property(slugArb, fc.constantFrom('es', 'en'), fc.integer({ min: 2015, max: 2100 }), (path, lang, year) => {
+        const ld = buildCreativeWorkJsonLd(
+          { title: 't', summary: 's', lang, year, stack: ['Astro'], path, links: {} },
+          SITE,
+        );
+        return ld.url.startsWith('https://elkisser.github.io/') && ld.datePublished === String(year);
+      }),
+    );
   });
 });

@@ -1,0 +1,30 @@
+---
+/**
+ * About en español (`/es/about`) — ruta real e indexable (Req 1.4, design.md
+ * §5.1). About absorbe el stack en contexto, GitHub como evidencia curada y el
+ * timeline de experiencia depurado; cierra con Contact como CTA final
+ * (design.md §4.6, arco narrativo).
+ *
+ * Numeración editorial de secciones: 01 About · 02 Stack · 03 GitHub ·
+ * 04 Experiencia · 05 Contact.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AboutIntro from "../../components/about/AboutIntro.astro";
+import Stack from "../../components/about/Stack.astro";
+import GitHubEvidence from "../../components/about/GitHubEvidence.astro";
+import Timeline from "../../components/about/Timeline.astro";
+import Contact from "../../components/Contact.astro";
+import { useTranslations } from "../../lib/i18n";
+
+const t = useTranslations("es");
+---
+
+<BaseLayout lang="es" title={t.about_title} description={t.about_lead}>
+  <main id="main" tabindex="-1">
+    <AboutIntro lang="es" index="01" />
+    <Stack lang="es" index="02" />
+    <GitHubEvidence lang="es" index="03" />
+    <Timeline lang="es" index="04" />
+    <Contact lang="es" index="05" />
+  </main>
+</BaseLayout>

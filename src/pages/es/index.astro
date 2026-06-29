@@ -5,11 +5,19 @@
  * Cableada a `BaseLayout` con `lang="es"` para que `<html lang>`, los metadatos
  * Open Graph y los `hreflang` salgan correctos por idioma. El opening es el
  * `Hero` definitivo (tarea 8): identidad + declaración + prueba (mini-índice de
- * destacados) + contexto, HTML estático con reveal por máscara. El resto del
- * contenido del slice 1 (About, Contact) llega en tareas posteriores.
+ * destacados) + contexto, HTML estático con reveal por máscara.
+ *
+ * Arco narrativo de la home (design.md §4.6, §5.1): Hero (01 — Work, prueba) →
+ * teaser de About (02 — About, con enlace a `/about`) → Contact (03 — Contact,
+ * CTA de cierre). GitHub como evidencia ya NO vive en la home: se absorbió por
+ * completo en `/about` (design.md §5.1/§5.2), donde tiene el contexto de "cómo
+ * trabaja". El teaser de About conserva el ancla `#about` del scrollspy sin
+ * duplicar la profundidad (stack + GitHub + timeline) que vive en `/about`.
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Hero from "../../components/Hero.astro";
+import AboutIntro from "../../components/about/AboutIntro.astro";
+import Contact from "../../components/Contact.astro";
 import { useTranslations } from "../../lib/i18n";
 
 const t = useTranslations("es");
@@ -18,5 +26,7 @@ const t = useTranslations("es");
 <BaseLayout lang="es" title="Inicio" description={t.hero_lead}>
   <main id="main" tabindex="-1">
     <Hero lang="es" />
+    <AboutIntro lang="es" index="02" more />
+    <Contact lang="es" index="03" />
   </main>
 </BaseLayout>

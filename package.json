@@ -6,9 +6,12 @@
   "description": "Portfolio de Sebastián Kisser — rediseño editorial premium con Astro (islas, salida estática).",
   "scripts": {
     "dev": "astro dev",
+    "fetch:github": "node src/scripts/fetch-github.mjs",
+    "prebuild": "node src/scripts/fetch-github.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "audit:budget": "node scripts/budget-audit.mjs",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",

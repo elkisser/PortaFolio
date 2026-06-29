@@ -1,0 +1,58 @@
+---
+# Prode — case study real (ES). Sigue el estándar de slice 1 (Chromora; tarea 13, Req 5.2/6.2).
+#
+# ----------------------------------------------------------------------------
+# Decisión de medios (design.md §2.5 — regla reuse-vs-recompose, documentada por
+# proyecto):
+# NO existe video fuente de Prode en `img/` (a diferencia de otros proyectos del
+# sitio legacy). Por lo tanto no hay nada que "reusar": se RECOMPONE con stills
+# compuestos (SVG vectorial, nítidos a cualquier densidad ≥2×, composición
+# intencional coherente con la identidad — ink-900 + un único ámbar + verde de
+# estado) en `public/media/prode/`, que resuelven en build y cumplen el esquema §8
+# (alt no vacío + width/height explícitos → CLS 0).
+# MEDIO REAL PENDIENTE: capturas/loop reales del producto desplegado
+# (prode-bay.vercel.app) mostrando una liga privada y un partido en vivo, una vez
+# que pasen los criterios de §2.5 (nitidez, sin UI de debug, poster, ≤12s).
+# ----------------------------------------------------------------------------
+title: "Prode"
+year: 2026
+category: ["fullstack"]
+summary: "Predicciones deportivas en tiempo real: ligas privadas, datos de partidos reales por API y puntuación automática."
+problem: "Los grupos de amigos que arman un 'prode' suelen llevar las predicciones y los puntajes a mano, en planillas o chats. Es tedioso, propenso a error y se desactualiza apenas empiezan los partidos. Faltaba un producto que cargara los resultados reales solos y mantuviera la tabla siempre al día sin que nadie tenga que recalcular."
+role: "Desarrollo full-stack en solitario: modelo de datos, autenticación, integración con APIs deportivas, lógica de puntuación, capa realtime y la UI completa. Despliegue y mantenimiento incluidos."
+decisions:
+  - decision: "Usar Supabase (Postgres + Auth + Realtime) como backend en lugar de armar un servidor a medida."
+    rationale: "Un proyecto de un solo desarrollador no necesita mantener auth, base de datos y websockets por separado. Supabase los da integrados y sus suscripciones realtime permiten que la tabla de posiciones se actualice sola en el cliente, sin polling manual ni recargar la página."
+  - decision: "Calcular la puntuación en el servidor a partir de los resultados oficiales de la API deportiva, no de carga manual."
+    rationale: "Si los puntos se cargaran a mano, el sistema heredaría el mismo error que se quería eliminar. Tomando el resultado real desde la API y comparándolo contra cada pronóstico, el puntaje es objetivo, auditable e igual para todos."
+  - decision: "Modelar las ligas como privadas con invitación en vez de un ranking global abierto."
+    rationale: "El valor del prode es competir con tu propio grupo. Ligas privadas mantienen la experiencia social acotada y relevante, y evitan la moderación y el spam que trae un ranking público abierto."
+challenges:
+  - "Mantener la tabla consistente cuando varios partidos cierran casi a la vez: la puntuación se deriva del resultado oficial, no del orden de llegada de los eventos."
+  - "Sincronizar el estado en vivo entre clientes sin recargar: las suscripciones realtime empujan los cambios y la UI reserva su espacio para no saltar (CLS)."
+  - "Manejar datos deportivos externos que pueden llegar tarde o incompletos sin romper la experiencia del usuario."
+result: "Prode es un producto full-stack desplegado donde un grupo crea su liga, carga pronósticos y ve cómo la tabla se actualiza sola con los resultados reales. Demuestra integración de datos externos, tiempo real y una lógica de puntuación objetiva de punta a punta."
+stack: ["TypeScript", "Supabase", "PostgreSQL", "Sports APIs", "Realtime"]
+media:
+  - type: "image"
+    src: "/media/prode/cover.svg"
+    alt: "Pantalla de Prode con un partido en vivo (2 a 1, minuto 67), el pronóstico del usuario sumando 3 puntos y la tabla de una liga privada a la derecha."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/prode/architecture.svg"
+    alt: "Diagrama de flujo de Prode: de la API deportiva a Supabase (auth, Postgres, realtime) y de ahí a la puntuación automática, sin polling manual."
+    width: 1600
+    height: 900
+links:
+  demo: "https://prode-bay.vercel.app"
+  repo: "https://github.com/elkisser/prode"
+featured: true
+order: 2
+lang: es
+---
+
+Prode nació de algo cotidiano: el "prode" de amigos que siempre termina en una planilla
+que nadie quiere actualizar. La idea fue convertir ese ritual en un producto que se
+mantenga solo. Cargás tu pronóstico, los resultados reales llegan por API y la tabla de
+tu liga privada se actualiza en vivo, sin que nadie tenga que sumar puntos a mano.

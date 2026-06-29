@@ -130,10 +130,72 @@ export interface UIDictionary {
   link_demo: string;
   link_code: string;
 
+  // Case study (página de detalle `/work/[slug]`, design.md §5.4).
+  cs_problem: string;
+  cs_role: string;
+  cs_decisions: string;
+  cs_rationale: string;
+  cs_challenges: string;
+  cs_result: string;
+  cs_stack: string;
+  cs_media: string;
+  cs_links: string;
+  cs_back: string;
+
+  // MediaViewer (carrusel/visor accesible, design.md §6.2, Req 6.x a11y).
+  media_region: string;
+  media_prev: string;
+  media_next: string;
+  media_play: string;
+
   // About.
   about_title: string;
   about_lead: string;
   about_text: string;
+  // Enlace del teaser de About en la home → página About completa (design.md §5.1).
+  about_more: string;
+
+  // Stack en contexto dentro de About (design.md §5.1/§5.2: Stack deja de ser
+  // sección propia y se absorbe en About, "en contexto"). Solo se localizan los
+  // títulos de grupo; los nombres de tecnología son neutrales al idioma.
+  about_stack_title: string;
+  about_stack_lead: string;
+  stack_backend: string;
+  stack_frontend: string;
+  stack_data: string;
+  stack_tools: string;
+
+  // Experiencia (timeline depurado, design.md §5.2). Copy migrado del heredado
+  // (Req 1.4): se conservan las 3 etapas con su fecha, título y descripción.
+  about_exp_title: string;
+  exp1_date: string;
+  exp1_title: string;
+  exp1_desc: string;
+  exp2_date: string;
+  exp2_title: string;
+  exp2_desc: string;
+  exp3_date: string;
+  exp3_title: string;
+  exp3_desc: string;
+
+  // GitHub como evidencia curada (design.md §2.4, Req 7.3/7.4). Sin métricas de
+  // vanidad: proyectos destacados + tecnologías predominantes + actividad honesta.
+  gh_title: string;
+  gh_lead: string;
+  gh_featured: string;
+  gh_languages: string;
+  gh_activity: string;
+  gh_last_push: string;
+  gh_repo: string;
+  gh_profile: string;
+  gh_empty: string;
+  // Colaboraciones curadas a mano: proyectos en los que participó pero que NO le
+  // pertenecen (privados, por invitación). No salen del fetch automático.
+  gh_collaborations: string;
+  gh_role: string;
+  // Etiqueta para colaboraciones en repos privados: en lugar de un enlace muerto
+  // (404 al visitante) se muestra esta marca discreta (Req 7.1/7.4).
+  gh_private_repo: string;
 
   // Contact.
   contact_title: string;
@@ -142,6 +204,14 @@ export interface UIDictionary {
   contact_msg: string;
   contact_send: string;
   contact_err: string;
+  // Errores por campo (códigos de `validateContact`) y feedback de estado.
+  contact_err_name_required: string;
+  contact_err_name_long: string;
+  contact_err_msg_required: string;
+  contact_err_msg_long: string;
+  contact_err_spam: string;
+  contact_status_opening: string;
+  contact_status_error: string;
 
   // Footer.
   footer_built: string;
@@ -179,11 +249,64 @@ const ES: UIDictionary = {
   link_demo: "Demo",
   link_code: "Código",
 
+  cs_problem: "Contexto y problema",
+  cs_role: "Mi rol",
+  cs_decisions: "Decisiones técnicas",
+  cs_rationale: "Por qué",
+  cs_challenges: "Desafíos",
+  cs_result: "Resultado e impacto",
+  cs_stack: "Stack",
+  cs_media: "Medios",
+  cs_links: "Enlaces",
+  cs_back: "Volver a proyectos",
+
+  media_region: "Medios del proyecto",
+  media_prev: "Medio anterior",
+  media_next: "Medio siguiente",
+  media_play: "Reproducir video",
+
   about_title: "Sobre mí",
   about_lead:
     "Desarrollador Full Stack y diseñador, de Argentina. Me muevo cómodo entre el backend en Symfony y PHP y el frontend en React, Next.js y Astro.",
   about_text:
     "Vengo del diseño gráfico, así que cuido la estética tanto como la arquitectura del código. Me interesa construir productos completos: que funcionen rápido, sean accesibles y se sientan bien al usarlos. Hoy trabajo en el sector público desarrollando aplicaciones web internas, y en paralelo construyo proyectos propios y para clientes.",
+  about_more: "Conocé más sobre mí",
+
+  about_stack_title: "Stack en contexto",
+  about_stack_lead:
+    "Las tecnologías con las que trabajo a diario, agrupadas por área. No es una lista de logos: es lo que uso para construir y mantener producto.",
+  stack_backend: "Backend",
+  stack_frontend: "Frontend",
+  stack_data: "Datos & Infra",
+  stack_tools: "Herramientas & Diseño",
+
+  about_exp_title: "Experiencia",
+  exp1_date: "2024 — Actualidad",
+  exp1_title: "Ministerio de Infraestructura, Servicios Públicos y Hábitat",
+  exp1_desc:
+    "Desarrollo de aplicaciones web con Symfony, Twig y bases de datos relacionales. Backend y frontend, formularios complejos, gestión de entidades y lógica de negocio. Interfaces dinámicas, accesibles y responsivas.",
+  exp2_date: "2021 — Actualidad",
+  exp2_title: "Full Stack Developer — Freelance",
+  exp2_desc:
+    "Proyectos personales y para clientes: apps web, APIs, dashboards y e-commerce.",
+  exp3_date: "2016 — Actualidad",
+  exp3_title: "Diseñador Gráfico & Editor",
+  exp3_desc:
+    "Identidad visual, motion graphics y edición audiovisual para redes sociales.",
+
+  gh_title: "En GitHub",
+  gh_lead:
+    "Una selección curada de mi trabajo abierto: proyectos destacados, las tecnologías que más uso y actividad reciente. Nada de contadores vacíos.",
+  gh_featured: "Repositorios destacados",
+  gh_languages: "Tecnologías predominantes",
+  gh_activity: "Actividad reciente",
+  gh_last_push: "Último cambio",
+  gh_repo: "Repositorio",
+  gh_profile: "Ver perfil completo en GitHub",
+  gh_empty: "Los datos de GitHub no están disponibles por ahora.",
+  gh_collaborations: "Colaboraciones",
+  gh_role: "Rol",
+  gh_private_repo: "Repositorio privado",
 
   contact_title: "Trabajemos juntos",
   contact_lead:
@@ -192,6 +315,13 @@ const ES: UIDictionary = {
   contact_msg: "Tu mensaje",
   contact_send: "Enviar por WhatsApp",
   contact_err: "Completá tu nombre y mensaje.",
+  contact_err_name_required: "Ingresá tu nombre.",
+  contact_err_name_long: "El nombre es demasiado largo (máx. 80 caracteres).",
+  contact_err_msg_required: "Escribí tu mensaje.",
+  contact_err_msg_long: "El mensaje es demasiado largo (máx. 1000 caracteres).",
+  contact_err_spam: "Quitá los enlaces extra para poder enviarlo.",
+  contact_status_opening: "Abriendo WhatsApp…",
+  contact_status_error: "Revisá los campos marcados.",
 
   footer_built: "Diseñado y desarrollado en Argentina",
   footer_top: "Volver arriba ↑",
@@ -226,11 +356,64 @@ const EN: UIDictionary = {
   link_demo: "Demo",
   link_code: "Source",
 
+  cs_problem: "Context & problem",
+  cs_role: "My role",
+  cs_decisions: "Technical decisions",
+  cs_rationale: "Why",
+  cs_challenges: "Challenges",
+  cs_result: "Result & impact",
+  cs_stack: "Stack",
+  cs_media: "Media",
+  cs_links: "Links",
+  cs_back: "Back to work",
+
+  media_region: "Project media",
+  media_prev: "Previous media",
+  media_next: "Next media",
+  media_play: "Play video",
+
   about_title: "About me",
   about_lead:
     "Full Stack developer and designer, from Argentina. I move comfortably between Symfony/PHP on the backend and React, Next.js and Astro on the frontend.",
   about_text:
     "I come from graphic design, so I care about aesthetics as much as code architecture. I like building complete products: fast, accessible and pleasant to use. Today I work in the public sector building internal web apps, while building my own and client projects in parallel.",
+  about_more: "More about me",
+
+  about_stack_title: "Stack in context",
+  about_stack_lead:
+    "The technologies I work with daily, grouped by area. Not a wall of logos: it's what I use to build and maintain product.",
+  stack_backend: "Backend",
+  stack_frontend: "Frontend",
+  stack_data: "Data & Infra",
+  stack_tools: "Tools & Design",
+
+  about_exp_title: "Experience",
+  exp1_date: "2024 — Present",
+  exp1_title: "Ministry of Infrastructure, Public Services and Habitat",
+  exp1_desc:
+    "Web application development with Symfony, Twig and relational databases. Backend and frontend, complex forms, entity management and business logic. Dynamic, accessible and responsive interfaces.",
+  exp2_date: "2021 — Present",
+  exp2_title: "Full Stack Developer — Freelance",
+  exp2_desc:
+    "Personal and client projects: web apps, APIs, dashboards and e-commerce.",
+  exp3_date: "2016 — Present",
+  exp3_title: "Graphic Designer & Editor",
+  exp3_desc:
+    "Visual identity, motion graphics and video editing for social media.",
+
+  gh_title: "On GitHub",
+  gh_lead:
+    "A curated selection of my open work: featured projects, the technologies I use most and recent activity. No empty counters.",
+  gh_featured: "Featured repositories",
+  gh_languages: "Predominant technologies",
+  gh_activity: "Recent activity",
+  gh_last_push: "Last update",
+  gh_repo: "Repository",
+  gh_profile: "View full profile on GitHub",
+  gh_empty: "GitHub data isn't available right now.",
+  gh_collaborations: "Collaborations",
+  gh_role: "Role",
+  gh_private_repo: "Private repository",
 
   contact_title: "Let's work together",
   contact_lead:
@@ -239,6 +422,13 @@ const EN: UIDictionary = {
   contact_msg: "Your message",
   contact_send: "Send via WhatsApp",
   contact_err: "Please fill in your name and message.",
+  contact_err_name_required: "Please enter your name.",
+  contact_err_name_long: "Your name is too long (80 characters max).",
+  contact_err_msg_required: "Please write your message.",
+  contact_err_msg_long: "Your message is too long (1000 characters max).",
+  contact_err_spam: "Please remove the extra links to send it.",
+  contact_status_opening: "Opening WhatsApp…",
+  contact_status_error: "Please check the highlighted fields.",
 
   footer_built: "Designed and developed in Argentina",
   footer_top: "Back to top ↑",

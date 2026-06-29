@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://elkisser.github.io/PortaFolio/sitemap.xml

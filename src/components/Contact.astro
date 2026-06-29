@@ -1,0 +1,161 @@
+---
+/**
+ * Contact — sección de cierre del arco narrativo (design.md §4.6, §5.2; Req
+ * 12.1–12.4). Es el CTA final ELEVADO (design.md §5.2: "Conservar, elevar"):
+ * compone el primitivo `Section` (índice editorial de sección), una intro con
+ * criterio y, junto al formulario validado, accesos directos fuertes — WhatsApp
+ * y descarga de CV — para que el cierre tenga una llamada a la acción clara
+ * (Req 12: contacto simple). El `id="contact"` es el ancla del scrollspy de `Nav`.
+ *
+ * "Elevar" es COMPOSICIÓN/copy/CTA, no reconstruir el formulario: la validación
+ * pura + WhatsApp + feedback accesible siguen viviendo intactos en la isla
+ * `ContactForm` (tarea 14). Aquí solo se añade el marco editorial y los accesos
+ * directos (WhatsApp `wa.me` y CV por idioma), con `rel="noopener noreferrer"`
+ * en los enlaces externos (Req 12.4).
+ *
+ * HTML estático salvo la isla `ContactForm`; el reveal on-scroll lo aporta
+ * `Motion` (montado en el layout) vía `[data-reveal]`, respetando reduced-motion.
+ */
+import Section from "./primitives/Section.astro";
+import Text from "./primitives/Text.astro";
+import Mono from "./primitives/Mono.astro";
+import ContactForm from "./ContactForm.astro";
+import Whatsapp from "./icons/Whatsapp.astro";
+import Download from "./icons/Download.astro";
+import { WHATSAPP_NUMBER } from "../lib/contact";
+import {
+  useTranslations,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../lib/i18n";
+
+interface Props {
+  /** Idioma de la página → copy y etiquetas localizadas. */
+  lang?: string;
+  /** Índice de sección mostrado en mono (por defecto "03"). */
+  index?: string;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE, index = "03" }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+// Accesos directos del CTA final (design.md §5.2): WhatsApp directo + CV por
+// idioma (mismo origen que el Hero, preservando el copy del heredado, Req 1.4).
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}`;
+const cvHref = `/documentos/cv-sebastian-kisser-${lang}.pdf`;
+
+const titleId = "contact-title";
+---
+
+<div id="contact">
+  <Section index={index} label={t.nav_contact} aria-labelledby={titleId} data-reveal>
+    <div class="contact__grid">
+      <div class="contact__intro">
+        <Text as="h2" id={titleId} step="3" font="display">{t.contact_title}</Text>
+        <Text step="1" tone="dim" measure>{t.contact_lead}</Text>
+
+        <!-- CTA directos: WhatsApp (canal principal) + CV. Enlaces reales que
+             funcionan sin JS (Req 12.4); el formulario validado es la vía rica. -->
+        <div class="contact__cta">
+          <a
+            class="contact__cta-primary"
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Whatsapp size={18} />
+            <Mono>WhatsApp</Mono>
+          </a>
+          <a
+            class="contact__cta-secondary"
+            href={cvHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Download size={16} />
+            <Mono>{t.hero_cta_cv}</Mono>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact__form">
+        <ContactForm lang={lang} />
+      </div>
+    </div>
+  </Section>
+</div>
+
+<style>
+  /* Composición editorial: intro + formulario; en desktop, dos columnas
+     asimétricas (la intro como nota de apertura, el formulario como acción). */
+  .contact__grid {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+
+  .contact__intro {
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  /* Accesos directos del CTA final: WhatsApp como acción primaria (relleno
+     ámbar) + CV como secundaria (hairline). Lenguaje editorial del sistema. */
+  .contact__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-lg);
+    margin-block-start: var(--space-sm);
+  }
+
+  .contact__cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-lg);
+    color: var(--amber-ink);
+    text-decoration: none;
+    background-color: var(--amber);
+    border: 1px solid var(--amber);
+    border-radius: var(--r);
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  /* El primitivo `Mono` pinta su texto con `--paper-dim` (gris), que sobre el
+     relleno ámbar queda casi ilegible. Dentro del botón primario forzamos la
+     tinta oscura del acento (`--amber-ink`) para contraste AA. El icono ya
+     hereda este color vía `currentColor`. */
+  .contact__cta-primary :global(.mono) {
+    color: var(--amber-ink);
+  }
+
+  .contact__cta-primary:hover {
+    background-color: var(--amber-hi);
+  }
+
+  .contact__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .contact__cta-secondary:hover {
+    gap: var(--space-2xs);
+  }
+
+  @media (min-width: 900px) {
+    .contact__grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-3xl);
+      align-items: start;
+    }
+  }
+</style>

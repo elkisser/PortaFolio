@@ -84,6 +84,16 @@ export function ogLocale(lang: string): string {
 }
 
 /**
+ * Devuelve la etiqueta de idioma BCP 47 para `schema.org` `inLanguage`
+ * (p. ej. "es" → "es-AR", "en" → "en-US"). Deriva del mismo mapeo que el
+ * `og:locale` (única fuente de verdad) reemplazando el `_` por `-` (forma BCP 47).
+ * Si no hay mapeo, cae al propio código de idioma (que ya es BCP 47 válido).
+ */
+export function bcp47(lang: string): string {
+  return ogLocale(lang).replace("_", "-");
+}
+
+/**
  * Construye el `<title>`: `"<página> — <sitio>"`. Si no hay título de página
  * (o es el propio nombre del sitio) devuelve el título por defecto / el nombre,
  * evitando duplicar el sufijo.
@@ -215,4 +225,103 @@ export function personJsonLdString(
   person: PersonProfile = PERSON,
 ): string {
   return JSON.stringify(buildPersonJsonLd(site, person));
+}
+
+/* -----------------------------------------------------------------------------
+   JSON-LD `CreativeWork` por case study (Req 8.3, design.md §5.4).
+   -----------------------------------------------------------------------------
+   Cada página de detalle (`/work/[slug]`) inyecta un `CreativeWork` LOCALIZADO:
+   nombre/descripción en el idioma de la página, `inLanguage` BCP 47, autor
+   `Person` (el mismo de la home) y los enlaces externos del proyecto (demo/repo)
+   como `sameAs`. Igual que `buildPersonJsonLd`, es una función PURA que resuelve
+   `url`/`image` contra `site`, de modo que es testeable de forma aislada.
+   --------------------------------------------------------------------------- */
+
+/** Datos de un case study necesarios para construir su `CreativeWork`. */
+export interface CaseStudySeoInput {
+  /** Título del proyecto (localizado). */
+  title: string;
+  /** Resumen de 1 línea (localizado) → `description`. */
+  summary: string;
+  /** Idioma de la página (`"es"`/`"en"`) → `inLanguage` BCP 47. */
+  lang: string;
+  /** Año del proyecto → `datePublished`. */
+  year: number;
+  /** Stack tecnológico → `keywords`. */
+  stack: readonly string[];
+  /** Ruta interna de la página de detalle (p. ej. `"/es/work/chromora"`). */
+  path: string;
+  /** Ruta (relativa o absoluta) de la imagen principal, si existe. */
+  imagePath?: string;
+  /** Enlaces externos del proyecto (demo/repo) → `sameAs`. */
+  links?: { demo?: string; repo?: string };
+}
+
+/** Autor embebido (subconjunto de `Person`) dentro del `CreativeWork`. */
+export interface CreativeWorkAuthor {
+  "@type": "Person";
+  name: string;
+  url: string;
+}
+
+/** Forma serializable del JSON-LD `CreativeWork` (schema.org). */
+export interface CreativeWorkJsonLd {
+  "@context": "https://schema.org";
+  "@type": "CreativeWork";
+  name: string;
+  description: string;
+  inLanguage: string;
+  url: string;
+  datePublished: string;
+  keywords: string[];
+  author: CreativeWorkAuthor;
+  image?: string;
+  sameAs?: string[];
+}
+
+/**
+ * Construye el objeto JSON-LD `CreativeWork` de un case study (Req 8.3),
+ * localizado por idioma. `url`/`image` se resuelven contra `site`; el autor es el
+ * `Person` del portfolio (su `url` es la home). `sameAs` reúne demo/repo si
+ * existen. Devuelve el objeto tipado; usar `creativeWorkJsonLdString` para el
+ * `<script type="application/ld+json">`.
+ */
+export function buildCreativeWorkJsonLd(
+  input: CaseStudySeoInput,
+  site: string | URL | undefined,
+  person: PersonProfile = PERSON,
+): CreativeWorkJsonLd {
+  const sameAs = [input.links?.demo, input.links?.repo].filter(
+    (url): url is string => typeof url === "string" && url.length > 0,
+  );
+
+  const ld: CreativeWorkJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: input.title,
+    description: input.summary,
+    inLanguage: bcp47(input.lang),
+    url: absoluteUrl(input.path, site),
+    datePublished: String(input.year),
+    keywords: [...input.stack],
+    author: {
+      "@type": "Person",
+      name: person.name,
+      url: canonicalURL("/", site),
+    },
+  };
+
+  if (input.imagePath) ld.image = absoluteUrl(input.imagePath, site);
+  if (sameAs.length > 0) ld.sameAs = sameAs;
+
+  return ld;
+}
+
+/** Serializa el JSON-LD `CreativeWork` para inyectarlo en un `<script>`. */
+export function creativeWorkJsonLdString(
+  input: CaseStudySeoInput,
+  site: string | URL | undefined,
+  person: PersonProfile = PERSON,
+): string {
+  return JSON.stringify(buildCreativeWorkJsonLd(input, site, person));
 }

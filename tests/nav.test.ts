@@ -13,12 +13,12 @@ describe("nav: navEntries (design.md §5.1)", () => {
   const t = useTranslations("en");
 
   it("por defecto expone 4 entradas… sin Playground (3): Work, About, Contact", () => {
-    const entries = navEntries(t);
+    const entries = navEntries(t, "en");
     expect(entries.map((e) => e.id)).toEqual(["work", "about", "contact"]);
   });
 
   it("incluye Playground entre About y Contact cuando se pide", () => {
-    const entries = navEntries(t, true);
+    const entries = navEntries(t, "en", true);
     expect(entries.map((e) => e.id)).toEqual([
       "work",
       "about",
@@ -28,15 +28,18 @@ describe("nav: navEntries (design.md §5.1)", () => {
   });
 
   it("usa las etiquetas localizadas del diccionario", () => {
-    const en = navEntries(useTranslations("en"));
-    const es = navEntries(useTranslations("es"));
+    const en = navEntries(useTranslations("en"), "en");
+    const es = navEntries(useTranslations("es"), "es");
     expect(en.find((e) => e.id === "work")?.label).toBe("Work");
     expect(es.find((e) => e.id === "work")?.label).toBe("Proyectos");
   });
 
-  it("cada entrada apunta a un ancla en página coherente con su id", () => {
-    for (const entry of navEntries(t, true)) {
-      expect(entry.href).toBe(`#${entry.id}`);
+  it("cada entrada apunta a la ruta real localizada coherente con su id", () => {
+    for (const entry of navEntries(t, "en", true)) {
+      expect(entry.href).toBe(`/en/${entry.id}`);
+    }
+    for (const entry of navEntries(useTranslations("es"), "es", true)) {
+      expect(entry.href).toBe(`/es/${entry.id}`);
     }
   });
 });

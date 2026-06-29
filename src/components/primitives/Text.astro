@@ -21,6 +21,8 @@ interface Props {
   measure?: boolean;
   /** Etiqueta HTML (por defecto `p`). */
   as?: keyof HTMLElementTagNameMap;
+  /** `id` opcional: permite referenciar el texto con `aria-labelledby`. */
+  id?: string;
   class?: string;
 }
 

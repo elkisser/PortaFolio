@@ -1,0 +1,26 @@
+---
+/**
+ * Contact in English (`/en/contact`) — real, indexable route (Req 1.4, design.md
+ * §5.1/§5.2). It's the closing page of the narrative arc (design.md §4.6): a
+ * strong final CTA with WhatsApp + CV and the integrated `ContactForm` island.
+ *
+ * "Preserve, elevate" (design.md §5.2): the form isn't rebuilt; the pure
+ * validation + WhatsApp + accessible feedback still live in the `ContactForm`
+ * island (task 7.1), composed by the editorial `Contact.astro` section. The
+ * island hydrates `client:visible`-style (§6.2): the `<contact-form>` custom
+ * element observes itself and only wires behavior as it nears the viewport.
+ *
+ * Editorial numbering: as the only section on the page, it opens the index (01).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Contact from "../../components/Contact.astro";
+import { useTranslations } from "../../lib/i18n";
+
+const t = useTranslations("en");
+---
+
+<BaseLayout lang="en" title={t.nav_contact} description={t.contact_lead}>
+  <main id="main" tabindex="-1">
+    <Contact lang="en" index="01" />
+  </main>
+</BaseLayout>

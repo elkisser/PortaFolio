@@ -57,17 +57,21 @@
         animation-timeline: view();
         /* Revela mientras el elemento entra: del 5% de "entry" al 30% de "cover". */
         animation-range: entry 5% cover 30%;
+        /* Layout-neutral: sólo clip-path/opacity/transform, en su propia capa. */
+        will-change: clip-path, opacity, transform;
       }
     }
 
     /* --- Camino B: fallback con IntersectionObserver ------------------------ */
     /* Estado inicial oculto: SOLO los elementos que la isla marca (los que aún
        no están en viewport al hidratar), para no esconder contenido ya visible
-       (sin "flash"). */
+       (sin "flash"). La caja sigue reservada (no se colapsa alto ni display):
+       el gesto es puramente clip-path + opacity + transform → sin layout shift. */
     :root[data-motion="observe"] [data-reveal][data-reveal-hidden] {
       opacity: 0;
       clip-path: inset(0 0 100% 0);
       transform: translateY(0.75rem);
+      will-change: clip-path, opacity, transform;
     }
 
     /* Reveal al intersecar: mismo gesto de máscara que el Hero. */

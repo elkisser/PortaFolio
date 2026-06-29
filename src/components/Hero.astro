@@ -38,7 +38,8 @@ import Grid from "./primitives/Grid.astro";
 import Text from "./primitives/Text.astro";
 import Mono from "./primitives/Mono.astro";
 import Arrow from "./icons/Arrow.astro";
-import ExternalLink from "./icons/ExternalLink.astro";
+import Github from "./icons/Github.astro";
+import Download from "./icons/Download.astro";
 import { getCollection } from "astro:content";
 import {
   useTranslations,
@@ -111,12 +112,12 @@ const categoryLabel = (categories: readonly string[]): string =>
           rel="noopener noreferrer"
         >
           <Mono>{t.hero_github}</Mono>
-          <ExternalLink size={14} />
+          <Github size={16} />
         </a>
 
         <a class="hero__meta-link" href={cvHref} target="_blank" rel="noopener noreferrer">
           <Mono>{t.hero_cta_cv}</Mono>
-          <ExternalLink size={14} />
+          <Download size={16} />
         </a>
       </div>
     </div>
@@ -350,6 +351,12 @@ const categoryLabel = (categories: readonly string[]): string =>
   @media (prefers-reduced-motion: no-preference) {
     .reveal {
       animation: hero-mask-reveal var(--dur-slow) var(--ease) both;
+      /* Layout-neutral por contrato: el gesto se conduce SÓLO con clip-path +
+         opacity + transform (ninguna propiedad de layout). `will-change` lo
+         promociona a su propia capa para que se componga sin reflow/repaint del
+         hilo principal. La caja queda reservada en todo momento (el estado
+         `from` recorta/translada/atenúa, nunca colapsa alto ni display). */
+      will-change: clip-path, opacity, transform;
     }
 
     /* Cascada editorial: identidad → declaración → contexto → prueba. */

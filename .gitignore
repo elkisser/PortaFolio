@@ -2,6 +2,8 @@
 dist/
 # generated types / astro cache
 .astro/
+# build-time GitHub dataset (regenerado por scripts/fetch-github.mjs en cada build)
+src/content/data/github.json
 # dependencies
 node_modules/
 # test artifacts

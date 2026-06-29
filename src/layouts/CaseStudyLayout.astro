@@ -1,0 +1,567 @@
+---
+/**
+ * CaseStudyLayout — plantilla de la página de detalle `/work/[slug]`
+ * (design.md §5.4, §7.1; Req 5.1, 5.2, 8.3).
+ *
+ * Convierte cada case study en una historia editorial con la estructura del
+ * brief (design.md §5.4):
+ *   Contexto/Problema → Rol → Decisiones técnicas (con su porqué) → Desafíos →
+ *   Resultado/Impacto → Stack → Medios → Enlaces (demo/repo).
+ *
+ * Wiring (sobre lo ya construido):
+ *  - Envuelve `BaseLayout` con `lang`, `title`/`description` derivados del
+ *    frontmatter y `ogType="article"`; le pasa el JSON-LD `CreativeWork`
+ *    localizado por proyecto (Req 8.3) construido con la función pura
+ *    `creativeWorkJsonLdString` (`lib/seo.ts`).
+ *  - El medio principal (hero) reusa el MISMO `transition:name`
+ *    (`work-media-<slug>`) que expone `WorkCard` en su thumbnail, de modo que al
+ *    navegar Home/Work → detalle, View Transitions morfea thumbnail → hero
+ *    (continuidad espacial, Req 4.2, design.md §4.6). Degrada a corte simple sin
+ *    soporte (Req 4.3): el atributo es inerte.
+ *  - Los medios reservan su espacio con `width`/`height` del esquema (CLS 0,
+ *    Req 6.4). La presentación rica (carrusel/video accesible) es la isla
+ *    `MediaViewer` (tarea 12): aquí se renderizan con espacio reservado y marcado
+ *    `data-media` para que esa isla los progrese sin reestructurar el markup.
+ *  - Los enlaces externos (demo/repo) usan `rel="noopener noreferrer"`
+ *    (Req 12.4).
+ *
+ * El cuerpo MDX del case study (la narrativa larga, opcional) se renderiza por la
+ * página vía `<slot />`, debajo del medio principal.
+ */
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import Section from "../components/primitives/Section.astro";
+import Text from "../components/primitives/Text.astro";
+import Mono from "../components/primitives/Mono.astro";
+import Demo from "../components/icons/Demo.astro";
+import Repo from "../components/icons/Repo.astro";
+import Arrow from "../components/icons/Arrow.astro";
+import MediaViewer from "../components/MediaViewer.astro";
+import { caseStudySlug, CATEGORY_LABELS } from "../lib/work";
+import { useTranslations, localizedPath, type Locale } from "../lib/i18n";
+import type { MediaAsset, TechDecision, WorkCategory } from "../content/schema";
+import { creativeWorkJsonLdString } from "../lib/seo";
+
+interface Props {
+  /** Entrada de la colección `work` (frontmatter + id del idioma activo). */
+  entry: CollectionEntry<"work">;
+  /** Idioma de la página → copy localizado, enlaces y `<html lang>`. */
+  lang: Locale;
+}
+
+const { entry, lang }: Props = Astro.props;
+const t = useTranslations(lang);
+const data = entry.data;
+
+// Slug compartido entre idiomas (sin sufijo de idioma) → URL y `transition:name`.
+const slug = caseStudySlug(entry.id);
+const workHref = localizedPath("/work", lang);
+const detailPath = localizedPath(`/work/${slug}`, lang);
+const transitionName = `work-media-${slug}`;
+
+// Medios: el primero es el hero (porta el morph); el resto va a la galería.
+const media: MediaAsset[] = data.media ?? [];
+const heroMedia = media[0];
+const galleryMedia = media.slice(1);
+
+// Marcador tipográfico si el case study aún no tiene medios (coherente con
+// WorkCard, sin gradientes/blobs — design.md §4.4).
+const initials = data.title
+  .split(/\s+/)
+  .map((word: string) => word[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+
+const categoryLabel = data.category
+  .map((c: WorkCategory) => CATEGORY_LABELS[c])
+  .join(" · ");
+
+// JSON-LD CreativeWork localizado por proyecto (Req 8.3). Imagen principal = el
+// primer medio de tipo imagen, si existe (poster/imagen real → og/structured).
+const imagePath =
+  media.find((m: MediaAsset) => m.type === "image")?.src ?? heroMedia?.poster ?? undefined;
+
+const creativeWorkLd = creativeWorkJsonLdString(
+  {
+    title: data.title,
+    summary: data.summary,
+    lang,
+    year: data.year,
+    stack: data.stack,
+    path: detailPath,
+    imagePath,
+    links: data.links,
+  },
+  Astro.site,
+);
+
+const hasLinks = Boolean(data.links.demo ?? data.links.repo);
+---
+
+<BaseLayout
+  lang={lang}
+  title={data.title}
+  description={data.summary}
+  ogType="article"
+  image={imagePath}
+  jsonLd={creativeWorkLd}
+>
+  <main id="main" tabindex="-1">
+    <article class="cs">
+      <Section as="div" class="cs__inner">
+        <!-- Volver al índice de Work (continuidad de navegación). -->
+        <a class="cs__back" href={workHref}>
+          <Arrow size={16} class="cs__back-arrow" />
+          <Mono>{t.cs_back}</Mono>
+        </a>
+
+        <!-- Encabezado editorial: metadatos mono + título display + resumen. -->
+        <header class="cs__header" data-reveal>
+          <p class="cs__identity">
+            <Mono accent>{String(data.year)}</Mono>
+            <Mono class="cs__sep" aria-hidden="true">/</Mono>
+            <Mono>{data.role}</Mono>
+            <Mono class="cs__sep" aria-hidden="true">/</Mono>
+            <Mono>{categoryLabel}</Mono>
+          </p>
+
+          <Text as="h1" font="display" step="4" class="cs__title">{data.title}</Text>
+          <Text class="cs__summary" tone="dim" step="1" measure>{data.summary}</Text>
+        </header>
+
+        <!-- Medio principal (hero): porta el `transition:name` del morph y reserva
+             espacio con width/height (CLS 0). `MediaViewer` (tarea 12) lo progresa. -->
+        <figure class="cs__hero" transition:name={transitionName} data-reveal>
+          {
+            heroMedia ? (
+              <div class="cs__media" data-media data-media-type={heroMedia.type}>
+                {heroMedia.type === "video" ? (
+                  <video
+                    class="cs__media-el"
+                    width={heroMedia.width}
+                    height={heroMedia.height}
+                    poster={heroMedia.poster}
+                    preload="none"
+                    controls
+                    playsinline
+                    aria-label={heroMedia.alt}
+                  >
+                    <source src={heroMedia.src} />
+                  </video>
+                ) : (
+                  <img
+                    class="cs__media-el"
+                    src={heroMedia.src}
+                    alt={heroMedia.alt}
+                    width={heroMedia.width}
+                    height={heroMedia.height}
+                    loading="eager"
+                    decoding="async"
+                  />
+                )}
+              </div>
+            ) : (
+              <div class="cs__media cs__media--empty" aria-hidden="true">
+                <span class="cs__placeholder">{initials}</span>
+              </div>
+            )
+          }
+          {heroMedia && <figcaption class="cs__caption">{heroMedia.alt}</figcaption>}
+        </figure>
+
+        <!-- Narrativa larga opcional (cuerpo MDX del case study). -->
+        <div class="cs__prose">
+          <slot />
+        </div>
+
+        <!-- Estructura del case study (design.md §5.4). -->
+        <div class="cs__body">
+          <!-- 1 · Contexto / Problema -->
+          <section class="cs__block" data-reveal aria-labelledby="cs-problem">
+            <Mono as="h2" id="cs-problem" accent class="cs__block-label">{t.cs_problem}</Mono>
+            <Text class="cs__block-text" step="1" measure>{data.problem}</Text>
+          </section>
+
+          <!-- 2 · Rol -->
+          <section class="cs__block" data-reveal aria-labelledby="cs-role">
+            <Mono as="h2" id="cs-role" accent class="cs__block-label">{t.cs_role}</Mono>
+            <Text class="cs__block-text" step="1" measure>{data.role}</Text>
+          </section>
+
+          <!-- 3 · Decisiones técnicas (con su porqué) -->
+          <section class="cs__block" data-reveal aria-labelledby="cs-decisions">
+            <Mono as="h2" id="cs-decisions" accent class="cs__block-label">
+              {t.cs_decisions}
+            </Mono>
+            <ol class="cs__decisions">
+              {
+                data.decisions.map((d: TechDecision, i: number) => (
+                  <li class="cs__decision">
+                    <Mono class="cs__decision-num" aria-hidden="true">
+                      {String(i + 1).padStart(2, "0")}
+                    </Mono>
+                    <div class="cs__decision-body">
+                      <Text as="h3" font="display" step="2" class="cs__decision-title">
+                        {d.decision}
+                      </Text>
+                      <p class="cs__rationale">
+                        <Mono class="cs__rationale-label">{t.cs_rationale}</Mono>
+                        <Text as="span" tone="dim" step="0">{d.rationale}</Text>
+                      </p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+          </section>
+
+          <!-- 4 · Desafíos (opcional) -->
+          {
+            data.challenges.length > 0 && (
+              <section class="cs__block" data-reveal aria-labelledby="cs-challenges">
+                <Mono as="h2" id="cs-challenges" accent class="cs__block-label">
+                  {t.cs_challenges}
+                </Mono>
+                <ul class="cs__list">
+                  {data.challenges.map((c: string) => (
+                    <li class="cs__list-item">
+                      <Text as="span" step="0" measure>
+                        {c}
+                      </Text>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+
+          <!-- 5 · Resultado / Impacto -->
+          <section class="cs__block" data-reveal aria-labelledby="cs-result">
+            <Mono as="h2" id="cs-result" accent class="cs__block-label">{t.cs_result}</Mono>
+            <Text class="cs__block-text" step="1" measure>{data.result}</Text>
+          </section>
+
+          <!-- 6 · Stack -->
+          <section class="cs__block" data-reveal aria-labelledby="cs-stack">
+            <Mono as="h2" id="cs-stack" accent class="cs__block-label">{t.cs_stack}</Mono>
+            <ul class="cs__stack">
+              {
+                data.stack.map((tech: string) => (
+                  <li class="cs__stack-item">
+                    <Mono>{tech}</Mono>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+
+          <!-- 7 · Medios (galería; el hero ya mostró el primero). Presentados por
+               la isla `MediaViewer` (tarea 12): carrusel/visor accesible (teclado,
+               swipe), lazy, `poster`/`preload="none"` y espacio reservado por
+               width/height (CLS 0). Conserva el contrato `data-media`. -->
+          {
+            galleryMedia.length > 0 && (
+              <section class="cs__block" data-reveal aria-labelledby="cs-media">
+                <Mono as="h2" id="cs-media" accent class="cs__block-label">
+                  {t.cs_media}
+                </Mono>
+                <MediaViewer media={galleryMedia} lang={lang} idBase={`mv-${slug}`} />
+              </section>
+            )
+          }
+
+          <!-- 8 · Enlaces (demo / repo) — externos con rel noopener (Req 12.4) -->
+          {
+            hasLinks && (
+              <section class="cs__block" data-reveal aria-labelledby="cs-links">
+                <Mono as="h2" id="cs-links" accent class="cs__block-label">
+                  {t.cs_links}
+                </Mono>
+                <div class="cs__links">
+                  {data.links.demo && (
+                    <a
+                      class="cs__link"
+                      href={data.links.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Demo size={18} />
+                      <Mono>{t.link_demo}</Mono>
+                    </a>
+                  )}
+                  {data.links.repo && (
+                    <a
+                      class="cs__link"
+                      href={data.links.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Repo size={18} />
+                      <Mono>{t.link_code}</Mono>
+                    </a>
+                  )}
+                </div>
+              </section>
+            )
+          }
+        </div>
+      </Section>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .cs__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  /* Volver al índice: mono discreto + flecha apuntando a la izquierda. */
+  .cs__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    align-self: start;
+    color: var(--paper-dim);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .cs__back :global(.cs__back-arrow) {
+    transform: rotate(180deg);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .cs__back:hover {
+    color: var(--paper);
+  }
+
+  .cs__back:hover :global(.cs__back-arrow) {
+    transform: rotate(180deg) translateX(3px);
+  }
+
+  /* Encabezado editorial. */
+  .cs__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .cs__identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-xs);
+    margin: 0;
+  }
+
+  .cs__sep {
+    color: var(--line);
+  }
+
+  .cs__title {
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  .cs__summary {
+    margin: 0;
+  }
+
+  /* Medio principal: aspecto consistente, radius bajo, sin sombras (CLS 0). */
+  .cs__hero {
+    margin: 0;
+  }
+
+  .cs__media {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--ink-800);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    aspect-ratio: 16 / 10;
+  }
+
+  .cs__media-el {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cs__media--empty {
+    display: grid;
+    place-items: center;
+  }
+
+  .cs__placeholder {
+    font-family: var(--font-display);
+    font-size: var(--step-5);
+    letter-spacing: var(--tracking-display);
+    color: var(--line);
+  }
+
+  .cs__caption {
+    margin-block-start: var(--space-2xs);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    color: var(--paper-dim);
+  }
+
+  /* Narrativa MDX opcional: medida editorial para lectura larga. */
+  .cs__prose {
+    max-width: var(--measure);
+    color: var(--paper-dim);
+  }
+
+  .cs__prose:empty {
+    display: none;
+  }
+
+  /* Cuerpo estructurado: bloques separados por aire, no por cajas. */
+  .cs__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+  .cs__block {
+    display: grid;
+    gap: var(--space-md);
+    padding-block-start: var(--space-lg);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .cs__block-label {
+    margin: 0;
+  }
+
+  .cs__block-text {
+    margin: 0;
+  }
+
+  /* Decisiones técnicas: número de índice + decisión (display) + porqué (dim). */
+  .cs__decisions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .cs__decision {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    align-items: start;
+  }
+
+  .cs__decision-num {
+    color: var(--amber);
+  }
+
+  .cs__decision-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .cs__decision-title {
+    margin: 0;
+  }
+
+  /* "Por qué": etiqueta mono + texto; la etiqueta marca el rationale. */
+  .cs__rationale {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    margin: 0;
+    max-width: var(--measure);
+    padding-inline-start: var(--space-md);
+    border-inline-start: 1px solid var(--line);
+  }
+
+  .cs__rationale-label {
+    color: var(--amber);
+  }
+
+  /* Listas (desafíos): marcador editorial en hairline, no bullet del navegador. */
+  .cs__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .cs__list-item {
+    position: relative;
+    padding-inline-start: var(--space-md);
+  }
+
+  .cs__list-item::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.7em;
+    inset-inline-start: 0;
+    inline-size: var(--space-2xs);
+    block-size: 1px;
+    background-color: var(--amber);
+  }
+
+  /* Stack: etiquetas mono separadas por hairlines (no logos sueltos). */
+  .cs__stack {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-md);
+  }
+
+  .cs__stack-item {
+    padding-block-end: var(--space-3xs);
+    border-block-end: 1px solid var(--line);
+  }
+
+  /* Enlaces: demo/repo como acciones editoriales con hairline inferior ámbar. */
+  .cs__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
+  }
+
+  .cs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .cs__link:hover {
+    gap: var(--space-sm);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Desktop: medida editorial; el medio principal puede crecer manteniendo el
+     ratio. Composición intencional por breakpoint (design.md §4.6).
+     --------------------------------------------------------------------------- */
+  @media (min-width: 1024px) {
+    .cs__title {
+      max-width: 14ch;
+    }
+
+    .cs__hero .cs__media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

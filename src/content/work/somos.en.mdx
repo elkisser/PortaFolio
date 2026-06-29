@@ -1,0 +1,59 @@
+---
+# SoMoS — real case study (EN). Follows the slice-1 standard (Chromora; task 13).
+#
+# ----------------------------------------------------------------------------
+# Media decision (design.md §2.5 — reuse-vs-recompose rule, documented per project):
+# A source video exists at `img/SoMoS/SoMoS.mp4` (outside `public/`, without a
+# `poster`, without modern formats webm/av1, and with no verification of sharpness
+# ≥2×, absence of debug UI, duration ≤12s or absence of audio). Since it cannot be
+# guaranteed against §2.5, we RECOMPOSE with composed stills (vector SVG, crisp at
+# any density, intentional composition coherent with the identity) under
+# `public/media/somos/`, which resolve at build time and satisfy the §8 schema
+# (non-empty alt + explicit width/height → CLS 0). The `.mp4` remains as source
+# material for a future optimization pass (transcode + poster + ≤12s trim); if it
+# passes §2.5 it would be reused as an additional media item.
+# REAL MEDIA STILL PENDING: actual screenshots of the home and the work grid of the
+# deployed site (somos-env.netlify.app) that meet §2.5.
+# ----------------------------------------------------------------------------
+title: "SoMoS"
+year: 2025
+category: ["frontend"]
+summary: "Portfolio site for a digital development agency: elegant presentation of services and work with carefully crafted interaction."
+problem: "A digital development agency needed a site that was itself a sample of its work. An agency portfolio carries a double demand: it has to look flawless and move smoothly, but it can't pay for that polish with a slow page — because speed is also part of what the agency sells."
+role: "Solo frontend design and development: site architecture, visual system, animations and the composition of the services and work sections. Deployment included."
+decisions:
+  - decision: "Build the site on Astro 5 and reserve React islands only for the interactive sections."
+    rationale: "Much of an agency site is presentational content that needs no JavaScript. With Astro, that content ships as static HTML and only the pieces that truly react to interaction hydrate as islands, which keeps the page fast without giving up visual richness."
+  - decision: "Use Framer Motion for transitions and microinteractions, not for decoration."
+    rationale: "Motion communicates the agency's quality, but too much animation tires and slows. It was kept to purposeful transitions — entrances, state changes, focus — that reinforce hierarchy instead of competing with the content."
+  - decision: "Structure services and work as reusable content blocks instead of loose markup."
+    rationale: "The agency adds work and adjusts its offering over time. Modeling those sections as structured content lets the site be updated by adding data, not rewriting pages, and keeps the presentation consistent."
+challenges:
+  - "Balancing a rich aesthetic with performance: islands keep JavaScript small while most of the site is served statically."
+  - "Adding personality through motion without overwhelming: animations are limited to purposeful transitions and respect reduced-motion."
+  - "Presenting the work so that the site itself acts as proof of the agency's capability."
+result: "SoMoS is the public site of an agency that works as its own calling card: fast, polished and with carefully crafted interaction. It demonstrates frontend judgment — choosing where to spend JavaScript — and product-level visual direction."
+stack: ["Astro 5", "React", "TypeScript", "Framer Motion"]
+media:
+  - type: "image"
+    src: "/media/somos/cover.svg"
+    alt: "SoMoS landing with the agency navigation, a large editorial headline, a start-a-project button and three service cards."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/somos/work.svg"
+    alt: "SoMoS work grid with cards for an online store, a campaign landing, a booking app and a brand redesign, using React islands where there is interaction."
+    width: 1600
+    height: 900
+links:
+  demo: "https://somos-env.netlify.app/"
+  repo: "https://github.com/elkisser/SoMoS"
+featured: true
+order: 6
+lang: en
+---
+
+SoMoS is the site of a digital development agency, and the site itself had to prove what
+the agency offers: look great and, at the same time, run fast. The central decision was a
+frontend one — build on Astro and spend JavaScript only where interaction justifies it —
+so the visual polish wouldn't cost speed.

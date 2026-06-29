@@ -38,7 +38,24 @@ import { workSchema } from "./content/schema";
 
 const work = defineCollection({
   // Content Layer (Astro 5): glob loader sobre los MDX de case studies.
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/work" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/work",
+    // `generateId` (decisión de modelo i18n): el slugificador por defecto elimina
+    // el punto de `<slug>.<lang>` y pega el idioma a la base (`chromora.es` →
+    // `chromoraes`), lo que impide derivar un slug de URL independiente del idioma
+    // y rompe el modelo `/work/[slug]` compartido entre ES/EN. Producimos en su
+    // lugar un id limpio y único `<slug>-<lang>` (p. ej. `chromora-es`): el punto
+    // separador del idioma pasa a guion, el resto del nombre se conserva. Así el
+    // id es único por archivo (requisito de la colección) y a la vez el slug base
+    // es recuperable (`lib/work.ts → caseStudySlug` quita el sufijo de idioma).
+    generateId: ({ entry }) =>
+      entry
+        .replace(/\.(md|mdx)$/i, "")
+        .toLowerCase()
+        .replace(/\.(es|en)$/i, (_m, lang: string) => `-${lang}`)
+        .replace(/[/\\]/g, "-"),
+  }),
   schema: workSchema,
 });
 

@@ -54,7 +54,7 @@ const { lang: rawLang = DEFAULT_LOCALE, includePlayground = false }: Props = Ast
 const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
 
 const t = useTranslations(lang);
-const entries = navEntries(t, includePlayground);
+const entries = navEntries(t, lang, includePlayground);
 
 // Switch de idioma computado en build: enlace real al idioma alterno para esta
 // misma ruta (degrada sin JS). `Astro.url.pathname` es conocido en salida estática.
@@ -112,6 +112,29 @@ const homeHref = localizedPath("/", lang);
     </a>
   </nav>
 </site-nav>
+
+<!--
+  Anti-CLS (Req 5.1 / 11.5): marca `data-hydrated` ANTES del primer paint.
+
+  Sin esto, en mobile el menú se renderiza en flujo (apilado, ~280px de alto) y
+  la isla recién lo saca del flujo (`position: fixed`) al hidratarse en *idle*
+  (~1.3s bajo CPU throttle); ese cambio colapsaba la altura de la nav sticky y
+  empujaba `main` hacia arriba ~90px → CLS ~0.34 en Lighthouse mobile.
+
+  Este script `is:inline` es síncrono con el parser (corre antes del primer
+  paint), así el primer render ya muestra la nav colapsada que coincide con el
+  estado hidratado: `main` no se mueve (CLS ≈ 0). El handler del botón sigue
+  conectándose en `idle` desde el módulo de abajo. Sólo afecta a mobile (en
+  desktop el menú es una fila en flujo, idéntica antes/después). Sin JS, el
+  atributo nunca se añade y el menú permanece en flujo, visible y accesible
+  (degradación elegante, Req 4.3/4.4).
+-->
+<script is:inline>
+  (function () {
+    const nav = document.currentScript.previousElementSibling;
+    if (nav && nav.tagName === "SITE-NAV") nav.setAttribute("data-hydrated", "");
+  })();
+</script>
 
 <style>
   /* ---------------------------------------------------------------------------
@@ -297,6 +320,14 @@ const homeHref = localizedPath("/", lang);
       flex: 1;
       justify-content: flex-end;
       gap: var(--space-lg);
+    }
+
+    /* El acento de "idioma" se agrupa con los enlaces a la derecha. El
+       `margin-inline-start: auto` base es solo para el layout en columna de
+       mobile; en desktop debe resetearse, si no empuja el switch de idioma
+       contra el borde y deja los enlaces pegados a la marca (composición rota). */
+    .nav__lang {
+      margin-inline-start: 0;
     }
   }
 

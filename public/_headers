@@ -1,0 +1,27 @@
+# =============================================================================
+# Cloudflare Pages — headers de caché (Req 13.4, design.md §5.9 / ADR 0002)
+# -----------------------------------------------------------------------------
+# Este archivo lo emite Astro a la raíz de `dist/` (todo lo de `public/` se
+# copia tal cual) y Cloudflare Pages lo lee desde la raíz del directorio de
+# salida para aplicar headers por ruta.
+# Doc verificada: https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Regla de caché (Req 13.4): los assets con hash en el nombre (fingerprint) son
+# inmutables — su contenido nunca cambia para una misma URL, así que se sirven
+# con la caché más agresiva posible. El HTML, en cambio, NO se cachea de forma
+# persistente: debe revalidarse para que un deploy nuevo se vea de inmediato.
+# =============================================================================
+
+# Assets hasheados que emite Astro (JS/CSS de islas, imágenes optimizadas):
+# el nombre incluye un hash de contenido, por lo que son seguros como inmutables.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML: revalidar siempre para que las publicaciones se reflejen sin demora.
+# (max-age=0 + must-revalidate => el navegador/edge revalida antes de reusar.)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Rutas "limpias" sin extensión (p. ej. /es, /en/about) también son HTML.
+/
+  Cache-Control: public, max-age=0, must-revalidate

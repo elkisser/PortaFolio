@@ -2,8 +2,20 @@
 
 Las `@font-face` viven en `src/styles/fonts.css` y apuntan a los `.woff2` de esta
 carpeta. Por restricciones de red del entorno de desarrollo, los binarios **no**
-se incluyeron en este commit: hay que colocarlos aquí con los nombres exactos de
-abajo y el sistema queda funcionando sin tocar nada más.
+se incluyeron: para no emitir warnings de build ni peticiones 404 en runtime,
+las `@font-face` self-hosted quedan en un **bloque comentado** dentro de
+`src/styles/fonts.css`. Mientras tanto renderizan las familias `* Fallback`
+ajustadas métricamente (sin intercambio de fuente → sin CLS).
+
+## Activación (3 pasos)
+
+1. Colocar aquí los `.woff2` con los nombres exactos de la tabla de abajo.
+2. **Descomentar** el bloque `@font-face SELF-HOSTED` en `src/styles/fonts.css`.
+3. (Opcional) Regenerar los overrides de `* Fallback` con `fontaine`/`capsize`
+   para el subset final exacto.
+
+Los stacks `--font-*` en `tokens.css` ya priorizan la familia web sobre su
+`* Fallback`, así que al activarse no hay más cambios que hacer.
 
 ## Archivos requeridos (subset `latin`, formato `woff2`)
 

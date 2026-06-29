@@ -1,0 +1,59 @@
+---
+# LuminaEdit — real case study (EN). Follows the slice-1 standard (Chromora; task 13).
+#
+# ----------------------------------------------------------------------------
+# Media decision (design.md §2.5 — reuse-vs-recompose rule, documented per project):
+# A source video exists at `img/LuminaEdit/LuminaEdit Desktop.mp4` (outside
+# `public/`, without a `poster`, without modern formats webm/av1, and with no
+# verification of sharpness ≥2×, absence of debug UI, duration ≤12s or absence of
+# audio). Since it cannot be guaranteed against §2.5, we RECOMPOSE with composed
+# stills (vector SVG, crisp at any density, intentional composition coherent with
+# the identity) under `public/media/luminaedit/`, which resolve at build time and
+# satisfy the §8 schema (non-empty alt + explicit width/height → CLS 0). The `.mp4`
+# remains as source material for a future optimization pass (transcode + poster +
+# ≤12s trim); if it passes §2.5 it would be reused as an additional media item.
+# REAL MEDIA STILL PENDING: actual screenshot/loop of the deployed editor
+# (luminaedit.netlify.app) removing the background of a photo, once it meets §2.5.
+# ----------------------------------------------------------------------------
+title: "LuminaEdit"
+year: 2025
+category: ["ai", "frontend"]
+summary: "Fully local, private AI background removal: TensorFlow.js with WebGL acceleration, never sending the image to any server."
+problem: "Removing an image background usually means uploading it to an external service: you hand the photo to a third party, wait for the round trip and often pay or accept watermarks. For personal photos or sensitive work, giving the image to a server is exactly what many people want to avoid."
+role: "Solo frontend development: segmentation-model integration, the client-side processing pipeline, WebGL acceleration and the whole editor UI. Deployment included."
+decisions:
+  - decision: "Run the segmentation model entirely in the browser with TensorFlow.js, with no backend."
+    rationale: "If everything happens on the device, the image never leaves the user's machine: privacy by design, zero server cost and no waiting on uploads and downloads. Privacy stops being a promise and becomes a property of the architecture."
+  - decision: "Use the TensorFlow.js WebGL backend for inference instead of the CPU one."
+    rationale: "Image segmentation is expensive; on CPU, real-time processing isn't viable. WebGL leverages the GPU via shaders, which makes the experience smooth even with large images, with nothing to install."
+  - decision: "Keep the result in memory and export it as a PNG with transparency from the client."
+    rationale: "Consistent with the privacy decision: the final file is assembled and downloaded locally. There is no point in the flow where the image crosses the device boundary."
+challenges:
+  - "Achieving smooth in-browser processing: WebGL acceleration makes viable a segmentation that would be too slow on CPU."
+  - "Holding the privacy promise end to end: no step of the pipeline uploads data, not even for telemetry."
+  - "Handling large images without freezing the interface while the model works."
+result: "LuminaEdit removes backgrounds with usable quality directly in the browser, with no servers and without the image ever leaving the device. It is proof that real AI can run on the client with privacy as a principle, not an add-on."
+stack: ["TensorFlow.js", "WebGL", "JavaScript", "Canvas API"]
+media:
+  - type: "image"
+    src: "/media/luminaedit/cover.svg"
+    alt: "Before-and-after comparison in LuminaEdit: an image with a background on the left and the same image with the background removed (transparent) on the right, with a local-processing banner."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/luminaedit/pipeline.svg"
+    alt: "LuminaEdit pipeline: image in memory, TensorFlow.js model with WebGL backend, segmentation mask and a transparent-background PNG, all within the device boundary."
+    width: 1600
+    height: 900
+links:
+  demo: "https://luminaedit.netlify.app/"
+  repo: "https://github.com/elkisser/LuminaEdit"
+featured: true
+order: 5
+lang: en
+---
+
+LuminaEdit removes an image's background without that image ever leaving your browser.
+The AI model runs on your own device with TensorFlow.js over WebGL, so there's no upload,
+no server and nobody looking at your photos. Privacy isn't a checkbox in the terms: it's
+how it's built.

@@ -12,6 +12,8 @@ interface Props {
   as?: keyof HTMLElementTagNameMap;
   /** Pinta el texto con el acento ámbar (jerarquía, no decoración). */
   accent?: boolean;
+  /** `id` opcional: permite referenciar la etiqueta con `aria-labelledby`. */
+  id?: string;
   class?: string;
 }
 

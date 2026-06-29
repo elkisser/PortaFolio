@@ -58,6 +58,12 @@ interface Props {
   canonical?: string;
   /** Si es true, marca la página como no indexable. */
   noindex?: boolean;
+  /**
+   * JSON-LD adicional (ya serializado) a inyectar en el `<head>`, además del
+   * `Person` global. Lo usan las páginas que aportan datos estructurados propios
+   * (p. ej. el `CreativeWork` por case study — Req 8.3). Acepta uno o varios.
+   */
+  jsonLd?: string | string[];
 }
 
 const {
@@ -69,6 +75,7 @@ const {
   twitterCard = "summary_large_image",
   canonical,
   noindex = false,
+  jsonLd,
 }: Props = Astro.props;
 
 // `Astro.site` proviene de astro.config (`site`); `Astro.url` es la URL actual.
@@ -96,6 +103,10 @@ const ogMeta = openGraphTags(seo);
 const twitterMeta = twitterTags(seo);
 const personLd = personJsonLdString(site);
 const robots = noindex ? "noindex, nofollow" : "index, follow";
+
+// JSON-LD adicional por página (p. ej. `CreativeWork` del case study, Req 8.3),
+// normalizado a arreglo para inyectar un `<script>` por bloque.
+const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 // hreflang: ahora que existe el i18n routing real (`/es`, `/en`), generamos las
 // alternativas por idioma + `x-default` (Req 8.1). `localizedPath` reescribe la
@@ -150,6 +161,14 @@ const xDefaultHref = absoluteUrl(localizedPath(currentPath, DEFAULT_LOCALE), sit
 
     <!-- Datos estructurados: Person (Req 8.3). `is:inline` para no procesar/bundlear. -->
     <script is:inline type="application/ld+json" set:html={personLd} />
+
+    <!-- Datos estructurados adicionales por página (p. ej. CreativeWork del case
+         study, Req 8.3). Cada bloque ya viene serializado por la página. -->
+    {
+      extraJsonLd.map((ld) => (
+        <script is:inline type="application/ld+json" set:html={ld} />
+      ))
+    }
   </head>
 
   <body>

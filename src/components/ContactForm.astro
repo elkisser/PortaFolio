@@ -1,0 +1,418 @@
+---
+/**
+ * ContactForm — isla del formulario de contacto del portfolio (design.md §5.3,
+ * §6.2, §9.4, §12; Req 12.1, 12.2, 12.3, 12.4, 10.5).
+ *
+ * Responsabilidad: capturar nombre + mensaje, validarlos con la lógica PURA de
+ * `lib/contact.ts` (`validateContact`) y, en éxito, construir el texto con
+ * `encodeURIComponent` y abrir `wa.me` con feedback de estado. Sigue la
+ * convención de islas vanilla del proyecto (`Nav`, `Motion`, `MediaViewer`): HTML
+ * estático + custom element `<contact-form>` con la decisión en `lib/contact.ts`,
+ * sin runtime de framework. Coste objetivo < 3 KB (§6.2).
+ *
+ * Hidratación estilo `client:visible` (§6.2, igual que `MediaViewer`): el custom
+ * element se observa a sí mismo con `IntersectionObserver` y solo cablea el
+ * comportamiento al acercarse al viewport (si no hay IO, inicializa de inmediato).
+ *
+ * Accesibilidad (Req 12.2, 10.5):
+ *  - Cada campo enlaza su error con `aria-describedby` y alterna `aria-invalid`.
+ *  - Los errores y el feedback ("Abriendo WhatsApp…") se anuncian con regiones
+ *    `aria-live`/`role` apropiados (`role="alert"` para errores, `role="status"`
+ *    para el feedback).
+ *  - En error, NO se abre WhatsApp (Req 12.2) y el foco va al primer campo inválido.
+ *
+ * Seguridad (Req 12.3, 12.4, design.md §12):
+ *  - El texto del mensaje se codifica con `encodeURIComponent` antes de armar la URL.
+ *  - Todo enlace externo usa `rel="noopener noreferrer"` (conservado del sitio previo).
+ *
+ * Progressive enhancement: sin JS / antes de hidratar, el formulario es markup
+ * estático y los enlaces directos (GitHub / WhatsApp) — que sí funcionan sin JS —
+ * quedan disponibles como vía de contacto. La codificación del mensaje requiere
+ * JS por diseño (no hay backend; el contacto es vía `wa.me`).
+ */
+import {
+  useTranslations,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../lib/i18n";
+import {
+  NAME_MAX_LENGTH,
+  MESSAGE_MAX_LENGTH,
+  WHATSAPP_NUMBER,
+} from "../lib/contact";
+import Github from "./icons/Github.astro";
+import Whatsapp from "./icons/Whatsapp.astro";
+
+interface Props {
+  /** Idioma de la página → etiquetas, errores y feedback localizados. */
+  lang?: string;
+  /** Número de WhatsApp de destino (por defecto, el del sitio). Configurable. */
+  whatsappNumber?: string;
+  /** Prefijo único para los `id` internos (evita colisiones si hay varios). */
+  idBase?: string;
+}
+
+const {
+  lang: rawLang = DEFAULT_LOCALE,
+  whatsappNumber = WHATSAPP_NUMBER,
+  idBase = "cf",
+}: Props = Astro.props;
+
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+const nameId = `${idBase}-name`;
+const nameErrId = `${idBase}-name-error`;
+const msgId = `${idBase}-message`;
+const msgErrId = `${idBase}-message-error`;
+const statusId = `${idBase}-status`;
+
+// Mapa de mensajes (código de error → copy localizado) que consume la isla en el
+// cliente. Se serializa en un atributo de datos para no duplicar el copy en JS y
+// mantener la paridad ES/EN gestionada en `lib/i18n.ts`.
+const messages = {
+  name: {
+    required: t.contact_err_name_required,
+    too_long: t.contact_err_name_long,
+    spam: t.contact_err_spam,
+  },
+  message: {
+    required: t.contact_err_msg_required,
+    too_long: t.contact_err_msg_long,
+    spam: t.contact_err_spam,
+  },
+  opening: t.contact_status_opening,
+  error: t.contact_status_error,
+};
+---
+
+<contact-form
+  class="cf"
+  data-whatsapp={whatsappNumber}
+  data-messages={JSON.stringify(messages)}
+>
+  <form class="cf__form" novalidate data-cf-form>
+    <div class="cf__field">
+      <label class="cf__label" for={nameId}>{t.contact_name}</label>
+      <input
+        class="cf__input"
+        id={nameId}
+        name="name"
+        type="text"
+        autocomplete="name"
+        maxlength={NAME_MAX_LENGTH}
+        required
+        aria-describedby={nameErrId}
+        data-cf-input="name"
+      />
+      <p class="cf__error" id={nameErrId} role="alert" hidden data-cf-error="name"></p>
+    </div>
+
+    <div class="cf__field">
+      <label class="cf__label" for={msgId}>{t.contact_msg}</label>
+      <textarea
+        class="cf__input cf__textarea"
+        id={msgId}
+        name="message"
+        rows="5"
+        maxlength={MESSAGE_MAX_LENGTH}
+        required
+        aria-describedby={msgErrId}
+        data-cf-input="message"></textarea>
+      <p class="cf__error" id={msgErrId} role="alert" hidden data-cf-error="message"></p>
+    </div>
+
+    <button class="cf__submit" type="submit">{t.contact_send}</button>
+
+    <p class="cf__status" id={statusId} role="status" aria-live="polite" data-cf-status></p>
+  </form>
+
+  <ul class="cf__links">
+    <li>
+      <a
+        class="cf__link"
+        href="https://github.com/elkisser"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Github size={18} />
+        <span>{t.hero_github}</span>
+      </a>
+    </li>
+    <li>
+      <a
+        class="cf__link"
+        href={`https://wa.me/${whatsappNumber}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Whatsapp size={18} />
+        <span>WhatsApp</span>
+      </a>
+    </li>
+  </ul>
+</contact-form>
+
+<style>
+  .cf {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .cf__form {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .cf__field {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .cf__label {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--paper-dim);
+  }
+
+  .cf__input {
+    width: 100%;
+    padding: var(--space-2xs) var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    color: var(--paper);
+    background-color: var(--ink-800);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .cf__input:hover {
+    border-color: color-mix(in srgb, var(--paper) 24%, transparent);
+  }
+
+  .cf__input:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-color: var(--amber);
+  }
+
+  .cf__textarea {
+    resize: vertical;
+    min-height: 7rem;
+  }
+
+  /* Estado inválido: borde de error + el mensaje se vuelve visible (Req 12.2). */
+  .cf__input[aria-invalid="true"] {
+    border-color: var(--err, #e5635b);
+  }
+
+  .cf__error {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    color: var(--err, #e5635b);
+  }
+
+  .cf__submit {
+    justify-self: start;
+    padding: var(--space-2xs) var(--space-lg);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--amber-ink);
+    background-color: var(--amber);
+    border: 1px solid var(--amber);
+    border-radius: var(--r);
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  .cf__submit:hover {
+    background-color: var(--amber-hi);
+  }
+
+  .cf__submit:focus-visible {
+    outline: 2px solid var(--paper);
+    outline-offset: 2px;
+  }
+
+  .cf__status {
+    margin: 0;
+    min-height: 1.4em;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    color: var(--paper-dim);
+  }
+
+  .cf__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cf__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-decoration: none;
+    color: var(--paper-dim);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .cf__link:hover {
+    color: var(--paper);
+  }
+</style>
+
+<script>
+  import { validateContact, buildWhatsAppUrl } from "../lib/contact";
+
+  type FieldMessages = Record<string, string>;
+  interface Messages {
+    name: FieldMessages;
+    message: FieldMessages;
+    opening: string;
+    error: string;
+  }
+
+  /**
+   * `<contact-form>` — comportamiento vanilla del formulario. Hidratación estilo
+   * `client:visible` (§6.2): observa su propia entrada en viewport y solo cablea
+   * el `submit` al acercarse (si no hay IO, inicializa de inmediato). La decisión
+   * (validación + armado de URL) es pura (`lib/contact.ts`); aquí solo se aplica
+   * al DOM, se gestiona `aria`/foco y se abre WhatsApp.
+   */
+  class ContactForm extends HTMLElement {
+    private io: IntersectionObserver | null = null;
+    private form: HTMLFormElement | null = null;
+    private status: HTMLElement | null = null;
+    private messages: Messages | null = null;
+    private number = "";
+
+    connectedCallback(): void {
+      if ("IntersectionObserver" in window) {
+        this.io = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+              this.io?.disconnect();
+              this.io = null;
+              this.init();
+            }
+          },
+          { rootMargin: "200px 0px" },
+        );
+        this.io.observe(this);
+      } else {
+        this.init();
+      }
+    }
+
+    disconnectedCallback(): void {
+      this.io?.disconnect();
+      this.io = null;
+      this.form?.removeEventListener("submit", this.onSubmit);
+    }
+
+    private init(): void {
+      this.form = this.querySelector<HTMLFormElement>("[data-cf-form]");
+      this.status = this.querySelector<HTMLElement>("[data-cf-status]");
+      this.number = this.dataset.whatsapp ?? "";
+      this.messages = this.parseMessages();
+      this.form?.addEventListener("submit", this.onSubmit);
+    }
+
+    private parseMessages(): Messages | null {
+      try {
+        return JSON.parse(this.dataset.messages ?? "null") as Messages;
+      } catch {
+        return null;
+      }
+    }
+
+    private onSubmit = (event: SubmitEvent): void => {
+      // Siempre manejamos el envío en JS: no hay backend, el contacto es vía wa.me.
+      event.preventDefault();
+      if (!this.form) return;
+
+      const data = new FormData(this.form);
+      const input = {
+        name: String(data.get("name") ?? ""),
+        message: String(data.get("message") ?? ""),
+      };
+
+      const result = validateContact(input);
+
+      // Pinta el estado de cada campo (error visible + aria-invalid + foco).
+      const firstInvalid = this.applyErrors(result.errors);
+
+      if (!result.ok) {
+        // Req 12.2: NO se abre WhatsApp; se anuncia el estado y se enfoca el error.
+        this.setStatus(this.messages?.error ?? "");
+        firstInvalid?.focus();
+        return;
+      }
+
+      // Req 12.3: construir el texto con encodeURIComponent y abrir wa.me.
+      this.setStatus(this.messages?.opening ?? "");
+      const url = buildWhatsAppUrl(input, this.number);
+      // `noopener` también en la apertura programática (Req 12.4 / §12).
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    /**
+     * Aplica los errores por campo al DOM y devuelve el primer campo inválido
+     * (en orden de documento) para gestionar el foco. Limpia los campos válidos.
+     */
+    private applyErrors(
+      errors: Record<string, string | undefined>,
+    ): HTMLElement | null {
+      let firstInvalid: HTMLElement | null = null;
+
+      const fields: Array<"name" | "message"> = ["name", "message"];
+      for (const field of fields) {
+        const input = this.querySelector<HTMLElement>(`[data-cf-input="${field}"]`);
+        const errorEl = this.querySelector<HTMLElement>(`[data-cf-error="${field}"]`);
+        const code = errors[field];
+
+        if (code) {
+          const text = this.messages?.[field]?.[code] ?? "";
+          if (errorEl) {
+            errorEl.textContent = text;
+            errorEl.hidden = false;
+          }
+          input?.setAttribute("aria-invalid", "true");
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          if (errorEl) {
+            errorEl.textContent = "";
+            errorEl.hidden = true;
+          }
+          input?.removeAttribute("aria-invalid");
+        }
+      }
+
+      return firstInvalid;
+    }
+
+    private setStatus(text: string): void {
+      if (this.status) this.status.textContent = text;
+    }
+  }
+
+  if (!customElements.get("contact-form")) {
+    customElements.define("contact-form", ContactForm);
+  }
+</script>

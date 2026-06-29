@@ -53,5 +53,16 @@ const labelled = Boolean(title);
     display: inline-block;
     vertical-align: middle;
     flex: none;
+    /* Bordes nítidos al rasterizar el trazo en sizes pequeños. */
+    shape-rendering: geometricPrecision;
+  }
+
+  /* El set se dibuja en una rejilla de 24 pero se usa a 14/18px: a esa escala un
+     trazo de 1.5 *unidades* cae a ~0.9–1.1px y se ve borroso/lavado. Con
+     `non-scaling-stroke` el grosor se mide en px de pantalla (1.5px reales),
+     así el trazo queda crujiente y legible a cualquier `size`. `vector-effect`
+     no se hereda, por eso se aplica a cada forma hija (slot). */
+  .icon :global(*) {
+    vector-effect: non-scaling-stroke;
   }
 </style>
