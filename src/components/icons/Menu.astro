@@ -1,0 +1,16 @@
+---
+/**
+ * Menu — menú (hamburguesa). Tres hairlines horizontales: el gesto estructural
+ * del sistema llevado a un control de UI (design.md §4.5). Terminales square.
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <line x1="3" y1="6" x2="21" y2="6"></line>
+  <line x1="3" y1="12" x2="21" y2="12"></line>
+  <line x1="3" y1="18" x2="21" y2="18"></line>
+</Icon>

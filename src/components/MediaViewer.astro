@@ -1,0 +1,415 @@
+---
+/**
+ * MediaViewer — isla del visor de medios de un case study (design.md §2.5, §6.2,
+ * §10; Req 6.1, 6.2, 6.3, 6.4).
+ *
+ * Presenta los medios (imágenes/videos) de un case study como un **carrusel/visor
+ * accesible**: operable por teclado (← → Home End), swipe en touch, lazy, con
+ * `poster` y `preload="none"` en video (Req 6.3) y espacio reservado por
+ * `width`/`height` para CLS 0 (Req 6.4). Sigue la convención de islas vanilla del
+ * proyecto (`Nav`, `Motion`): HTML estático + custom element con lógica pura en
+ * `lib/media.ts`, sin runtime de framework. Coste objetivo < 6 KB (§6.2).
+ *
+ * Hidratación estilo `client:visible` (§6.2): el custom element `<media-viewer>`
+ * se observa a sí mismo con `IntersectionObserver` y solo inicializa el
+ * comportamiento de carrusel al acercarse al viewport (si no hay IO, inicializa
+ * de inmediato). Antes de hidratar —y sin JS— TODOS los medios se muestran
+ * apilados y son accesibles (progressive enhancement): el modo carrusel (una
+ * diapositiva visible + controles) solo lo introduce la isla vía
+ * `[data-hydrated]`, de modo que ningún medio queda oculto e inaccesible (Req
+ * 6.x a11y; coherente con el contrato de `Nav`/`Motion`).
+ *
+ * Estándar de medios (§2.5): la decisión reuse-vs-recompose (reusar el video
+ * optimizado con `poster`/`preload="none"` o reemplazar por capturas compuestas)
+ * se documenta POR case study en su frontmatter MDX (los medios y sus dimensiones
+ * son datos del esquema §8); esta isla presenta lo que el contenido declare,
+ * reservando su caja con la relación de aspecto declarada (CLS 0).
+ *
+ * Reduced-motion: el contrato global de `BaseLayout` neutraliza la transición de
+ * desplazamiento del track (el cambio de diapositiva es instantáneo); la lógica
+ * no depende de `transitionend`.
+ *
+ * Iconografía: set propio (`Arrow`) — design.md §4.5 / Req 2.2.
+ */
+import Arrow from "./icons/Arrow.astro";
+import { useTranslations, type Locale } from "../lib/i18n";
+import type { MediaAsset } from "../content/schema";
+
+interface Props {
+  /** Medios a presentar (orden del frontmatter). Cada uno reserva su caja. */
+  media: MediaAsset[];
+  /** Idioma de la página → etiquetas a11y de los controles. */
+  lang: Locale;
+  /** Prefijo único para los `id` internos (evita colisiones si hay varios). */
+  idBase?: string;
+}
+
+const { media, lang, idBase = "mv" } = Astro.props as Props;
+const t = useTranslations(lang);
+const count = media.length;
+// El carrusel (controles + una diapositiva visible) solo tiene sentido con > 1
+// medio; con 0/1 el visor es un único medio estático con su espacio reservado.
+const isCarousel = count > 1;
+---
+
+<media-viewer
+  class="mv"
+  data-count={String(count)}
+  data-carousel={isCarousel ? "" : undefined}
+>
+  <div
+    class="mv__viewport"
+    role="group"
+    aria-roledescription="carousel"
+    aria-label={t.media_region}
+    tabindex={isCarousel ? "0" : undefined}
+    data-mv-viewport
+  >
+    <ul class="mv__track" role="list" data-mv-track>
+      {
+        media.map((m: MediaAsset, i: number) => (
+          <li
+            class="mv__slide"
+            id={`${idBase}-slide-${i}`}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} / ${count}`}
+            data-mv-slide
+            data-index={String(i)}
+          >
+            <figure class="mv__figure">
+              {/* Caja con espacio reservado por la relación de aspecto declarada
+                  (CLS 0, Req 6.4). `data-media` preserva el contrato de marcado. */}
+              <div
+                class="mv__media"
+                data-media
+                data-media-type={m.type}
+                style={`aspect-ratio:${m.width} / ${m.height}`}
+              >
+                {m.type === "video" ? (
+                  <video
+                    class="mv__media-el"
+                    width={m.width}
+                    height={m.height}
+                    poster={m.poster}
+                    preload="none"
+                    controls
+                    playsinline
+                    aria-label={m.alt}
+                  >
+                    <source src={m.src} />
+                  </video>
+                ) : (
+                  <img
+                    class="mv__media-el"
+                    src={m.src}
+                    alt={m.alt}
+                    width={m.width}
+                    height={m.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              <figcaption class="mv__caption">{m.alt}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  {
+    isCarousel && (
+      <div class="mv__controls" hidden data-mv-controls>
+        <button
+          type="button"
+          class="mv__btn mv__btn--prev"
+          aria-label={t.media_prev}
+          data-mv-prev
+        >
+          <Arrow size={18} class="mv__icon mv__icon--prev" />
+        </button>
+        <p class="mv__status" aria-live="polite" data-mv-status>
+          1 / {count}
+        </p>
+        <button
+          type="button"
+          class="mv__btn mv__btn--next"
+          aria-label={t.media_next}
+          data-mv-next
+        >
+          <Arrow size={18} class="mv__icon" />
+        </button>
+      </div>
+    )
+  }
+</media-viewer>
+
+<style>
+  .mv {
+    display: block;
+  }
+
+  /* Sin JS / pre-hidratación: los medios se apilan y TODOS son visibles
+     (progressive enhancement). El modo carrusel lo activa `[data-hydrated]`. */
+  .mv__track {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .mv__figure {
+    margin: 0;
+  }
+
+  /* Caja del medio: aspect-ratio inline reserva el espacio (CLS 0, Req 6.4).
+     Radius bajo, hairline, sin sombras (design.md §4.3). */
+  .mv__media {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--ink-800);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+  }
+
+  .mv__media-el {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mv__caption {
+    margin-block-start: var(--space-2xs);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    color: var(--paper-dim);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Modo carrusel (solo hidratado): viewport con overflow oculto + track en fila
+     que se desplaza con translateX. El espacio reservado de cada caja no cambia,
+     así que el cambio de diapositiva nunca produce layout shift (CLS 0).
+     --------------------------------------------------------------------------- */
+  .mv[data-hydrated][data-carousel] .mv__viewport {
+    overflow: hidden;
+    border-radius: var(--r);
+  }
+
+  .mv[data-hydrated][data-carousel] .mv__viewport:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  .mv[data-hydrated][data-carousel] .mv__track {
+    flex-direction: row;
+    gap: 0;
+    transform: translateX(calc(-100% * var(--mv-index, 0)));
+    transition: transform var(--dur-mid) var(--ease);
+    touch-action: pan-y;
+  }
+
+  .mv[data-hydrated][data-carousel] .mv__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  /* La caption va fuera del recorte para no cortarse; en carrusel la dejamos
+     bajo el viewport mostrando la del medio activo (las demás se ocultan). */
+  .mv[data-hydrated][data-carousel] .mv__slide:not([data-active]) .mv__caption {
+    visibility: hidden;
+  }
+
+  /* Controles: ocultos hasta hidratar (el atributo `hidden` los esconde sin JS).
+     Hidratado, fila con estado al centro y botones a los lados. */
+  .mv__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-block-start: var(--space-sm);
+  }
+
+  .mv__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xs);
+    color: var(--paper);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+
+  .mv__btn:hover {
+    border-color: var(--amber);
+  }
+
+  .mv__icon--prev {
+    transform: rotate(180deg);
+  }
+
+  .mv__status {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    color: var(--paper-dim);
+    min-width: 4ch;
+    text-align: center;
+  }
+
+  /* Reduced-motion: el contrato global de BaseLayout ya neutraliza la transición;
+     reforzamos quitando el desplazamiento animado del track (cambio instantáneo). */
+  @media (prefers-reduced-motion: reduce) {
+    .mv[data-hydrated][data-carousel] .mv__track {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { keyToIndex, nextIndex, prevIndex, clampIndex } from "../lib/media";
+
+  /**
+   * `<media-viewer>` — comportamiento vanilla del visor. Hidratación estilo
+   * `client:visible` (§6.2): observa su propia entrada en viewport y solo
+   * inicializa el carrusel al acercarse (si no hay IO, inicializa de inmediato).
+   * La aritmética de navegación es pura (`lib/media.ts`); aquí solo se aplica al
+   * DOM, se gestiona `aria`/foco y se leen gestos de teclado/puntero.
+   */
+  class MediaViewer extends HTMLElement {
+    private viewport: HTMLElement | null = null;
+    private slides: HTMLElement[] = [];
+    private status: HTMLElement | null = null;
+    private prevBtn: HTMLButtonElement | null = null;
+    private nextBtn: HTMLButtonElement | null = null;
+    private controls: HTMLElement | null = null;
+    private io: IntersectionObserver | null = null;
+    private index = 0;
+    private count = 0;
+    // Estado del gesto de swipe (puntero).
+    private pointerId: number | null = null;
+    private startX = 0;
+
+    connectedCallback(): void {
+      this.count = Number(this.dataset.count ?? "0");
+      // Sin carrusel (0/1 medio): nada que hidratar; los medios ya son estáticos.
+      if (this.dataset.carousel === undefined) return;
+
+      // Hidratación `client:visible`: inicializa al entrar (cerca del) viewport.
+      if ("IntersectionObserver" in window) {
+        this.io = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+              this.io?.disconnect();
+              this.io = null;
+              this.init();
+            }
+          },
+          { rootMargin: "200px 0px" },
+        );
+        this.io.observe(this);
+      } else {
+        this.init();
+      }
+    }
+
+    disconnectedCallback(): void {
+      this.io?.disconnect();
+      this.io = null;
+      document.removeEventListener("pointerup", this.onPointerUp);
+    }
+
+    private init(): void {
+      this.viewport = this.querySelector<HTMLElement>("[data-mv-viewport]");
+      this.slides = Array.from(this.querySelectorAll<HTMLElement>("[data-mv-slide]"));
+      this.status = this.querySelector<HTMLElement>("[data-mv-status]");
+      this.prevBtn = this.querySelector<HTMLButtonElement>("[data-mv-prev]");
+      this.nextBtn = this.querySelector<HTMLButtonElement>("[data-mv-next]");
+      this.controls = this.querySelector<HTMLElement>("[data-mv-controls]");
+      this.count = this.slides.length;
+      if (this.count <= 1) return;
+
+      // Marca la isla como hidratada → CSS pasa a modo carrusel y revela controles.
+      this.setAttribute("data-hydrated", "");
+      this.controls?.removeAttribute("hidden");
+
+      this.prevBtn?.addEventListener("click", this.onPrev);
+      this.nextBtn?.addEventListener("click", this.onNext);
+      this.viewport?.addEventListener("keydown", this.onKeydown);
+      this.viewport?.addEventListener("pointerdown", this.onPointerDown);
+
+      this.goTo(0);
+    }
+
+    /* ---- Navegación ---------------------------------------------------------- */
+
+    private onPrev = (): void => {
+      this.goTo(prevIndex(this.index, this.count));
+    };
+
+    private onNext = (): void => {
+      this.goTo(nextIndex(this.index, this.count));
+    };
+
+    private onKeydown = (event: KeyboardEvent): void => {
+      const target = keyToIndex(event.key, this.index, this.count);
+      if (target === null) return; // otras teclas (Tab/Escape…) siguen su curso
+      event.preventDefault();
+      this.goTo(target);
+    };
+
+    /** Aplica el índice (acotado) al DOM: track, estado y `aria` de cada slide. */
+    private goTo(next: number): void {
+      this.index = clampIndex(next, this.count);
+      this.style.setProperty("--mv-index", String(this.index));
+
+      this.slides.forEach((slide, i) => {
+        const active = i === this.index;
+        if (active) slide.setAttribute("data-active", "");
+        else slide.removeAttribute("data-active");
+        // Las diapositivas inactivas no deben recibir foco ni leerse (sin fugas).
+        slide.toggleAttribute("inert", !active);
+        slide.setAttribute("aria-hidden", String(!active));
+      });
+
+      if (this.status) this.status.textContent = `${this.index + 1} / ${this.count}`;
+    }
+
+    /* ---- Swipe (puntero) ----------------------------------------------------- */
+
+    private onPointerDown = (event: PointerEvent): void => {
+      // Solo gestos primarios; ignora interacción con controles del video.
+      if (event.button !== 0) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("video")) return;
+      this.pointerId = event.pointerId;
+      this.startX = event.clientX;
+      document.addEventListener("pointerup", this.onPointerUp);
+    };
+
+    private onPointerUp = (event: PointerEvent): void => {
+      if (event.pointerId !== this.pointerId) return;
+      const dx = event.clientX - this.startX;
+      this.pointerId = null;
+      document.removeEventListener("pointerup", this.onPointerUp);
+
+      // Umbral mínimo para considerar swipe (evita micro-arrastres / taps).
+      const THRESHOLD = 40;
+      if (Math.abs(dx) < THRESHOLD) return;
+      if (dx < 0) this.onNext();
+      else this.onPrev();
+    };
+  }
+
+  if (!customElements.get("media-viewer")) {
+    customElements.define("media-viewer", MediaViewer);
+  }
+</script>

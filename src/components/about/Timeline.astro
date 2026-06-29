@@ -1,0 +1,108 @@
+---
+/**
+ * Timeline — experiencia depurada dentro de About (design.md §5.2: "Experience
+ * (timeline) — Conservar, depurar"). Migra las 3 etapas del sitio heredado
+ * (Req 1.4) a la identidad editorial del sistema: índice de sección, periodo en
+ * mono (nota al margen), rol en display y descripción en cuerpo, articuladas por
+ * hairlines de 1px en vez de cajas/sombras.
+ *
+ * HTML 100% estático: no embarca isla ni JS. El reveal on-scroll lo aporta
+ * `Motion` (montado en el layout) vía `[data-reveal]`, respetando reduced-motion.
+ */
+import Section from "../primitives/Section.astro";
+import Text from "../primitives/Text.astro";
+import Mono from "../primitives/Mono.astro";
+import {
+  useTranslations,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../../lib/i18n";
+
+interface Props {
+  /** Idioma de la página → copy localizado. */
+  lang?: string;
+  /** Índice de sección editorial (por defecto "04"; About lo ajusta). */
+  index?: string;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE, index = "04" }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+// Etapas migradas del heredado (Req 1.4): la más reciente primero.
+const entries: { date: string; role: string; desc: string }[] = [
+  { date: t.exp1_date, role: t.exp1_title, desc: t.exp1_desc },
+  { date: t.exp2_date, role: t.exp2_title, desc: t.exp2_desc },
+  { date: t.exp3_date, role: t.exp3_title, desc: t.exp3_desc },
+];
+
+const titleId = "about-exp-title";
+---
+
+<Section index={index} label={t.about_exp_title} aria-labelledby={titleId} data-reveal>
+  <Text as="h2" id={titleId} font="display" step="3" class="tl__title">
+    {t.about_exp_title}
+  </Text>
+
+  <ol class="tl__list">
+    {
+      entries.map((entry) => (
+        <li class="tl__item">
+          <Mono class="tl__period" accent>{entry.date}</Mono>
+          <div class="tl__body">
+            <Text as="h3" font="display" step="2" class="tl__role">{entry.role}</Text>
+            <Text class="tl__desc" tone="dim" step="0" measure>{entry.desc}</Text>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
+
+<style>
+  .tl__title {
+    margin: 0 0 var(--space-xl);
+  }
+
+  .tl__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Cada etapa: periodo (mono) + cuerpo, articulada por hairline superior. */
+  .tl__item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+    padding-block: var(--space-lg);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .tl__item:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .tl__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .tl__role,
+  .tl__desc {
+    margin: 0;
+  }
+
+  /* Desktop: periodo como nota al margen a la izquierda (composición editorial). */
+  @media (min-width: 768px) {
+    .tl__item {
+      grid-template-columns: 14rem 1fr;
+      gap: var(--space-xl);
+      align-items: baseline;
+    }
+  }
+</style>

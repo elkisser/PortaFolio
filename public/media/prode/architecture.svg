@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Prode: flujo de datos desde las APIs deportivas hasta la puntuación en tiempo real">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">02 — PRODE</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">FLUJO DE DATOS</text>
+
+  <text x="120" y="220" class="mono" font-size="20" fill="#a6a5a0">DE LA API AL PUNTAJE, EN TIEMPO REAL</text>
+
+  <!-- Nodos del flujo -->
+  <g>
+    <rect x="120" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="270" y="430" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Sports API</text>
+    <text x="270" y="466" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">resultados reales</text>
+
+    <rect x="560" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="710" y="424" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Supabase</text>
+    <text x="710" y="458" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">auth · postgres</text>
+    <text x="710" y="486" class="mono" font-size="16" fill="#5fd38a" text-anchor="middle">realtime</text>
+
+    <rect x="1000" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="1150" y="424" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Puntuación</text>
+    <text x="1150" y="458" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">automática</text>
+    <text x="1150" y="486" class="mono" font-size="16" fill="#e8b75c" text-anchor="middle">+3 pts</text>
+  </g>
+
+  <!-- Conectores -->
+  <g stroke="#e8b75c" stroke-width="2" fill="none">
+    <line x1="420" y1="440" x2="540" y2="440"/>
+    <path d="M540 440 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
+    <line x1="860" y1="440" x2="980" y2="440"/>
+    <path d="M980 440 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
+  </g>
+
+  <text x="120" y="848" class="mono" font-size="20" fill="#a6a5a0">SIN POLLING MANUAL: LA UI SE ACTUALIZA POR SUSCRIPCIÓN</text>
+</svg>

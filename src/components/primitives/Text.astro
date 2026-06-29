@@ -1,0 +1,77 @@
+---
+/**
+ * Text — texto del sistema sobre la escala tipográfica modular (design.md §4.5).
+ *
+ * `step` selecciona el peldaño de la escala (--step--1 … --step-5). `font`
+ * elige la familia: body (Inter, lectura larga) o display (Space Grotesk, con
+ * tracking negativo para titulares). `tone` controla jerarquía de color.
+ */
+import "../../styles/tokens.css";
+
+type Step = "-1" | "0" | "1" | "2" | "3" | "4" | "5";
+
+interface Props {
+  /** Peldaño de la escala tipográfica. Mapea a `--step-<n>`. */
+  step?: Step;
+  /** Familia tipográfica. `display` aplica tracking negativo de titular. */
+  font?: "body" | "display";
+  /** Color: tinta principal o secundaria (design.md §4.3). */
+  tone?: "paper" | "dim";
+  /** Limita la línea a la medida editorial (~68ch) para lectura larga. */
+  measure?: boolean;
+  /** Etiqueta HTML (por defecto `p`). */
+  as?: keyof HTMLElementTagNameMap;
+  /** `id` opcional: permite referenciar el texto con `aria-labelledby`. */
+  id?: string;
+  class?: string;
+}
+
+const {
+  step = "0",
+  font = "body",
+  tone = "paper",
+  measure = false,
+  as: Tag = "p",
+  class: className,
+  ...rest
+}: Props = Astro.props;
+---
+
+<Tag
+  class:list={["text", `font-${font}`, `tone-${tone}`, { measure }, className]}
+  style={`--_step:var(--step-${step})`}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .text {
+    font-size: var(--_step, var(--step-0));
+    line-height: var(--leading-body);
+    margin: 0;
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  /* Titulares: Space Grotesk con tracking negativo y line-height más ceñido. */
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+  }
+
+  .tone-paper {
+    color: var(--paper);
+  }
+
+  .tone-dim {
+    color: var(--paper-dim);
+  }
+
+  .measure {
+    max-width: var(--measure);
+  }
+</style>

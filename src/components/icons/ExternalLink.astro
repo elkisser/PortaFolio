@@ -1,0 +1,17 @@
+---
+/**
+ * ExternalLink — enlace externo. Marco en L abierto + cabeza de flecha diagonal
+ * saliendo por la esquina superior derecha. Todas las esquinas vivas (sin
+ * radios), coherentes con las hairlines (design.md §4.5).
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <polyline points="13 4 4 4 4 20 20 20 20 11"></polyline>
+  <polyline points="14 4 20 4 20 10"></polyline>
+  <line x1="20" y1="4" x2="11" y2="13"></line>
+</Icon>

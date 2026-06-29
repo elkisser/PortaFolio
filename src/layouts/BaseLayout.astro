@@ -1,0 +1,320 @@
+---
+/**
+ * BaseLayout — documento base del portfolio (design.md §7.1, §10, §11).
+ *
+ * Responsabilidad única: `<head>` accesible (meta + SEO + JSON-LD), fuentes y
+ * tokens globales, View Transitions con degradación elegante, textura de grano
+ * sutil, skip-link, `:focus-visible` global y contrato global de reduced-motion.
+ *
+ * SEO: delega en `lib/seo.ts` (funciones puras) la construcción de title,
+ * canónica, Open Graph/Twitter y el JSON-LD `Person` (Req 8.3). Los datos de
+ * `Person`, title, description y theme-color se preservan del `index.html`
+ * heredado (design.md §15).
+ *
+ * View Transitions (Astro 5): se usa `<ClientRouter />` de `astro:transitions`
+ * (el antiguo `<ViewTransitions />` quedó deprecado). `fallback="swap"` degrada
+ * a un corte simple (swap instantáneo, sin animación) en navegadores sin la
+ * View Transitions API, sin romper la navegación (Req 4.2, 4.3).
+ * Doc verificada: https://docs.astro.build/en/reference/modules/astro-transitions/
+ * (sección `<ClientRouter />` y tipo `Fallback = 'none' | 'animate' | 'swap'`).
+ */
+import { ClientRouter } from "astro:transitions";
+import "../styles/tokens.css";
+import "../styles/fonts.css";
+import {
+  buildTitle,
+  canonicalURL,
+  absoluteUrl,
+  openGraphTags,
+  twitterTags,
+  personJsonLdString,
+  ogLocale,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE_PATH,
+  THEME_COLOR,
+  SITE_NAME,
+  type OgType,
+  type TwitterCard,
+  type ResolvedSeo,
+} from "../lib/seo";
+import { LOCALES, DEFAULT_LOCALE, localizedPath, type Locale } from "../lib/i18n";
+import Nav from "../components/Nav.astro";
+import Motion from "../components/Motion.astro";
+
+interface Props {
+  /** Título de la página (sin el sufijo del sitio); opcional para la home. */
+  title?: string;
+  /** Meta description; cae a la descripción por defecto preservada. */
+  description?: string;
+  /** Idioma del documento → atributo `<html lang>` (Req 8.1/10). */
+  lang?: string;
+  /** Imagen social (ruta relativa o absoluta); cae a la foto de perfil. */
+  image?: string;
+  /** Tipo de Open Graph. */
+  ogType?: OgType;
+  /** Tipo de Twitter card. */
+  twitterCard?: TwitterCard;
+  /** Override de la URL canónica; por defecto, la de la página actual. */
+  canonical?: string;
+  /** Si es true, marca la página como no indexable. */
+  noindex?: boolean;
+  /**
+   * JSON-LD adicional (ya serializado) a inyectar en el `<head>`, además del
+   * `Person` global. Lo usan las páginas que aportan datos estructurados propios
+   * (p. ej. el `CreativeWork` por case study — Req 8.3). Acepta uno o varios.
+   */
+  jsonLd?: string | string[];
+}
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  lang = "es",
+  image = DEFAULT_OG_IMAGE_PATH,
+  ogType = "website",
+  twitterCard = "summary_large_image",
+  canonical,
+  noindex = false,
+  jsonLd,
+}: Props = Astro.props;
+
+// `Astro.site` proviene de astro.config (`site`); `Astro.url` es la URL actual.
+const site = Astro.site;
+const resolvedTitle = buildTitle(title);
+const resolvedCanonical = canonical ?? canonicalURL(Astro.url.pathname, site);
+const resolvedImage = absoluteUrl(image, site);
+
+// Locale alterno: el "otro" idioma soportado (es ⇄ en).
+const alternateLang = lang === "en" ? "es" : "en";
+
+const seo: ResolvedSeo = {
+  title: resolvedTitle,
+  description,
+  canonical: resolvedCanonical,
+  image: resolvedImage,
+  ogType,
+  siteName: SITE_NAME,
+  locale: ogLocale(lang),
+  localeAlternate: [ogLocale(alternateLang)],
+  twitterCard,
+};
+
+const ogMeta = openGraphTags(seo);
+const twitterMeta = twitterTags(seo);
+const personLd = personJsonLdString(site);
+const robots = noindex ? "noindex, nofollow" : "index, follow";
+
+// JSON-LD adicional por página (p. ej. `CreativeWork` del case study, Req 8.3),
+// normalizado a arreglo para inyectar un `<script>` por bloque.
+const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+// hreflang: ahora que existe el i18n routing real (`/es`, `/en`), generamos las
+// alternativas por idioma + `x-default` (Req 8.1). `localizedPath` reescribe la
+// ruta actual a cada idioma de forma idempotente (design.md §9.5); `x-default`
+// apunta al idioma por defecto. Doc:
+// https://developers.google.com/search/docs/specialty/international/localized-versions
+const currentPath = Astro.url.pathname;
+const hreflangAlternates: { hreflang: Locale; href: string }[] = LOCALES.map(
+  (locale) => ({
+    hreflang: locale,
+    href: absoluteUrl(localizedPath(currentPath, locale), site),
+  }),
+);
+const xDefaultHref = absoluteUrl(localizedPath(currentPath, DEFAULT_LOCALE), site);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content={THEME_COLOR} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta -->
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE_NAME} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={resolvedCanonical} />
+
+    <!-- hreflang: versiones por idioma + x-default (Req 8.1, i18n routing real). -->
+    {
+      hreflangAlternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+
+    <!-- Open Graph -->
+    {ogMeta.map((tag) => <meta property={tag.property} content={tag.content} />)}
+
+    <!-- Twitter -->
+    {twitterMeta.map((tag) => <meta name={tag.name} content={tag.content} />)}
+
+    <!-- Icons (preservados del heredado) -->
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="apple-touch-icon" href="/img/foto-perfil.png" />
+
+    <!-- View Transitions de Astro (corte simple si no hay soporte) -->
+    <ClientRouter fallback="swap" />
+
+    <!-- Datos estructurados: Person (Req 8.3). `is:inline` para no procesar/bundlear. -->
+    <script is:inline type="application/ld+json" set:html={personLd} />
+
+    <!-- Datos estructurados adicionales por página (p. ej. CreativeWork del case
+         study, Req 8.3). Cada bloque ya viene serializado por la página. -->
+    {
+      extraJsonLd.map((ld) => (
+        <script is:inline type="application/ld+json" set:html={ld} />
+      ))
+    }
+  </head>
+
+  <body>
+    <!-- Skip-link al contenido principal (a11y). La página provee <main id="main">. -->
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <!-- Textura de grano sutil (design.md §4.2); decorativa, sin movimiento. -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- Navegación: isla con scrollspy + menú móvil + switch de idioma (Req 4.1/4.4).
+         Se hidrata en idle; funciona sin JS. Playground excluido (fase 2, §5.7). -->
+    <Nav lang={lang} />
+
+    <slot />
+
+    <!-- Motion: isla orquestadora de reveals on-scroll (Req 10.2/10.3/10.4).
+         CSS scroll-driven cuando hay soporte; fallback IntersectionObserver; bajo
+         reduced-motion o sin IO, todo visible y nada observado. Se hidrata en idle
+         y descubre los `[data-reveal]` de toda la página (design.md §6.2, §10). -->
+    <Motion />
+  </body>
+</html>
+
+<style is:global>
+  /* ---------------------------------------------------------------------------
+     Reset mínimo + base del documento. La tipografía/escala vive en tokens.css;
+     aquí solo el lienzo global (no es base.css completo, que llega en su tarea).
+     --------------------------------------------------------------------------- */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    background-color: var(--ink-900);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background-color: var(--amber);
+    color: var(--amber-ink);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Foco visible global: solo cuando el navegador lo considera relevante
+     (`:focus-visible`), nunca se elimina el foco para usuarios de teclado.
+     --------------------------------------------------------------------------- */
+  :focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Quita el anillo por defecto solo cuando NO es navegación por teclado. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ---------------------------------------------------------------------------
+     Skip-link: oculto hasta recibir foco; entonces se ancla arriba a la izq.
+     --------------------------------------------------------------------------- */
+  .skip-link {
+    position: fixed;
+    top: var(--space-2xs);
+    left: var(--space-2xs);
+    z-index: 1000;
+    padding: var(--space-2xs) var(--space-sm);
+    background-color: var(--amber);
+    color: var(--amber-ink);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--r);
+    transform: translateY(-150%);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Grano: overlay fijo, muy sutil, decorativo y no interactivo (design.md §4.2).
+     Es estático (sin animación) → no afecta a reduced-motion.
+     --------------------------------------------------------------------------- */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------------------------------------------------------------------------
+     Contrato global de reduced-motion (design.md §10, Req 10.2):
+     ninguna animación no esencial corre; las View Transitions degradan a corte.
+     --------------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Desactiva las animaciones de View Transitions (corte simple). */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
+  }
+</style>

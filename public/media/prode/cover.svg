@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Prode: predicción de un partido en vivo y tabla de una liga privada">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Fondo (ink-900) -->
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <!-- Rejilla tenue (hairlines de firma) -->
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <!-- Índice editorial -->
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">02 — PRODE</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">FULL-STACK · REALTIME</text>
+
+  <!-- Tarjeta de partido en vivo -->
+  <text x="120" y="210" class="mono" font-size="20" fill="#a6a5a0">PARTIDO EN VIVO</text>
+  <rect x="120" y="234" width="760" height="220" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <circle cx="176" cy="262" r="6" fill="#5fd38a"/>
+  <text x="196" y="269" class="mono" font-size="16" fill="#5fd38a">EN VIVO · 67'</text>
+  <text x="200" y="360" class="display" font-size="40" fill="#f3f2ee" text-anchor="middle">Local</text>
+  <text x="500" y="360" class="display" font-size="64" fill="#f3f2ee" text-anchor="middle">2 — 1</text>
+  <text x="800" y="360" class="display" font-size="40" fill="#f3f2ee" text-anchor="middle">Visita</text>
+  <text x="500" y="420" class="mono" font-size="18" fill="#a6a5a0" text-anchor="middle">TU PRONÓSTICO: 2 — 1 · +3 PTS</text>
+
+  <!-- Tabla de liga privada -->
+  <text x="920" y="210" class="mono" font-size="20" fill="#a6a5a0">LIGA PRIVADA · TABLA</text>
+  <rect x="920" y="234" width="560" height="430" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <g class="mono" font-size="20" fill="#f3f2ee">
+    <text x="952" y="296">01</text><text x="1010" y="296" class="body">Sebastián</text><text x="1448" y="296" fill="#e8b75c" text-anchor="end">128</text>
+    <line x1="952" y1="320" x2="1448" y2="320" stroke="rgba(255,255,255,0.09)"/>
+    <text x="952" y="360">02</text><text x="1010" y="360" class="body" fill="#a6a5a0">Martina</text><text x="1448" y="360" fill="#a6a5a0" text-anchor="end">121</text>
+    <line x1="952" y1="384" x2="1448" y2="384" stroke="rgba(255,255,255,0.09)"/>
+    <text x="952" y="424">03</text><text x="1010" y="424" class="body" fill="#a6a5a0">Lucas</text><text x="1448" y="424" fill="#a6a5a0" text-anchor="end">117</text>
+    <line x1="952" y1="448" x2="1448" y2="448" stroke="rgba(255,255,255,0.09)"/>
+    <text x="952" y="488">04</text><text x="1010" y="488" class="body" fill="#a6a5a0">Camila</text><text x="1448" y="488" fill="#a6a5a0" text-anchor="end">110</text>
+    <line x1="952" y1="512" x2="1448" y2="512" stroke="rgba(255,255,255,0.09)"/>
+    <text x="952" y="552">05</text><text x="1010" y="552" class="body" fill="#a6a5a0">Diego</text><text x="1448" y="552" fill="#a6a5a0" text-anchor="end">104</text>
+  </g>
+  <text x="952" y="624" class="mono" font-size="16" fill="#a6a5a0">PUNTUACIÓN AUTOMÁTICA</text>
+
+  <!-- Pie -->
+  <text x="120" y="848" class="mono" font-size="20" fill="#5fd38a">DATOS REALES VÍA SPORTS APIS</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Supabase · suscripciones realtime</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="The Cookie Box: panel de administración seguro para gestionar el catálogo">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <!-- Marco de la app -->
+  <rect x="80" y="80" width="1440" height="740" rx="10" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <line x1="80" y1="156" x2="1520" y2="156" stroke="rgba(255,255,255,0.09)"/>
+  <text x="116" y="126" class="mono" font-size="20" fill="#a6a5a0">THE COOKIE BOX — ADMIN</text>
+  <circle cx="1456" cy="118" r="7" fill="#5fd38a"/>
+  <text x="1430" y="126" class="mono" font-size="16" fill="#5fd38a" text-anchor="end">SESIÓN SEGURA</text>
+
+  <!-- Sidebar -->
+  <line x1="380" y1="156" x2="380" y2="820" stroke="rgba(255,255,255,0.09)"/>
+  <g class="mono" font-size="18">
+    <text x="116" y="220" fill="#e8b75c">— PRODUCTOS</text>
+    <text x="116" y="264" fill="#a6a5a0">— PEDIDOS</text>
+    <text x="116" y="308" fill="#a6a5a0">— CATEGORÍAS</text>
+    <text x="116" y="352" fill="#a6a5a0">— MEDIOS</text>
+  </g>
+
+  <!-- Formulario de producto -->
+  <text x="420" y="216" class="mono" font-size="18" fill="#a6a5a0">NUEVO PRODUCTO</text>
+  <rect x="420" y="240" width="640" height="56" rx="6" fill="#161619" stroke="rgba(255,255,255,0.09)"/>
+  <text x="444" y="276" class="body" font-size="22" fill="#f3f2ee">Alfajor de maicena</text>
+  <rect x="420" y="316" width="310" height="56" rx="6" fill="#161619" stroke="rgba(255,255,255,0.09)"/>
+  <text x="444" y="352" class="body" font-size="22" fill="#f3f2ee">$ 1.900</text>
+  <rect x="750" y="316" width="310" height="56" rx="6" fill="#161619" stroke="rgba(255,255,255,0.09)"/>
+  <text x="774" y="352" class="body" font-size="22" fill="#a6a5a0">Categoría: Clásicas</text>
+
+  <!-- Subida de imagen → WebP -->
+  <rect x="420" y="392" width="640" height="180" rx="6" fill="#161619" stroke="rgba(255,255,255,0.09)" stroke-dasharray="6 6"/>
+  <text x="740" y="470" class="body" font-size="22" fill="#a6a5a0" text-anchor="middle">Arrastrá una imagen</text>
+  <text x="740" y="506" class="mono" font-size="16" fill="#5fd38a" text-anchor="middle">JPG/PNG → WEBP AUTOMÁTICO</text>
+
+  <rect x="420" y="600" width="220" height="52" rx="6" fill="#e8b75c"/>
+  <text x="530" y="634" class="mono" font-size="16" fill="#14110a" text-anchor="middle">GUARDAR</text>
+
+  <!-- Vista previa -->
+  <text x="1100" y="216" class="mono" font-size="18" fill="#a6a5a0">VISTA PREVIA</text>
+  <rect x="1100" y="240" width="332" height="332" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.09)"/>
+  <rect x="1124" y="264" width="284" height="180" rx="6" fill="#161619"/>
+  <circle cx="1266" cy="354" r="52" fill="#1d1d20"/>
+  <text x="1124" y="486" class="body" font-size="22" fill="#f3f2ee">Alfajor de maicena</text>
+  <text x="1124" y="520" class="mono" font-size="18" fill="#e8b75c">$ 1.900</text>
+  <text x="1124" y="556" class="mono" font-size="14" fill="#a6a5a0">120 KB · WEBP</text>
+</svg>

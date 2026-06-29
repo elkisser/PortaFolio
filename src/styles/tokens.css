@@ -1,0 +1,89 @@
+/* =============================================================================
+   tokens.css — Sistema de identidad visual (design.md §4.3 / §4.5)
+   -----------------------------------------------------------------------------
+   Única fuente de verdad de los tokens de diseño del portfolio. Consumido por
+   los primitivos (`src/components/primitives/`) y por el resto del sistema.
+
+   Decisión (design.md §4.3): un solo acento (ámbar). Sin gradientes multicolor,
+   sin segundo acento "porque sí". La identidad se sostiene en tipografía +
+   ritmo + un cálido, no en color.
+   ============================================================================= */
+
+:root {
+  /* ---------------------------------------------------------------------------
+     Color — Base oscura (modo principal) — design.md §4.3
+     --------------------------------------------------------------------------- */
+  --ink-900: #0a0a0b; /* fondo */
+  --ink-800: #101012; /* elevación */
+  --ink-700: #161619; /* elevación 2 */
+  --paper: #f3f2ee; /* tinta principal (texto) */
+  --paper-dim: #a6a5a0; /* texto secundario */
+  --line: rgba(255, 255, 255, 0.09); /* hairlines 1px estructurales */
+
+  /* Acento (conservado, calibrado) — un único cálido */
+  --amber: #e8b75c; /* acento */
+  --amber-hi: #f4cd7e; /* acento, estado alto */
+  --amber-ink: #14110a; /* texto sobre acento */
+
+  /* Señales semánticas — reservadas a estados, no decorativas */
+  --live: #5fd38a; /* "disponible" */
+
+  /* ---------------------------------------------------------------------------
+     Tipografía — familias (self-hosted, ver fonts.css) — design.md §4.3
+     --------------------------------------------------------------------------- */
+  --font-display: "Space Grotesk", "Space Grotesk Fallback", system-ui, sans-serif;
+  --font-body: "Inter", "Inter Fallback", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, monospace;
+
+  /* ---------------------------------------------------------------------------
+     Escala tipográfica modular (~1.25, fluida con clamp) — design.md §4.5
+     --------------------------------------------------------------------------- */
+  --step--1: clamp(0.83rem, 0.80rem + 0.15vw, 0.94rem); /* mono / captions */
+  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.13rem); /* body */
+  --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.56rem); /* lead */
+  --step-2: clamp(1.56rem, 1.40rem + 0.8vw, 2.2rem); /* h3 */
+  --step-3: clamp(1.95rem, 1.70rem + 1.3vw, 3.05rem); /* h2 */
+  --step-4: clamp(2.44rem, 2.00rem + 2.2vw, 4.24rem); /* h1 */
+  --step-5: clamp(3.05rem, 2.30rem + 3.8vw, 6.5rem); /* display / hero */
+
+  /* Detalle tipográfico de firma (design.md §4.5) */
+  --tracking-display: -0.02em; /* tracking negativo en --step-4/5 */
+  --tracking-mono: 0.08em; /* uppercase mono: etiquetas e índices */
+  --leading-body: 1.6; /* lectura larga de case studies */
+  --measure: 68ch; /* medida editorial 60–72ch */
+
+  /* ---------------------------------------------------------------------------
+     Escala de espaciado 8pt — design.md §4.5 (4 8 12 16 24 32 48 64 96 128)
+     --------------------------------------------------------------------------- */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  --space-4xl: 128px;
+
+  /* ---------------------------------------------------------------------------
+     Rejilla — 12 columnas, gutters fluidos — design.md §4.3 / §4.5
+     --------------------------------------------------------------------------- */
+  --grid-cols: 12;
+  --grid-gutter: clamp(16px, 1rem + 1vw, 32px);
+  --maxw: 1240px; /* --maxw editorial; case studies pueden romper a full-bleed */
+
+  /* ---------------------------------------------------------------------------
+     Radios y elevación — radius bajo, sombras casi nulas — design.md §4.5
+     --------------------------------------------------------------------------- */
+  --r: 6px;
+  --r-lg: 10px;
+
+  /* ---------------------------------------------------------------------------
+     Firma de movimiento — un solo ease, duraciones acotadas — design.md §4.5
+     --------------------------------------------------------------------------- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 300ms;
+  --dur-mid: 500ms;
+  --dur-slow: 700ms;
+}

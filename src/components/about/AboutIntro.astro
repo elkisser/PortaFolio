@@ -1,0 +1,112 @@
+---
+/**
+ * AboutIntro — apertura editorial de About (design.md §5.1/§5.3): quién es y cómo
+ * trabaja. Copy migrado del heredado (Req 1.4: `about_title`/`about_lead`/
+ * `about_text`). Lleva el ancla `id="about"` que usa el scrollspy de la nav
+ * (entrada `about`), de modo que la entrada About sea siempre alcanzable
+ * (Req 4.1).
+ *
+ * Dos usos:
+ *  - **Teaser en la home** (`more`): intro breve + enlace a la página About
+ *    completa (`/about`), para que la home conserve el ancla `#about` sin
+ *    duplicar la profundidad (stack + GitHub + timeline viven en `/about`).
+ *  - **Apertura de `/about`** (`more` = false): la intro completa que precede a
+ *    Stack, GitHubEvidence y Timeline.
+ *
+ * HTML 100% estático: no embarca isla ni JS. El reveal on-scroll lo aporta
+ * `Motion` (montado en el layout) vía `[data-reveal]`, respetando reduced-motion.
+ */
+import Section from "../primitives/Section.astro";
+import Text from "../primitives/Text.astro";
+import Arrow from "../icons/Arrow.astro";
+import Mono from "../primitives/Mono.astro";
+import {
+  useTranslations,
+  localizedPath,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../../lib/i18n";
+
+interface Props {
+  /** Idioma de la página → copy localizado y destino del enlace. */
+  lang?: string;
+  /** Índice de sección editorial (por defecto "02"; la página About usa "01"). */
+  index?: string;
+  /** Si es true, muestra el enlace a la página About completa (teaser de home). */
+  more?: boolean;
+}
+
+const {
+  lang: rawLang = DEFAULT_LOCALE,
+  index = "02",
+  more = false,
+}: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+const aboutHref = localizedPath("/about", lang);
+const titleId = "about-title";
+---
+
+<div id="about">
+  <Section index={index} label={t.nav_about} aria-labelledby={titleId} data-reveal>
+    <div class="about__intro">
+      <Text as="h2" id={titleId} font="display" step="3" class="about__title">
+        {t.about_title}
+      </Text>
+      <Text class="about__lead" step="1" measure>{t.about_lead}</Text>
+      <Text class="about__text" tone="dim" step="0" measure>{t.about_text}</Text>
+
+      {
+        more && (
+          <a class="about__more" href={aboutHref}>
+            <Mono>{t.about_more}</Mono>
+            <Arrow size={18} class="about__more-arrow" />
+          </a>
+        )
+      }
+    </div>
+  </Section>
+</div>
+
+<style>
+  .about__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .about__title,
+  .about__lead,
+  .about__text {
+    margin: 0;
+  }
+
+  /* Enlace a la página About completa: hairline inferior ámbar (lenguaje del Hero). */
+  .about__more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    align-self: start;
+    margin-block-start: var(--space-sm);
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .about__more :global(.about__more-arrow) {
+    color: var(--amber);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .about__more:hover {
+    gap: var(--space-sm);
+  }
+
+  .about__more:hover :global(.about__more-arrow) {
+    transform: translateX(3px);
+  }
+</style>

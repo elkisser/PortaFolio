@@ -1,0 +1,34 @@
+---
+/**
+ * Detalle de case study en español (`/es/work/[slug]`) — ruta real e indexable
+ * con URL propia por proyecto (Req 5.1, design.md §5.1/§5.4).
+ *
+ * `getStaticPaths` recorre la colección `work`, se queda con las entradas en
+ * español (cada case study es un MDX por idioma) y deriva el slug de URL sin el
+ * sufijo de idioma (`caseStudySlug`), de modo que `/es/work/<slug>` y
+ * `/en/work/<slug>` comparten slug (clave para el switch de idioma y el morph de
+ * View Transitions). El cuerpo MDX (narrativa) se renderiza con `render(entry)` y
+ * se pasa al `CaseStudyLayout`, que arma la estructura del caso y el JSON-LD
+ * `CreativeWork` localizado (Req 5.2, 8.3).
+ */
+import { getCollection, render } from "astro:content";
+import CaseStudyLayout from "../../../layouts/CaseStudyLayout.astro";
+import { caseStudySlug } from "../../../lib/work";
+
+export async function getStaticPaths() {
+  const all = await getCollection("work");
+  return all
+    .filter((entry) => entry.data.lang === "es")
+    .map((entry) => ({
+      params: { slug: caseStudySlug(entry.id) },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<CaseStudyLayout entry={entry} lang="es">
+  <Content />
+</CaseStudyLayout>

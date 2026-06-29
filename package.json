@@ -1,0 +1,40 @@
+{
+  "name": "portafolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portfolio de Sebastián Kisser — rediseño editorial premium con Astro (islas, salida estática).",
+  "scripts": {
+    "dev": "astro dev",
+    "fetch:github": "node src/scripts/fetch-github.mjs",
+    "prebuild": "node src/scripts/fetch-github.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "audit:budget": "node scripts/budget-audit.mjs",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test"
+  },
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^4.3.14",
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-astro": "^1.7.0",
+    "fast-check": "^4.8.0",
+    "globals": "^17.7.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.62.0",
+    "vitest": "^4.1.9"
+  }
+}

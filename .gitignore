@@ -1,0 +1,20 @@
+# build output
+dist/
+# generated types / astro cache
+.astro/
+# build-time GitHub dataset (regenerado por scripts/fetch-github.mjs en cada build)
+src/content/data/github.json
+# dependencies
+node_modules/
+# test artifacts
+playwright-report/
+test-results/
+# logs
+*.log
+npm-debug.log*
+# env
+.env
+.env.*
+!.env.example
+# os
+.DS_Store

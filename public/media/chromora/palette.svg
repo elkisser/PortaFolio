@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Detalle de una paleta de Chromora con valores LCH y verificación de contraste AA">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <text x="120" y="120" class="mono" font-size="22" fill="#a6a5a0">PALETA · DETALLE</text>
+  <text x="120" y="196" class="display" font-size="56" fill="#f3f2ee">Mar en calma</text>
+
+  <!-- Filas de color con metadatos -->
+  <g>
+    <!-- fila 1 -->
+    <rect x="120" y="252" width="180" height="120" rx="6" fill="#10243f"/>
+    <text x="332" y="300" class="mono" font-size="24" fill="#f3f2ee">#10243F</text>
+    <text x="332" y="338" class="mono" font-size="20" fill="#a6a5a0">LCH 18 / 28 / 264</text>
+    <rect x="1200" y="288" width="280" height="44" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="1340" y="318" class="mono" font-size="20" fill="#5fd38a" text-anchor="middle">AA · 8.9:1</text>
+
+    <!-- fila 2 -->
+    <rect x="120" y="392" width="180" height="120" rx="6" fill="#2f5e7e"/>
+    <text x="332" y="440" class="mono" font-size="24" fill="#f3f2ee">#2F5E7E</text>
+    <text x="332" y="478" class="mono" font-size="20" fill="#a6a5a0">LCH 40 / 26 / 248</text>
+    <rect x="1200" y="428" width="280" height="44" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="1340" y="458" class="mono" font-size="20" fill="#5fd38a" text-anchor="middle">AA · 5.1:1</text>
+
+    <!-- fila 3 -->
+    <rect x="120" y="532" width="180" height="120" rx="6" fill="#e8b75c"/>
+    <text x="332" y="580" class="mono" font-size="24" fill="#f3f2ee">#E8B75C</text>
+    <text x="332" y="618" class="mono" font-size="20" fill="#a6a5a0">LCH 76 / 52 / 78</text>
+    <rect x="1200" y="568" width="280" height="44" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="1340" y="598" class="mono" font-size="20" fill="#e8b75c" text-anchor="middle">ACENTO</text>
+
+    <!-- fila 4 -->
+    <rect x="120" y="672" width="180" height="120" rx="6" fill="#d9613c"/>
+    <text x="332" y="720" class="mono" font-size="24" fill="#f3f2ee">#D9613C</text>
+    <text x="332" y="758" class="mono" font-size="20" fill="#a6a5a0">LCH 56 / 58 / 42</text>
+    <rect x="1200" y="708" width="280" height="44" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="1340" y="738" class="mono" font-size="20" fill="#5fd38a" text-anchor="middle">AA · 4.6:1</text>
+  </g>
+
+  <line x1="120" y1="836" x2="1480" y2="836" stroke="rgba(255,255,255,0.09)"/>
+  <text x="120" y="872" class="mono" font-size="18" fill="#a6a5a0">CHROMA.JS · clamp en gamut sRGB · ajuste de L para AA</text>
+</svg>
