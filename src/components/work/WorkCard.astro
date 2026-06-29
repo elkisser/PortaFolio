@@ -1,0 +1,235 @@
+---
+/**
+ * WorkCard — entrada de proyecto del índice editorial (design.md §5.1, §7.1).
+ *
+ * Cada tarjeta es una entrada densa y editorial (no una "card" genérica de
+ * sombra + gradiente): número de índice mono, título display, resumen, metadatos
+ * (año · rol técnico vía categorías) y un thumbnail que reserva su espacio
+ * (anti-CLS). El conjunto del índice se lee como un sumario de revista.
+ *
+ * **Elemento compartido para el morph (Req 4.2):** la tarjeta expone
+ * `transition:name` en su thumbnail con un nombre único derivado del slug
+ * (`work-media-<slug>`). La página de detalle (`/work/[slug]`, tarea 11) reusará
+ * el mismo `transition:name` en su hero, de modo que al navegar, View Transitions
+ * morfea el thumbnail → hero (continuidad espacial, design.md §4.6 / §6.4-B). El
+ * `transition:name` DEBE ser único por página: como el slug es único por case
+ * study, lo es. Si el navegador no soporta View Transitions, degrada a corte
+ * simple sin romperse (Req 4.3) — el atributo es inerte.
+ *
+ * El thumbnail usa la primera imagen del case study si existe (con `width`/
+ * `height` explícitos del esquema → CLS 0, Req 6.4) y, si no, un marcador
+ * editorial tipográfico (las iniciales del título) coherente con la identidad
+ * (sin gradientes/blobs — design.md §4.4). Los medios reales (video, carrusel) se
+ * presentan en el detalle vía `MediaViewer` (tarea 12), no en el índice.
+ *
+ * `data-category` lleva las categorías de la entrada (separadas por espacio) para
+ * que la isla de filtro del índice (`WorkIndex`) decida en cliente con la misma
+ * lógica pura (`categoryMatches`).
+ */
+import Text from "../primitives/Text.astro";
+import Mono from "../primitives/Mono.astro";
+import Arrow from "../icons/Arrow.astro";
+import { caseStudySlug, CATEGORY_LABELS, type WorkEntryLike } from "../../lib/work";
+import { localizedPath, type Locale } from "../../lib/i18n";
+import type { MediaAsset } from "../../content/schema";
+
+interface Props {
+  /** Entrada de la colección `work` (id + data). */
+  entry: WorkEntryLike & { data: { media?: MediaAsset[] } };
+  /** Idioma activo → destino localizado del enlace de detalle. */
+  lang: Locale;
+  /** Posición en el índice (1-based) → número de índice editorial. */
+  index: number;
+}
+
+const { entry, lang, index }: Props = Astro.props;
+
+const slug = caseStudySlug(entry.id);
+const href = localizedPath(`/work/${slug}`, lang);
+
+// Etiqueta de categorías (mono) y atributo de datos para el filtro en cliente.
+const categories = entry.data.category;
+const categoryAttr = categories.join(" ");
+const categoryLabel = categories.map((c) => CATEGORY_LABELS[c]).join(" · ");
+
+// Thumbnail: primera imagen del case study si existe (con dimensiones del
+// esquema → CLS 0). Si no hay, marcador tipográfico con las iniciales del título.
+const media = entry.data.media ?? [];
+const thumb = media.find((m) => m.type === "image");
+const initials = entry.data.title
+  .split(/\s+/)
+  .map((word) => word[0])
+  .filter(Boolean)
+  .slice(0, 2)
+  .join("")
+  .toUpperCase();
+
+const num = String(index).padStart(2, "0");
+const transitionName = `work-media-${slug}`;
+---
+
+<article class="card" data-work-card data-category={categoryAttr} data-reveal>
+  <a class="card__link" href={href} aria-labelledby={`work-${slug}-title`}>
+    <!-- Thumbnail: reserva espacio (CLS 0) y porta el `transition:name` del morph. -->
+    <div class="card__media" transition:name={transitionName}>
+      {
+        thumb ? (
+          <img
+            class="card__img"
+            src={thumb.src}
+            alt={thumb.alt}
+            width={thumb.width}
+            height={thumb.height}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span class="card__placeholder" aria-hidden="true">
+            {initials}
+          </span>
+        )
+      }
+    </div>
+
+    <div class="card__body">
+      <Mono class="card__num" accent>{num}</Mono>
+
+      <div class="card__head">
+        <Text as="h3" id={`work-${slug}-title`} font="display" step="2" class="card__title">
+          {entry.data.title}
+        </Text>
+        <Arrow size={20} class="card__arrow" />
+      </div>
+
+      <Text class="card__summary" tone="dim" step="0">{entry.data.summary}</Text>
+
+      <p class="card__meta">
+        <Mono>{entry.data.year}</Mono>
+        <Mono class="card__meta-sep" aria-hidden="true">/</Mono>
+        <Mono>{categoryLabel}</Mono>
+      </p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    border-block-start: 1px solid var(--line);
+  }
+
+  /* La última tarjeta de la lista cierra con una hairline inferior. */
+  .card:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .card__link {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    padding-block: var(--space-lg);
+    text-decoration: none;
+    color: var(--paper);
+  }
+
+  /* Thumbnail editorial: aspecto consistente (CLS 0), radius bajo, sin sombras. */
+  .card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--ink-800);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+  }
+
+  .card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Marcador tipográfico (sin imagen): iniciales en display, integrado a la
+     identidad (design.md §4.4: nada de gradientes/blobs decorativos). */
+  .card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    letter-spacing: var(--tracking-display);
+    color: var(--line);
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .card__num {
+    align-self: start;
+  }
+
+  .card__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .card__title {
+    color: var(--paper);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .card__arrow {
+    flex-shrink: 0;
+    color: var(--paper-dim);
+    transition:
+      transform var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+
+  .card__summary {
+    max-width: var(--measure);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin: 0;
+  }
+
+  .card__meta-sep {
+    color: var(--line);
+  }
+
+  /* Hover/focus: el acento ámbar señala el destino sin depender solo del color
+     (también desplaza la flecha). El foco visible lo aporta `:focus-visible`. */
+  .card__link:hover .card__title,
+  .card__link:focus-visible .card__title {
+    color: var(--amber);
+  }
+
+  .card__link:hover .card__arrow,
+  .card__link:focus-visible .card__arrow {
+    color: var(--amber);
+    transform: translateX(4px);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Desktop: composición editorial a dos columnas (thumbnail | contenido), con
+     el medio a la izquierda y el cuerpo desplazado — ritmo de revista, no grid
+     simétrico de cards (design.md §4.5: composición asimétrica).
+     --------------------------------------------------------------------------- */
+  @media (min-width: 768px) {
+    .card__link {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: center;
+      gap: var(--space-xl);
+    }
+  }
+</style>

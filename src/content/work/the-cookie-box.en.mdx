@@ -1,0 +1,59 @@
+---
+# The Cookie Box — real case study (EN). Follows the slice-1 standard (Chromora; task 13).
+#
+# ----------------------------------------------------------------------------
+# Media decision (design.md §2.5 — reuse-vs-recompose rule, documented per project):
+# A source video exists at `img/TheCookieBox-SF/thecookiebox.mp4` (outside
+# `public/`, without a `poster`, without modern formats webm/av1, and with no
+# verification of resolution, compression, duration ≤12s or absence of audio).
+# Since it cannot be verified against §2.5, we RECOMPOSE with composed stills
+# (vector SVG) under `public/media/the-cookie-box/`, which resolve at build time
+# and satisfy the §8 schema (non-empty alt + explicit width/height → CLS 0). The
+# `.mp4` remains as source material for a future optimization pass (transcode +
+# poster); if it passes §2.5 it would be reused as an additional media item.
+# REAL MEDIA STILL PENDING: actual screenshots of the catalog and the admin panel
+# of the deployed site (thecookiebox.netlify.app) that meet the §2.5 criteria.
+# ----------------------------------------------------------------------------
+title: "The Cookie Box"
+year: 2025
+category: ["ecommerce", "frontend"]
+summary: "Artisan e-commerce with a filterable catalog, an animated cart and a secure admin panel. WebP conversion."
+problem: "An artisan-goods brand needed to sell online without depending on a marketplace or paying a monthly platform fee. The owner had to be able to upload products and photos on their own, and orders had to close through the channels they already used (WhatsApp and Instagram), with no friction for the customer."
+role: "Solo frontend and integration development: catalog, cart, admin panel, image optimization and connection to the contact channels. Deployment included."
+decisions:
+  - decision: "Automatically convert uploaded images to WebP instead of serving the original files."
+    rationale: "Product photos are the main weight of an e-commerce site. Converting to WebP on upload drastically reduces size without the owner having to optimize anything by hand, which improves load time and the mobile experience, where most purchases happen."
+  - decision: "Close the order via WhatsApp instead of integrating a full payment gateway."
+    rationale: "For this brand's volume and model, conversational checkout over WhatsApp is what already worked in their operation. It avoids fees, payment compliance and checkout friction, and the cart assembles the message with the order detail ready to send."
+  - decision: "Separate a protected admin panel from the public storefront."
+    rationale: "The owner needs autonomy to manage the catalog without touching code, but that capability cannot be left exposed. A panel with controlled access provides that autonomy while keeping product and price editing secure."
+challenges:
+  - "Keeping the catalog fast with many photos: WebP conversion and lazy loading sustain performance as the catalog grows."
+  - "Making the cart feel alive without distracting: animations (Framer Motion) reinforce the add-to-cart action without getting in the way of the purchase."
+  - "Giving the owner real control of the content without exposing administration to anyone."
+result: "The Cookie Box is a deployed, self-managed artisan store: the owner uploads products with photos that optimize themselves and customers close the order through the channels they already use. A custom e-commerce site with no platform cost."
+stack: ["React", "Vite", "Firebase", "Tailwind CSS", "Framer Motion"]
+media:
+  - type: "image"
+    src: "/media/the-cookie-box/cover.svg"
+    alt: "The Cookie Box catalog with category filters, a product grid with prices and a cart showing the total and an order-via-WhatsApp button."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/the-cookie-box/admin.svg"
+    alt: "The Cookie Box admin panel: a new-product form, an image upload area with automatic WebP conversion and a preview of the card."
+    width: 1600
+    height: 900
+links:
+  demo: "https://thecookiebox.netlify.app/"
+  repo: "https://github.com/elkisser/the-cookie-box"
+featured: true
+order: 3
+lang: en
+---
+
+The Cookie Box is a store for an artisan brand that wanted to sell online on its own
+terms: no marketplace, no monthly fee, closing through WhatsApp as it already did. The
+focus was on giving the owner real autonomy — uploading products and photos on their own,
+with images that optimize themselves — and giving customers a fast purchase that ends in
+the channel they already know.

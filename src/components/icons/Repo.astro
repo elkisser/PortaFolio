@@ -1,0 +1,22 @@
+---
+/**
+ * Repo — repositorio (metáfora de libro/cuaderno de código, como el icono de
+ * repositorio de GitHub). Tapa rectangular + lomo (binding) cerca del borde
+ * izquierdo, esquinas vivas coherentes con las hairlines (design.md §4.5).
+ *
+ * Geometría rebalanceada: el lomo se acerca al borde izquierdo (x8) para que se
+ * lea como el canto de un libro y no como un rectángulo partido por la mitad;
+ * una línea de "página" superior remata la lectura de libro a 18px. El grosor de
+ * trazo queda nítido vía `vector-effect:non-scaling-stroke` (ver Icon.astro).
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <rect x="5" y="3" width="14" height="18"></rect>
+  <line x1="8" y1="3" x2="8" y2="21"></line>
+  <line x1="11" y1="7" x2="16" y2="7"></line>
+</Icon>

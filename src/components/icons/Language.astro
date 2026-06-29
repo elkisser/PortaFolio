@@ -1,0 +1,17 @@
+---
+/**
+ * Language — selector de idioma (globo). El círculo y los meridianos son
+ * intencionalmente curvos (un globo no tiene esquinas); el resto del set
+ * mantiene esquinas vivas. Trazo de 1.5px y `currentColor` (design.md §4.5).
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <circle cx="12" cy="12" r="9"></circle>
+  <line x1="3" y1="12" x2="21" y2="12"></line>
+  <path d="M12 3 C7.5 7 7.5 17 12 21 C16.5 17 16.5 7 12 3 Z"></path>
+</Icon>

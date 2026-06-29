@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Yo No Fui: tablero de un caso de detective con pistas y sospechosos generados por IA">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">04 — YO NO FUI</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">IA · FRONTEND</text>
+
+  <text x="120" y="210" class="mono" font-size="20" fill="#a6a5a0">CASO #A1F · DIFICULTAD: DETECTIVE</text>
+
+  <!-- Tablero de caso: sospechosos -->
+  <g>
+    <rect x="120" y="244" width="380" height="220" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="152" y="288" class="mono" font-size="16" fill="#a6a5a0">SOSPECHOSO 01</text>
+    <circle cx="200" cy="360" r="40" fill="#161619"/>
+    <text x="264" y="352" class="body" font-size="24" fill="#f3f2ee">La bibliotecaria</text>
+    <text x="264" y="388" class="mono" font-size="16" fill="#a6a5a0">coartada: débil</text>
+
+    <rect x="540" y="244" width="380" height="220" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="572" y="288" class="mono" font-size="16" fill="#a6a5a0">SOSPECHOSO 02</text>
+    <circle cx="620" cy="360" r="40" fill="#161619"/>
+    <text x="684" y="352" class="body" font-size="24" fill="#f3f2ee">El jardinero</text>
+    <text x="684" y="388" class="mono" font-size="16" fill="#a6a5a0">coartada: sólida</text>
+
+    <rect x="960" y="244" width="380" height="220" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="992" y="288" class="mono" font-size="16" fill="#a6a5a0">SOSPECHOSO 03</text>
+    <circle cx="1040" cy="360" r="40" fill="#161619"/>
+    <text x="1104" y="352" class="body" font-size="24" fill="#f3f2ee">El socio</text>
+    <text x="1104" y="388" class="mono" font-size="16" fill="#e8b75c">coartada: contradice</text>
+  </g>
+
+  <!-- Hilo de pistas (líneas tipo corcho) -->
+  <g stroke="#e8b75c" stroke-width="1.5" opacity="0.7">
+    <line x1="310" y1="464" x2="730" y2="520"/>
+    <line x1="730" y1="464" x2="730" y2="520"/>
+    <line x1="1150" y1="464" x2="730" y2="520"/>
+  </g>
+  <circle cx="730" cy="520" r="6" fill="#e8b75c"/>
+
+  <!-- Interrogatorio -->
+  <text x="120" y="576" class="mono" font-size="20" fill="#a6a5a0">INTERROGATORIO</text>
+  <rect x="120" y="600" width="1220" height="140" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <text x="152" y="652" class="body" font-size="22" fill="#a6a5a0">› ¿Dónde estabas a las 21:00?</text>
+  <text x="152" y="700" class="body" font-size="22" fill="#f3f2ee">« Revisaba el inventario… aunque el registro marca otra cosa.»</text>
+
+  <text x="120" y="848" class="mono" font-size="20" fill="#5fd38a">CASOS GENERADOS DINÁMICAMENTE CON IA</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Astro 5 · React 19 · Zustand</text>
+</svg>

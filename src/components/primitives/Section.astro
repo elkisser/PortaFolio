@@ -1,0 +1,84 @@
+---
+/**
+ * Section — bloque editorial con índice de sección tipo revista (design.md §4.5).
+ *
+ * Firma visual: numeración mono "01 — Work" + hairline de 1px. Aplica el ritmo
+ * de espaciado 8pt y la --maxw editorial. Composición asimétrica se logra con el
+ * primitivo `Grid` dentro de la sección.
+ */
+import "../../styles/tokens.css";
+
+interface Props {
+  /** Índice de sección (p. ej. "01"); se muestra en mono junto al label. */
+  index?: string;
+  /** Etiqueta de la sección (p. ej. "Work"); acompaña al índice. */
+  label?: string;
+  /** Etiqueta HTML del contenedor. */
+  as?: keyof HTMLElementTagNameMap;
+  /** Anchura: editorial (--maxw) o full-bleed para medios (design.md §4.3). */
+  bleed?: boolean;
+  class?: string;
+}
+
+const {
+  index,
+  label,
+  as: Tag = "section",
+  bleed = false,
+  class: className,
+  ...rest
+}: Props = Astro.props;
+
+const hasHeader = Boolean(index ?? label);
+---
+
+<Tag class:list={["section", { bleed }, className]} {...rest}>
+  {
+    hasHeader && (
+      <header class="section__head">
+        {index && <span class="section__index">{index}</span>}
+        {index && label && <span class="section__dash" aria-hidden="true">—</span>}
+        {label && <span class="section__label">{label}</span>}
+      </header>
+    )
+  }
+  <slot />
+</Tag>
+
+<style>
+  .section {
+    --_inline: var(--space-md);
+    width: 100%;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--_inline);
+    padding-block: var(--space-3xl);
+  }
+
+  .section.bleed {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2xs);
+    margin-block-end: var(--space-lg);
+    padding-block-end: var(--space-sm);
+    border-block-end: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+  }
+
+  .section__index {
+    color: var(--amber);
+  }
+
+  .section__dash,
+  .section__label {
+    color: var(--paper-dim);
+  }
+</style>

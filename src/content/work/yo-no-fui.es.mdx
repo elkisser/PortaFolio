@@ -1,0 +1,61 @@
+---
+# Yo No Fui — case study real (ES). Sigue el estándar de slice 1 (Chromora; tarea 13).
+#
+# ----------------------------------------------------------------------------
+# Decisión de medios (design.md §2.5 — regla reuse-vs-recompose, documentada por
+# proyecto):
+# Existe un video fuente en `img/YoNoFui/yonofui.webm` (fuera de `public/`). Aunque
+# webm ya es un formato moderno, el archivo no trae `poster` ni dimensiones
+# declaradas, y no está verificado contra el resto de §2.5 (nitidez ≥2×, sin UI de
+# debug, duración ≤12s, sin audio imprescindible). Al no poder garantizar el
+# estándar, se RECOMPONE con stills compuestos (SVG vectorial, nítidos a cualquier
+# densidad, composición intencional coherente con la identidad — ink-900 + un único
+# ámbar + verde de estado) en `public/media/yo-no-fui/`, que resuelven en build y
+# cumplen el esquema §8 (alt no vacío + width/height → CLS 0). El `.webm` queda como
+# material fuente para una futura pasada de optimización (poster + recorte ≤12s); si
+# supera §2.5 se reusaría como medio adicional.
+# MEDIO REAL PENDIENTE: loop real de una partida del sitio desplegado
+# (yonofui.netlify.app) interrogando a un sospechoso, una vez que cumpla §2.5.
+# ----------------------------------------------------------------------------
+title: "Yo No Fui"
+year: 2025
+category: ["ai", "frontend"]
+summary: "Juego de misterio y deducción: sos detective y resolvés casos generados dinámicamente con IA, con distintos niveles de dificultad."
+problem: "Un juego de detectives con casos escritos a mano se agota rápido: una vez que conocés la solución, se pierde la gracia. La IA promete casos infinitos, pero genera texto que puede ser incoherente —pistas que no llevan a ningún lado, un culpable que contradice las propias pruebas— y eso rompe la lógica del juego. El desafío era usar IA para generar variedad sin que el caso deje de ser resoluble."
+role: "Desarrollo frontend en solitario: arquitectura de islas, generación de casos con IA, validación de la salida del modelo, estado del juego y toda la UI de investigación. Despliegue incluido."
+decisions:
+  - decision: "Validar la salida del modelo contra un esquema antes de dejarla entrar al estado del juego."
+    rationale: "Un modelo puede alucinar un caso incoherente (sospechosos sin pistas, un culpable que no figura). En vez de confiar en el texto crudo, la respuesta se valida y normaliza contra una forma esperada; si no encaja, se descarta y se vuelve a pedir. Así el jugador nunca recibe un caso irresoluble."
+  - decision: "Astro 5 con islas de React 19 solo en las partes interactivas (interrogatorio, tablero), no en toda la página."
+    rationale: "La mayor parte de la pantalla es contenido que no necesita JS. Hidratar solo las islas que reaccionan a la interacción mantiene el envío de JavaScript acotado y la carga rápida, mientras la lógica de juego vive donde de verdad hace falta."
+  - decision: "Centralizar el estado de la partida en Zustand en lugar de pasarlo por props entre islas."
+    rationale: "El estado del caso (pistas reveladas, sospechosos interrogados, progreso) lo comparten varias islas independientes. Un store liviano y compartido evita el prop-drilling entre islas que no son padre-hijo y mantiene la verdad del juego en un solo lugar."
+challenges:
+  - "Lograr que cada caso generado sea coherente y resoluble: la validación de esquema filtra las respuestas que no cierran como caso."
+  - "Compartir estado entre islas Astro independientes sin un árbol de componentes común: se resolvió con un store externo (Zustand)."
+  - "Escalar la dificultad sin reescribir la lógica: los niveles ajustan los parámetros del caso, no el motor del juego."
+result: "Yo No Fui es un juego desplegado donde cada partida es un caso nuevo generado por IA y siempre resoluble. Demuestra un uso responsable de IA generativa —validada, no confiada a ciegas— sobre una arquitectura de islas liviana."
+stack: ["Astro 5", "React 19", "Zustand", "OpenAI API", "TypeScript"]
+media:
+  - type: "image"
+    src: "/media/yo-no-fui/cover.svg"
+    alt: "Tablero de un caso de Yo No Fui con tres sospechosos, un hilo de pistas que los conecta y un panel de interrogatorio debajo."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/yo-no-fui/state.svg"
+    alt: "La salida del modelo de Yo No Fui se valida contra un esquema: lo coherente entra al estado del juego en Zustand y lo inválido se descarta."
+    width: 1600
+    height: 900
+links:
+  demo: "https://yonofui.netlify.app/"
+  repo: "https://github.com/elkisser/yo-no-fui"
+featured: true
+order: 4
+lang: es
+---
+
+Yo No Fui es un juego de detectives donde cada caso lo genera la IA, así que nunca se
+repite. La parte interesante no fue pedirle casos al modelo, sino asegurarse de que cada
+caso *cierre*: que las pistas lleven a un culpable y que el culpable no contradiga las
+pruebas. Por eso la IA propone, pero un esquema decide qué entra al juego.

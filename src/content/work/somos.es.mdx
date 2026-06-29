@@ -1,0 +1,60 @@
+---
+# SoMoS — case study real (ES). Sigue el estándar de slice 1 (Chromora; tarea 13).
+#
+# ----------------------------------------------------------------------------
+# Decisión de medios (design.md §2.5 — regla reuse-vs-recompose, documentada por
+# proyecto):
+# Existe un video fuente en `img/SoMoS/SoMoS.mp4` (fuera de `public/`, sin
+# `poster`, sin formatos modernos webm/av1 y sin verificación de nitidez ≥2×,
+# ausencia de UI de debug, duración ≤12s ni ausencia de audio). Al no poder
+# garantizarse contra §2.5, se RECOMPONE con stills compuestos (SVG vectorial,
+# nítidos a cualquier densidad, composición intencional coherente con la identidad)
+# en `public/media/somos/`, que resuelven en build y cumplen el esquema §8 (alt no
+# vacío + width/height → CLS 0). El `.mp4` queda como material fuente para una
+# futura pasada de optimización (transcodificado + poster + recorte ≤12s); si
+# supera §2.5 se reusaría como medio adicional.
+# MEDIO REAL PENDIENTE: capturas reales de la home y de la grilla de trabajos del
+# sitio desplegado (somos-env.netlify.app) que cumplan §2.5.
+# ----------------------------------------------------------------------------
+title: "SoMoS"
+year: 2025
+category: ["frontend"]
+summary: "Sitio portfolio para una agencia de desarrollo digital: presentación elegante de servicios y trabajos con interacción cuidada."
+problem: "Una agencia de desarrollo digital necesitaba un sitio que fuera, en sí mismo, una muestra de su trabajo. Un portfolio de agencia tiene una exigencia doble: tiene que verse impecable y moverse con fluidez, pero no puede pagar ese pulido con una página lenta —porque la velocidad también es parte de lo que la agencia vende."
+role: "Diseño y desarrollo frontend en solitario: arquitectura del sitio, sistema visual, animaciones y composición de las secciones de servicios y trabajos. Despliegue incluido."
+decisions:
+  - decision: "Construir el sitio en Astro 5 y reservar las islas de React solo para las secciones interactivas."
+    rationale: "Buena parte de un sitio de agencia es contenido presentacional que no necesita JavaScript. Con Astro, ese contenido se sirve como HTML estático y solo las piezas que de verdad reaccionan a la interacción se hidratan como islas, lo que mantiene la página rápida sin renunciar a la riqueza visual."
+  - decision: "Usar Framer Motion para las transiciones y microinteracciones, no para decorar."
+    rationale: "El movimiento comunica la calidad de la agencia, pero el exceso de animación cansa y ralentiza. Se acotó a transiciones con propósito —entradas, cambios de estado, foco— que refuerzan la jerarquía en lugar de competir con el contenido."
+  - decision: "Estructurar servicios y trabajos como bloques de contenido reutilizables en lugar de markup suelto."
+    rationale: "La agencia suma trabajos y ajusta su oferta con el tiempo. Modelar esas secciones como contenido estructurado permite actualizar el sitio agregando datos, no reescribiendo páginas, y mantiene la presentación consistente."
+challenges:
+  - "Equilibrar una estética rica con el rendimiento: las islas mantienen el JavaScript acotado mientras la mayor parte del sitio se sirve estática."
+  - "Dar personalidad con movimiento sin marear: las animaciones se limitan a transiciones con intención y respetan reduced-motion."
+  - "Presentar los trabajos de forma que el sitio mismo funcione como prueba de la capacidad de la agencia."
+result: "SoMoS es el sitio público de una agencia que funciona como su propia carta de presentación: rápido, pulido y con interacción cuidada. Demuestra criterio de frontend —elegir dónde gastar JavaScript— y dirección visual de producto."
+stack: ["Astro 5", "React", "TypeScript", "Framer Motion"]
+media:
+  - type: "image"
+    src: "/media/somos/cover.svg"
+    alt: "Portada de SoMoS con la navegación de la agencia, un titular editorial grande, un botón de empezar proyecto y tres tarjetas de servicios."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/somos/work.svg"
+    alt: "Grilla de trabajos de SoMoS con tarjetas de tienda online, landing de campaña, app de reservas y rediseño de marca, con islas React donde hay interacción."
+    width: 1600
+    height: 900
+links:
+  demo: "https://somos-env.netlify.app/"
+  repo: "https://github.com/elkisser/SoMoS"
+featured: true
+order: 6
+lang: es
+---
+
+SoMoS es el sitio de una agencia de desarrollo digital, y el sitio en sí tenía que probar
+lo que la agencia ofrece: verse muy bien y, al mismo tiempo, ir rápido. La decisión central
+fue de frontend —construir sobre Astro y gastar JavaScript solo donde la interacción lo
+justifica— para que el pulido visual no costara velocidad.

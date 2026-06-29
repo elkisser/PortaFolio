@@ -1,0 +1,64 @@
+---
+# Chromora — real case study (EN). Replaces the placeholder (task 13, Req 5.2/6.2/11.1).
+#
+# ----------------------------------------------------------------------------
+# Media decision (design.md §2.5 — reuse-vs-recompose rule, documented per
+# project):
+# A source video exists at `img/Chromora/chromora.mp4` (outside `public/`, without
+# a `poster`, without modern formats webm/av1, and with no verification of
+# resolution, compression, duration ≤12s or absence of audio). Since it cannot be
+# verified against the §2.5 criteria, we RECOMPOSE: we present composed stills
+# (vector SVG, crisp at any density ≥2×, intentional composition coherent with the
+# identity — ink-900 + a single amber) under `public/media/chromora/`, which
+# resolve at build time and satisfy the §8 schema (non-empty alt + explicit
+# width/height → CLS 0). The `.mp4` remains as source material for a future
+# optimization pass (transcode + poster); if it passes the §2.5 criteria it would
+# then be reused as an additional media item.
+# ----------------------------------------------------------------------------
+title: "Chromora"
+year: 2024
+category: ["ai", "frontend"]
+summary: "Describe a mood in plain language and Chromora generates an accessible palette in LCH color space, ready to export as tokens."
+problem: "Picking a palette that looks good AND meets accessible contrast is slow and error-prone. Most tools work in HSL/RGB, where raising or lowering a color's brightness is not perceptually even across hues, so guaranteeing AA becomes manual trial and error."
+role: "Solo product design and full-stack development: flow definition, model prompt-engineering, the LCH color engine, UI and animation."
+decisions:
+  - decision: "Work the palette in LCH color space instead of HSL/RGB."
+    rationale: "LCH is perceptually uniform: adjusting lightness (L) changes perceived brightness evenly across hues. That makes AA contrast predictable to guarantee and produces coherent scales, which HSL does not ensure."
+  - decision: "Ask the model for semantic color intent (role, temperature, relationship) instead of fixed hex codes."
+    rationale: "From the intent, final values are recomputed in LCH with Chroma.js and clamped to the sRGB gamut, so the result is always valid and accessible even if the model hallucinates an impossible or out-of-gamut color."
+  - decision: "Next 15 (App Router) with the model call on the server and Framer Motion only on the swatch transition."
+    rationale: "The API key never reaches the client and JS cost is concentrated where it pays off — the animated palette entrance — keeping the rest of the app light."
+challenges:
+  - "Avoiding palettes that look good but fail contrast: a step adjusts each color's L until it meets AA against its intended background."
+  - "Taming non-deterministic model responses without losing the sense of magic: a fixed output schema is validated and normalized before painting."
+  - "Keeping CLS at 0 when injecting the generated palette: swatch boxes reserve their space before animating."
+result: "Chromora turns a description into an accessible, exportable palette (CSS/JSON/SVG) in seconds. It is proof of an AI→product flow focused on real accessibility, not a flashy demo."
+stack: ["Next.js 15", "TypeScript", "Chroma.js", "LCH", "Framer Motion", "OpenAI API"]
+media:
+  - type: "image"
+    src: "/media/chromora/cover.svg"
+    alt: "Chromora: a plain-language description ('sunset over a calm sea') turns into a six-color palette with LCH values and verified AA contrast."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/chromora/palette.svg"
+    alt: "Detail of a Chromora palette showing each color's hex and LCH values plus an AA contrast badge per row."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/chromora/ui.svg"
+    alt: "Chromora interface: description panel, generate button, palette canvas and a UI preview with the palette applied."
+    width: 1600
+    height: 900
+links:
+  repo: "https://github.com/elkisser/chromora"
+featured: true
+order: 1
+lang: en
+---
+
+Chromora started from a concrete annoyance: spending too long matching "pretty"
+palettes with accessible ones. Instead of yet another color picker, I framed it as a
+bridge between **intent** (what you want to convey) and a color system that is **born
+meeting contrast**. You write a mood in plain language and get a palette in LCH space,
+ready to export as tokens.

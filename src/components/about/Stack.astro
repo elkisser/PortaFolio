@@ -1,0 +1,157 @@
+---
+/**
+ * Stack — el stack tecnológico presentado EN CONTEXTO dentro de About
+ * (design.md §5.1/§5.2). Stack deja de ser una sección propia con "4 columnas de
+ * listas de logos" (el anti-patrón de §1.2) y se reubica aquí como evidencia de
+ * cómo trabaja: tecnologías agrupadas por área, en el lenguaje editorial del
+ * sistema (índice de sección, mono, hairlines, un solo ámbar) — no chips genéricas.
+ *
+ * Copy migrado del sitio heredado (Req 1.4): los títulos de grupo se localizan
+ * vía i18n (`stack_*`); los nombres de tecnología son neutrales al idioma y viven
+ * aquí como datos estables.
+ *
+ * HTML 100% estático: no embarca isla ni JS. El reveal on-scroll lo aporta
+ * `Motion` (montado en el layout) vía `[data-reveal]`, respetando reduced-motion.
+ */
+import Section from "../primitives/Section.astro";
+import Text from "../primitives/Text.astro";
+import Mono from "../primitives/Mono.astro";
+import {
+  useTranslations,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../../lib/i18n";
+
+interface Props {
+  /** Idioma de la página → títulos de grupo localizados. */
+  lang?: string;
+  /** Índice de sección editorial (por defecto "02"; About lo ajusta). */
+  index?: string;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE, index = "02" }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+// Grupos de tecnologías (migrados del heredado, Req 1.4). El título es una clave
+// i18n; los `items` son nombres de marca/tecnología, neutrales al idioma.
+const groups: { title: string; items: string[] }[] = [
+  {
+    title: t.stack_backend,
+    items: ["PHP", "Symfony", "Doctrine ORM", "Node.js", "Java", "REST APIs", "MVC"],
+  },
+  {
+    title: t.stack_frontend,
+    items: [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Astro",
+      "Tailwind CSS",
+      "Twig",
+      "Framer Motion",
+    ],
+  },
+  {
+    title: t.stack_data,
+    items: ["MySQL", "PostgreSQL", "Firebase", "Supabase", "Vite", "Netlify", "Vercel"],
+  },
+  {
+    title: t.stack_tools,
+    items: ["Git", "GitHub", "GitLab", "Composer", "Postman", "TensorFlow.js", "UX / UI"],
+  },
+];
+
+const titleId = "about-stack-title";
+---
+
+<Section index={index} label={t.about_stack_title} aria-labelledby={titleId} data-reveal>
+  <header class="stack__head">
+    <Text as="h2" id={titleId} font="display" step="3" class="stack__title">
+      {t.about_stack_title}
+    </Text>
+    <Text class="stack__lead" tone="dim" step="1" measure>{t.about_stack_lead}</Text>
+  </header>
+
+  <div class="stack__groups">
+    {
+      groups.map((group) => (
+        <section class="stack__group">
+          <Mono as="h3" class="stack__group-title">{group.title}</Mono>
+          <ul class="stack__list">
+            {group.items.map((item) => (
+              <li class="stack__item">
+                <Mono>{item}</Mono>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .stack__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-block-end: var(--space-xl);
+  }
+
+  .stack__title,
+  .stack__lead {
+    margin: 0;
+  }
+
+  /* Grupos: rejilla editorial; cada grupo separado por aire, no por cajas. */
+  .stack__groups {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .stack__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-block-start: var(--space-md);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .stack__group-title {
+    margin: 0;
+    color: var(--paper);
+  }
+
+  /* Tecnologías: etiquetas mono con hairline inferior (no logos sueltos ni pills). */
+  .stack__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack__item {
+    padding-block-end: var(--space-3xs);
+    border-block-end: 1px solid var(--line);
+  }
+
+  /* Tablet+: los 4 grupos en dos columnas; ultra-wide deja respirar. */
+  @media (min-width: 768px) {
+    .stack__groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-2xl) var(--space-3xl);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .stack__groups {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

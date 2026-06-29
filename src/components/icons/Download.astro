@@ -1,0 +1,18 @@
+---
+/**
+ * Download — descarga (p. ej. el CV). Flecha hacia abajo entrando en una bandeja
+ * abierta por arriba. Icono de línea (1.5px, esquinas vivas) coherente con el
+ * resto del set propio (design.md §4.5) — no es una marca, así que se dibuja con
+ * el mismo lenguaje de trazo que `Arrow`/`ExternalLink`.
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <line x1="12" y1="3" x2="12" y2="14"></line>
+  <polyline points="7 9 12 14 17 9"></polyline>
+  <polyline points="4 16 4 21 20 21 20 16"></polyline>
+</Icon>

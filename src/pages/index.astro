@@ -1,0 +1,33 @@
+---
+/**
+ * Raíz `/` — redirección estática al idioma por defecto (design.md §5.1, Req 8.1).
+ *
+ * Con `prefixDefaultLocale: true` (ver `astro.config.mjs`) todo el contenido vive
+ * bajo `/es` y `/en`; la raíz no tiene contenido propio. Astro exige que este
+ * archivo exista. Como gestionamos el routing en salida estática, emitimos una
+ * redirección por meta-refresh + canonical hacia `/es/`, con un enlace de
+ * respaldo accesible si el refresh no se ejecuta.
+ *
+ * Doc verificada (Astro 5.18): https://v5.docs.astro.build/en/guides/internationalization/
+ * (sección `prefixDefaultLocale: true` — "index.astro is always required").
+ */
+import { DEFAULT_LOCALE, localizedPath } from "../lib/i18n";
+
+const target = `${localizedPath("/", DEFAULT_LOCALE)}/`; // '/es/'
+---
+
+<!doctype html>
+<html lang={DEFAULT_LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Sebastián Kisser</title>
+  </head>
+  <body>
+    <p>
+      <a href={target}>Continuar al sitio / Continue to the site</a>
+    </p>
+  </body>
+</html>

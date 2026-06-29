@@ -1,0 +1,144 @@
+# =============================================================================
+# CI — Integración continua (Req 13.1 / 13.3, design.md §5.9 / §11, ADR 0002)
+# -----------------------------------------------------------------------------
+# Pipeline de calidad que corre ANTES de publicar (Req 13.3): lint, type-check,
+# tests (unit + property-based), build y auditoría de presupuesto (bundle).
+# El deploy a Cloudflare Pages (Req 13.1/13.2/13.4) vive en el job `deploy`
+# (más abajo) con `needs: ci`: solo se publica un build verde. El job `ci`
+# publica el artefacto `dist/` (`site-dist`) que `deploy` descarga y sube.
+#
+# Seguridad: `GH_TOKEN` es un secret de CI (design.md §2.4 / §15, Req 7.2). Solo
+# se expone al step de build, donde el prebuild (`fetch-github.mjs`) lo consume.
+# Si el secret no está presente (p. ej. PRs desde forks), el fetch degrada con
+# gracia a la API pública y el build NO se rompe (Req 7.5).
+# Doc verificada: https://docs.astro.build/en/guides/deploy/cloudflare/
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Mínimos privilegios por defecto (el job de deploy de 12.2 pedirá lo que precise).
+permissions:
+  contents: read
+
+# Un solo run por rama/PR: cancela ejecuciones obsoletas y ahorra minutos.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint · type-check · test · build · budget
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # engines: >=20.3.0 (package.json)
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Type check (astro check)
+        run: npm run check
+
+      - name: Tests (unit + property-based)
+        run: npm test
+
+      - name: Build (astro build)
+        run: npm run build
+        env:
+          # Secret de CI únicamente; el prebuild fetch-github lo usa. Ausente => fallback.
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Budget audit (bundle size)
+        run: npm run audit:budget
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+          retention-days: 7
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------------------
+  # Publicación en Cloudflare Pages (Req 13.1 / 13.2 / 13.4, ADR 0002).
+  # -----------------------------------------------------------------------------
+  # Gateado por `needs: ci`: solo se publica un build verde. En lugar de volver
+  # a construir, descarga el artefacto `site-dist` que produjo el job `ci` y lo
+  # sube tal cual a Cloudflare Pages con `wrangler pages deploy`.
+  #
+  # Producción vs preview (Req 13.1 / 13.2):
+  #   - push a `main`  -> deploy a la rama de producción del proyecto -> URL prod.
+  #   - pull_request   -> deploy de PREVIEW (rama != producción) -> URL preview.
+  # `wrangler pages deploy` decide prod/preview comparando `--branch` con la
+  # "production branch" configurada en el proyecto de Cloudflare Pages (main).
+  #
+  # Dominio (decisión abierta B, resuelta): se usa el subdominio por defecto
+  # `*.pages.dev` del proyecto. NO se configura dominio propio.
+  #
+  # SECRETS DE REPO REQUERIDOS (Settings -> Secrets and variables -> Actions):
+  #   - CLOUDFLARE_API_TOKEN  Token con permiso "Cloudflare Pages: Edit".
+  #                           https://developers.cloudflare.com/workers/wrangler/ci-cd/#api-token
+  #   - CLOUDFLARE_ACCOUNT_ID Account ID de Cloudflare (dashboard -> Workers & Pages).
+  # Además, el nombre del proyecto en `--project-name` debe coincidir con el
+  # proyecto de Cloudflare Pages ya creado (aquí: `portafolio`).
+  # Los secrets nunca se hardcodean; `wrangler-action` los enmascara en logs.
+  # Doc verificada: https://github.com/cloudflare/wrangler-action (sección "Deploy your Pages site")
+  # ---------------------------------------------------------------------------
+  deploy:
+    name: Deploy to Cloudflare Pages
+    needs: ci
+    runs-on: ubuntu-latest
+
+    # Permisos mínimos: leer el repo y registrar el deployment en GitHub.
+    permissions:
+      contents: read
+      deployments: write
+
+    # No publicar desde forks: los PRs de forks no tienen acceso a los secrets,
+    # y un deploy sin credenciales fallaría. Solo push a main o PRs internos.
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+
+      - name: Publish to Cloudflare Pages
+        id: cf-pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # `--branch`: en push usa la rama (main => producción); en PR usa la
+          # rama de origen del PR (=> preview, al no ser la rama de producción).
+          command: >-
+            pages deploy dist
+            --project-name=portafolio
+            --branch=${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          # Habilita GitHub Deployments para ver la URL en el PR/commit.
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deployment URL
+        run: echo "Published to ${{ steps.cf-pages.outputs.deployment-url }}"

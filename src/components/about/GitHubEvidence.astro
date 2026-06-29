@@ -1,0 +1,645 @@
+---
+/**
+ * GitHubEvidence — GitHub como EVIDENCIA CURADA, no como contador (design.md
+ * §2.4, §5.1; Req 7.3/7.4). Vive dentro de About (la nav baja GitHub de sección
+ * propia a evidencia en contexto, design.md §5.1) y se nutre del dataset generado
+ * en BUILD por `scripts/fetch-github.mjs` → `content/data/github.json`, importado
+ * estáticamente (sin fetch en cliente, Req 7.1).
+ *
+ * Qué se muestra (señales con valor, design.md §2.4):
+ *   1. **Repositorios destacados** (4–6 por scoring): título enlazado al repo,
+ *      descripción, tecnología principal y su última actividad; demo si existe.
+ *   2. **Tecnologías predominantes**: lenguajes reales agregados (top ~6, con %),
+ *      en contexto como barra proporcional + leyenda — no una "skill bar"
+ *      decorativa con valores inventados.
+ *   3. **Actividad relevante**: resumen honesto a partir del último push de los
+ *      destacados (p. ej. "Último cambio · Mar 2026"), sin gráficos de racha.
+ *
+ * Qué NO se muestra (anti-vanidad, Req 7.4): contador total de commits
+ * descontextualizado, racha de días, ni followers como métrica de éxito. Por eso
+ * `stats.{stars,followers}` del dataset se ignoran deliberadamente aquí.
+ *
+ * Colaboraciones (curadas a mano, Req 7.1/7.4): el fetch automático solo lista
+ * repos públicos propios (`type=owner`), así que el trabajo hecho POR INVITACIÓN
+ * (apps privadas, repos de terceros) nunca aparece. NO se auto-extrae info
+ * privada de la API (exigiría un token con scope `repo` y arriesgaría filtrar
+ * datos privados al HTML público). En su lugar se renderiza un sub-bloque
+ * distinto a partir de la fuente curada `content/data/collaborations.ts`: lee
+ * como PARTICIPACIÓN, no como uno de sus repos puntuados. Las entradas privadas
+ * sin URL no muestran enlace; si no hay ninguna publicada, el sub-bloque no se
+ * renderiza (salida limpia).
+ *
+ * Degradación (Req 7.5): el dataset puede venir vacío pero válido (fallo de API
+ * en build). Si no hay ni destacados ni lenguajes ni colaboraciones publicadas,
+ * el componente degrada a un estado vacío sobrio con enlace al perfil, sin romper
+ * el build.
+ *
+ * HTML 100% estático: no embarca ninguna isla ni JS. El reveal on-scroll lo
+ * aporta `Motion` (montado en el layout) vía `[data-reveal]`, respetando
+ * reduced-motion (Req 10).
+ */
+import Section from "../primitives/Section.astro";
+import Text from "../primitives/Text.astro";
+import Mono from "../primitives/Mono.astro";
+import Github from "../icons/Github.astro";
+import ExternalLink from "../icons/ExternalLink.astro";
+import githubData from "../../content/data/github.json";
+import type { FeaturedRepo } from "../../lib/github";
+import {
+  selectPublishedCollaborations,
+  localizedText,
+} from "../../content/data/collaborations";
+import {
+  useTranslations,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../../lib/i18n";
+
+interface LanguageStat {
+  name: string;
+  pct: number;
+  color: string;
+}
+
+interface GitHubData {
+  generatedAt: string;
+  stats: { repos: number; stars: number; followers: number };
+  languages: LanguageStat[];
+  featured: FeaturedRepo[];
+}
+
+interface Props {
+  /** Idioma de la página → copy localizado y formato de fechas. */
+  lang?: string;
+  /** Índice de sección editorial (por defecto "03"; About lo ajusta). */
+  index?: string;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE, index = "03" }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+// Dataset de build (no confiable como tipo: lo proyectamos a la forma esperada).
+const data = githubData as unknown as GitHubData;
+const featured = data.featured ?? [];
+const languages = data.languages ?? [];
+
+const profileUrl = "https://github.com/elkisser";
+
+/** Formatea una fecha ISO a "mes año" localizado; cadena vacía si es inválida. */
+function formatMonthYear(iso: string): string {
+  const t0 = Date.parse(iso);
+  if (!Number.isFinite(t0)) return "";
+  return new Intl.DateTimeFormat(lang, { month: "short", year: "numeric" }).format(t0);
+}
+
+// Suma de % para dimensionar los segmentos de la barra de lenguajes de forma
+// proporcional aunque el total no llegue exactamente a 100 (redondeos del build).
+const langTotal = languages.reduce((sum, l) => sum + (l.pct > 0 ? l.pct : 0), 0);
+
+// Actividad honesta: el push más reciente entre los destacados (sin rachas).
+const latestPush = featured
+  .map((r) => Date.parse(r.pushedAt))
+  .filter((n) => Number.isFinite(n))
+  .sort((a, b) => b - a)[0];
+const latestActivity = latestPush ? formatMonthYear(new Date(latestPush).toISOString()) : "";
+
+const hasFeatured = featured.length > 0;
+const hasLanguages = languages.length > 0;
+
+// Colaboraciones curadas a mano (Req 7.1/7.4): solo las publicadas llegan a la
+// UI. El copy (`description`, `role`) se resuelve al idioma de la página. Las
+// entradas privadas sin URL pública muestran una etiqueta en vez de un enlace
+// muerto (un repo privado daría 404 al visitante).
+const collaborations = selectPublishedCollaborations().map((c) => ({
+  name: c.name,
+  description: localizedText(c.description, lang),
+  role: localizedText(c.role, lang),
+  stack: c.stack ?? [],
+  url: c.url,
+  showPrivateTag: c.private === true && !c.url,
+}));
+const hasCollaborations = collaborations.length > 0;
+
+const hasData = hasFeatured || hasLanguages || hasCollaborations;
+
+const titleId = "gh-evidence-title";
+---
+
+<div id="github">
+  <Section index={index} label={t.gh_title} aria-labelledby={titleId} data-reveal>
+    <header class="gh__head">
+      <Text as="h2" id={titleId} font="display" step="3" class="gh__title">{t.gh_title}</Text>
+      <Text class="gh__lead" tone="dim" step="1" measure>{t.gh_lead}</Text>
+    </header>
+
+    {
+      hasData ? (
+        <div class="gh__body">
+          {/* 1. Tecnologías predominantes: % reales, en contexto (design.md §2.4). */}
+          {hasLanguages && (
+            <section class="gh__block" aria-labelledby="gh-langs-title">
+              <Mono as="h3" id="gh-langs-title" class="gh__block-title">
+                {t.gh_languages}
+              </Mono>
+
+              {/* Barra proporcional: decorativa; la leyenda lleva el dato accesible. */}
+              <div class="gh__bar" aria-hidden="true">
+                {languages.map((l) => (
+                  <span
+                    class="gh__bar-seg"
+                    style={`flex:${langTotal > 0 ? l.pct / langTotal : 0};background-color:${l.color}`}
+                  />
+                ))}
+              </div>
+
+              <ul class="gh__langs">
+                {languages.map((l) => (
+                  <li class="gh__lang">
+                    <span class="gh__dot" style={`background-color:${l.color}`} aria-hidden="true" />
+                    <Mono class="gh__lang-name">{l.name}</Mono>
+                    <Mono class="gh__lang-pct">{l.pct}%</Mono>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {/* 2. Repositorios destacados: enlazados, con tecnología y actividad. */}
+          {hasFeatured && (
+            <section class="gh__block" aria-labelledby="gh-featured-title">
+              <div class="gh__block-head">
+                <Mono as="h3" id="gh-featured-title" class="gh__block-title">
+                  {t.gh_featured}
+                </Mono>
+                {latestActivity && (
+                  <Mono class="gh__activity">
+                    {t.gh_activity} · {latestActivity}
+                  </Mono>
+                )}
+              </div>
+
+              <ol class="gh__list">
+                {featured.map((repo, i) => {
+                  const pushed = formatMonthYear(repo.pushedAt);
+                  return (
+                    <li class="gh__item">
+                      <div class="gh__item-main">
+                        <Mono class="gh__num" accent>
+                          {String(i + 1).padStart(2, "0")}
+                        </Mono>
+                        <div class="gh__repo">
+                          <a
+                            class="gh__repo-link"
+                            href={repo.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Github size={18} class="gh__repo-icon" />
+                            <Text as="span" font="display" step="2" class="gh__repo-name">
+                              {repo.displayName ?? repo.name}
+                            </Text>
+                            <ExternalLink size={14} class="gh__repo-ext" />
+                          </a>
+                          {repo.description && (
+                            <Text class="gh__repo-desc" tone="dim" step="0" measure>
+                              {repo.description}
+                            </Text>
+                          )}
+                          <p class="gh__meta">
+                            {repo.primaryLanguage && (
+                              <Mono class="gh__meta-lang">{repo.primaryLanguage}</Mono>
+                            )}
+                            {repo.primaryLanguage && pushed && (
+                              <Mono class="gh__meta-sep" aria-hidden="true">
+                                /
+                              </Mono>
+                            )}
+                            {pushed && (
+                              <Mono class="gh__meta-push">
+                                {t.gh_last_push}: {pushed}
+                              </Mono>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {repo.homepage && (
+                        <a
+                          class="gh__demo"
+                          href={repo.homepage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Mono>{t.link_demo}</Mono>
+                          <ExternalLink size={14} />
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          )}
+
+          {/* 3. Colaboraciones: participación curada a mano en proyectos que NO
+              son suyos (privados/por invitación). Distinto de los destacados:
+              sin scoring, sin enlace si no hay URL pública. */}
+          {hasCollaborations && (
+            <section class="gh__block" aria-labelledby="gh-collabs-title">
+              <Mono as="h3" id="gh-collabs-title" class="gh__block-title">
+                {t.gh_collaborations}
+              </Mono>
+
+              <ul class="gh__collabs">
+                {collaborations.map((c) => (
+                  <li class="gh__collab">
+                    <div class="gh__collab-head">
+                      {c.url ? (
+                        <a
+                          class="gh__collab-link"
+                          href={c.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Text as="span" font="display" step="2" class="gh__collab-name">
+                            {c.name}
+                          </Text>
+                          <ExternalLink size={14} class="gh__collab-ext" />
+                        </a>
+                      ) : (
+                        <Text as="span" font="display" step="2" class="gh__collab-name">
+                          {c.name}
+                        </Text>
+                      )}
+                      {c.role && (
+                        <Mono class="gh__collab-role">
+                          {t.gh_role}: {c.role}
+                        </Mono>
+                      )}
+                      {c.showPrivateTag && (
+                        <Mono class="gh__collab-private">{t.gh_private_repo}</Mono>
+                      )}
+                    </div>
+
+                    {c.description && (
+                      <Text class="gh__collab-desc" tone="dim" step="0" measure>
+                        {c.description}
+                      </Text>
+                    )}
+
+                    {c.stack && c.stack.length > 0 && (
+                      <p class="gh__collab-stack">
+                        {c.stack.map((tech) => (
+                          <Mono class="gh__collab-tech">{tech}</Mono>
+                        ))}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <a class="gh__profile" href={profileUrl} target="_blank" rel="noopener noreferrer">
+            <Mono>{t.gh_profile}</Mono>
+            <ExternalLink size={14} />
+          </a>
+        </div>
+      ) : (
+        // Estado vacío sobrio (Req 7.5): nota + enlace al perfil, sin romper nada.
+        <div class="gh__empty">
+          <Mono class="gh__empty-note">{t.gh_empty}</Mono>
+          <a class="gh__profile" href={profileUrl} target="_blank" rel="noopener noreferrer">
+            <Mono>{t.gh_profile}</Mono>
+            <ExternalLink size={14} />
+          </a>
+        </div>
+      )
+    }
+  </Section>
+</div>
+
+<style>
+  .gh__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-block-end: var(--space-xl);
+  }
+
+  .gh__title,
+  .gh__lead {
+    margin: 0;
+  }
+
+  .gh__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+  .gh__block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .gh__block-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-md);
+    padding-block-end: var(--space-sm);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .gh__block-title {
+    margin: 0;
+    color: var(--paper);
+  }
+
+  .gh__activity {
+    color: var(--paper-dim);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Tecnologías predominantes: barra proporcional (decorativa) + leyenda con el
+     dato accesible. Los % y colores son reales (del build), no inventados.
+     --------------------------------------------------------------------------- */
+  .gh__bar {
+    display: flex;
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border-radius: var(--r);
+    background-color: var(--ink-800);
+  }
+
+  .gh__bar-seg {
+    min-width: 2px;
+    height: 100%;
+  }
+
+  .gh__langs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh__lang {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-3xs);
+  }
+
+  .gh__dot {
+    align-self: center;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .gh__lang-name {
+    color: var(--paper);
+  }
+
+  .gh__lang-pct {
+    color: var(--paper-dim);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Repositorios destacados: lista editorial con hairlines (no cards genéricas).
+     --------------------------------------------------------------------------- */
+  .gh__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm) var(--space-md);
+    padding-block: var(--space-lg);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .gh__item:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .gh__item-main {
+    display: flex;
+    gap: var(--space-md);
+    flex: 1 1 24ch;
+    min-width: 0;
+  }
+
+  .gh__num {
+    align-self: start;
+    padding-block-start: 0.35em;
+  }
+
+  .gh__repo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    min-width: 0;
+  }
+
+  .gh__repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--paper);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .gh__repo-link :global(.gh__repo-icon) {
+    color: var(--paper-dim);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .gh__repo-name {
+    color: var(--paper);
+    transition: color var(--dur-fast) var(--ease);
+    word-break: break-word;
+  }
+
+  .gh__repo-link :global(.gh__repo-ext) {
+    color: var(--paper-dim);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  /* Hover/focus: el acento ámbar señala el destino (no depende solo del color:
+     el icono de enlace externo ya comunica la naturaleza del enlace). */
+  .gh__repo-link:hover .gh__repo-name,
+  .gh__repo-link:focus-visible .gh__repo-name,
+  .gh__repo-link:hover :global(.gh__repo-icon),
+  .gh__repo-link:focus-visible :global(.gh__repo-icon),
+  .gh__repo-link:hover :global(.gh__repo-ext),
+  .gh__repo-link:focus-visible :global(.gh__repo-ext) {
+    color: var(--amber);
+  }
+
+  .gh__repo-desc {
+    margin: 0;
+  }
+
+  .gh__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin: 0;
+  }
+
+  .gh__meta-sep {
+    color: var(--line);
+  }
+
+  /* Demo: enlace mono con hairline inferior ámbar (lenguaje editorial del Hero). */
+  .gh__demo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    flex: none;
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .gh__demo:hover {
+    gap: var(--space-2xs);
+  }
+
+  /* Enlace al perfil: mono discreto, alineado a la izquierda. */
+  .gh__profile {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    width: fit-content;
+    color: var(--paper-dim);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .gh__profile:hover {
+    color: var(--paper);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Colaboraciones: participación curada (no repos propios). Mismo lenguaje
+     editorial (hairlines, mono, un solo ámbar) pero sin numeración de scoring,
+     para que lea como participación y no como una de sus vitrinas puntuadas.
+     --------------------------------------------------------------------------- */
+  .gh__collabs {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh__collab {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding-block: var(--space-lg);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .gh__collab:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .gh__collab-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-md);
+  }
+
+  .gh__collab-name {
+    color: var(--paper);
+    word-break: break-word;
+  }
+
+  /* Enlace solo cuando hay URL pública (las privadas no llevan enlace). */
+  .gh__collab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--paper);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .gh__collab-link :global(.gh__collab-ext) {
+    color: var(--paper-dim);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .gh__collab-link:hover .gh__collab-name,
+  .gh__collab-link:focus-visible .gh__collab-name,
+  .gh__collab-link:hover :global(.gh__collab-ext),
+  .gh__collab-link:focus-visible :global(.gh__collab-ext) {
+    color: var(--amber);
+  }
+
+  /* El rol comunica que es participación, no propiedad. */
+  .gh__collab-role {
+    color: var(--paper-dim);
+  }
+
+  /* Repo privado: marca discreta (no enlace muerto). Hairline ámbar la distingue
+     como metadato accionable sin prometer un destino navegable. */
+  .gh__collab-private {
+    color: var(--paper-dim);
+    padding-inline: var(--space-2xs);
+    padding-block: var(--space-3xs);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+  }
+
+  .gh__collab-desc {
+    margin: 0;
+  }
+
+  .gh__collab-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-md);
+    margin: 0;
+  }
+
+  .gh__collab-tech {
+    color: var(--paper-dim);
+  }
+
+  .gh__empty {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+
+  /* Desktop: la lista de repos respira con la columna de número desplazada. */
+  @media (min-width: 768px) {
+    .gh__item-main {
+      flex-basis: 40ch;
+    }
+  }
+</style>

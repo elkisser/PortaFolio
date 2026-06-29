@@ -1,0 +1,60 @@
+---
+# The Cookie Box — case study real (ES). Sigue el estándar de slice 1 (Chromora; tarea 13).
+#
+# ----------------------------------------------------------------------------
+# Decisión de medios (design.md §2.5 — regla reuse-vs-recompose, documentada por
+# proyecto):
+# Existe un video fuente en `img/TheCookieBox-SF/thecookiebox.mp4` (fuera de
+# `public/`, sin `poster`, sin formatos modernos webm/av1 y sin verificación de
+# resolución, compresión, duración ≤12s ni ausencia de audio). Al NO poder
+# verificarse contra §2.5, se RECOMPONE con stills compuestos (SVG vectorial) en
+# `public/media/the-cookie-box/`, que resuelven en build y cumplen el esquema §8
+# (alt no vacío + width/height → CLS 0). El `.mp4` queda como material fuente para
+# una futura pasada de optimización (transcodificado + poster); si supera §2.5 se
+# reusaría como medio adicional.
+# MEDIO REAL PENDIENTE: capturas reales del catálogo y del panel de admin del sitio
+# desplegado (thecookiebox.netlify.app) que cumplan los criterios de §2.5.
+# ----------------------------------------------------------------------------
+title: "The Cookie Box"
+year: 2025
+category: ["ecommerce", "frontend"]
+summary: "E-commerce artesanal con catálogo filtrable, carrito animado y panel de administración seguro. Conversión a WebP."
+problem: "Una marca de productos artesanales necesitaba vender online sin depender de un marketplace ni de pagar una plataforma mensual. El dueño debía poder cargar productos y fotos por su cuenta, y los pedidos tenían que cerrarse por los canales que ya usaba (WhatsApp e Instagram), sin fricción para el cliente."
+role: "Desarrollo frontend y de integración en solitario: catálogo, carrito, panel de administración, optimización de imágenes y conexión con los canales de contacto. También el despliegue."
+decisions:
+  - decision: "Convertir automáticamente las imágenes subidas a WebP en lugar de servir los archivos originales."
+    rationale: "Las fotos de producto son el peso principal de un e-commerce. Convertir a WebP en la carga baja drásticamente el tamaño sin que el dueño tenga que optimizar nada a mano, lo que mejora el tiempo de carga y la experiencia móvil, donde ocurre la mayor parte de las compras."
+  - decision: "Cerrar el pedido vía WhatsApp en vez de integrar una pasarela de pago completa."
+    rationale: "Para el volumen y el modelo de esta marca, el cierre conversacional por WhatsApp es lo que ya funcionaba en su operación. Evita comisiones, cumplimiento de pagos y fricción de checkout, y el carrito arma el mensaje con el detalle del pedido listo para enviar."
+  - decision: "Separar un panel de administración protegido del sitio público de la tienda."
+    rationale: "El dueño necesita autonomía para gestionar el catálogo sin tocar código, pero esa capacidad no puede quedar expuesta. Un panel con acceso controlado da esa autonomía manteniendo segura la edición de productos y precios."
+challenges:
+  - "Mantener el catálogo rápido con muchas fotos: la conversión a WebP y la carga diferida sostienen el rendimiento al crecer el catálogo."
+  - "Que el carrito se sienta vivo sin distraer: las animaciones (Framer Motion) refuerzan la acción de agregar sin estorbar la compra."
+  - "Dar al dueño control real del contenido sin exponer la administración a cualquiera."
+result: "The Cookie Box es una tienda artesanal desplegada y autogestionable: el dueño carga productos con fotos que se optimizan solas y los clientes cierran el pedido por los canales que ya usan. Un e-commerce a medida, sin costo de plataforma."
+stack: ["React", "Vite", "Firebase", "Tailwind CSS", "Framer Motion"]
+media:
+  - type: "image"
+    src: "/media/the-cookie-box/cover.svg"
+    alt: "Catálogo de The Cookie Box con filtros por categoría, una grilla de productos con precio y un carrito con el total y el botón de pedir por WhatsApp."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/the-cookie-box/admin.svg"
+    alt: "Panel de administración de The Cookie Box: formulario de nuevo producto, zona de carga de imagen con conversión automática a WebP y una vista previa de la tarjeta."
+    width: 1600
+    height: 900
+links:
+  demo: "https://thecookiebox.netlify.app/"
+  repo: "https://github.com/elkisser/the-cookie-box"
+featured: true
+order: 3
+lang: es
+---
+
+The Cookie Box es una tienda para una marca artesanal que quería vender online a su
+manera: sin marketplace, sin abono mensual y cerrando por WhatsApp como ya lo hacía. El
+foco estuvo en darle al dueño autonomía real —cargar productos y fotos por su cuenta, con
+imágenes que se optimizan solas— y a los clientes una compra rápida que termina en el
+canal que ya conocen.

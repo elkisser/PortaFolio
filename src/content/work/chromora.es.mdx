@@ -1,0 +1,64 @@
+---
+# Chromora — case study real (ES). Reemplaza al placeholder (tarea 13, Req 5.2/6.2/11.1).
+#
+# ----------------------------------------------------------------------------
+# Decisión de medios (design.md §2.5 — regla reuse-vs-recompose, documentada por
+# proyecto):
+# Existe un video fuente en `img/Chromora/chromora.mp4` (fuera de `public/`, sin
+# `poster`, sin formatos modernos webm/av1 y sin verificación de resolución,
+# compresión, duración ≤12s ni ausencia de audio). Al NO poder verificarse contra
+# los criterios de §2.5, se opta por RECOMPONER: se presentan stills compuestos
+# (SVG vectorial, nítidos a cualquier densidad ≥2×, composición intencional y
+# coherente con la identidad — ink-900 + un único ámbar) en
+# `public/media/chromora/`, que resuelven en build y cumplen el esquema §8
+# (alt no vacío + width/height explícitos → CLS 0). El `.mp4` queda como material
+# fuente para una futura pasada de optimización (transcodificado + poster); si
+# supera los criterios de §2.5 se reusaría entonces como medio adicional.
+# ----------------------------------------------------------------------------
+title: "Chromora"
+year: 2024
+category: ["ai", "frontend"]
+summary: "Describís un mood en lenguaje natural y Chromora genera una paleta accesible en espacio LCH, lista para exportar a tokens."
+problem: "Elegir una paleta que se vea bien Y cumpla contraste accesible es lento y propenso a error. Las herramientas habituales trabajan en HSL/RGB, donde subir o bajar el brillo de un color no es perceptualmente parejo entre tonos, así que garantizar AA termina siendo prueba y error manual."
+role: "Diseño de producto y desarrollo full-stack en solitario: definición del flujo, prompt-engineering del modelo, motor de color en LCH, UI y animación."
+decisions:
+  - decision: "Trabajar la paleta en espacio de color LCH en lugar de HSL/RGB."
+    rationale: "LCH es perceptualmente uniforme: ajustar la luminosidad (L) cambia el brillo percibido de forma pareja entre tonos. Eso permite garantizar contraste AA de forma predecible y generar escalas coherentes, algo que HSL no asegura."
+  - decision: "Pedirle al modelo intención semántica de color (rol, temperatura, relación) en vez de códigos hex fijos."
+    rationale: "Con la intención, los valores finales se recalculan en LCH con Chroma.js y se clampean al gamut sRGB; así el resultado es siempre válido y accesible aunque el modelo alucine un color imposible o fuera de gamut."
+  - decision: "Next 15 (App Router) con la llamada al modelo en el servidor y Framer Motion solo en la transición de los swatches."
+    rationale: "La clave de API nunca llega al cliente y el costo de JS se concentra donde aporta —la entrada animada de la paleta—, manteniendo el resto de la app liviano."
+challenges:
+  - "Evitar paletas que se ven bien pero fallan contraste: se añadió un paso que ajusta la L de cada color hasta cumplir AA contra su fondo previsto."
+  - "Domar respuestas no deterministas del modelo sin perder la sensación de magia: se fijó un esquema de salida y se valida/normaliza antes de pintar."
+  - "Mantener CLS 0 al insertar la paleta generada: las cajas de los swatches reservan su espacio antes de animar."
+result: "Chromora convierte una descripción en una paleta accesible y exportable (CSS/JSON/SVG) en segundos. Es la prueba de un flujo IA→producto con foco en accesibilidad real, no en un demo vistoso."
+stack: ["Next.js 15", "TypeScript", "Chroma.js", "LCH", "Framer Motion", "OpenAI API"]
+media:
+  - type: "image"
+    src: "/media/chromora/cover.svg"
+    alt: "Chromora: una descripción en lenguaje natural ('atardecer sobre un mar en calma') se transforma en una paleta de seis colores con valores LCH y contraste AA verificado."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/chromora/palette.svg"
+    alt: "Detalle de una paleta de Chromora con el hex y los valores LCH de cada color y una insignia de contraste AA por fila."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/chromora/ui.svg"
+    alt: "Interfaz de Chromora: panel de descripción, botón de generar, lienzo de paleta y una vista previa de UI con la paleta aplicada."
+    width: 1600
+    height: 900
+links:
+  repo: "https://github.com/elkisser/chromora"
+featured: true
+order: 1
+lang: es
+---
+
+Chromora nació de una molestia concreta: pasar demasiado tiempo igualando paletas
+"bonitas" con paletas accesibles. En vez de otro pickers de color, lo pensé como un
+puente entre la **intención** (lo que querés transmitir) y un sistema de color que
+**ya nace cumpliendo contraste**. Escribís un mood en lenguaje natural y obtenés una
+paleta en espacio LCH, lista para exportar como tokens.

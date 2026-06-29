@@ -1,0 +1,19 @@
+---
+/**
+ * Work index in English (`/en/work`) — real, indexable route (Req 5.1, design.md
+ * §5.1). Wired to `BaseLayout` with `lang="en"` and to `WorkIndex`, which reads
+ * the `work` collection, filters by language and renders the editorial index with
+ * a category filter (Req 5.4). Detail pages (`/work/[slug]`) land in task 11.
+ */
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import WorkIndex from "../../../components/work/WorkIndex.astro";
+import { useTranslations } from "../../../lib/i18n";
+
+const t = useTranslations("en");
+---
+
+<BaseLayout lang="en" title={t.work_title} description={t.work_desc}>
+  <main id="main" tabindex="-1">
+    <WorkIndex lang="en" />
+  </main>
+</BaseLayout>

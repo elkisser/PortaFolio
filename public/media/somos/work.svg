@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="SoMoS: grilla interactiva de trabajos de la agencia con islas de Astro">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">06 — SOMOS</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">TRABAJOS</text>
+
+  <text x="120" y="210" class="mono" font-size="20" fill="#a6a5a0">PORTAFOLIO DE LA AGENCIA</text>
+
+  <!-- Grilla de trabajos -->
+  <g>
+    <rect x="120" y="250" width="640" height="300" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <rect x="144" y="274" width="592" height="200" rx="6" fill="#161619"/>
+    <text x="144" y="514" class="display" font-size="28" fill="#f3f2ee">Tienda online</text>
+    <text x="700" y="514" class="mono" font-size="16" fill="#e8b75c" text-anchor="end">VER →</text>
+
+    <rect x="800" y="250" width="640" height="300" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <rect x="824" y="274" width="592" height="200" rx="6" fill="#161619"/>
+    <text x="824" y="514" class="display" font-size="28" fill="#f3f2ee">Landing de campaña</text>
+    <text x="1380" y="514" class="mono" font-size="16" fill="#e8b75c" text-anchor="end">VER →</text>
+
+    <rect x="120" y="586" width="640" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="144" y="652" class="display" font-size="26" fill="#f3f2ee">App de reservas</text>
+    <text x="144" y="694" class="mono" font-size="16" fill="#a6a5a0">UI animada · estado en islas</text>
+
+    <rect x="800" y="586" width="640" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+    <text x="824" y="652" class="display" font-size="26" fill="#f3f2ee">Rediseño de marca</text>
+    <text x="824" y="694" class="mono" font-size="16" fill="#a6a5a0">identidad · sistema visual</text>
+  </g>
+
+  <text x="120" y="848" class="mono" font-size="20" fill="#a6a5a0">ISLAS REACT SOLO DONDE LA INTERACCIÓN LO JUSTIFICA</text>
+</svg>

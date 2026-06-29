@@ -1,0 +1,27 @@
+---
+/**
+ * Contact en español (`/es/contact`) — ruta real e indexable (Req 1.4, design.md
+ * §5.1/§5.2). Es la página de cierre del arco narrativo (design.md §4.6): un CTA
+ * final fuerte con WhatsApp + CV e isla `ContactForm` integrada.
+ *
+ * "Conservar, elevar" (design.md §5.2): no se reconstruye el formulario; la
+ * validación pura + WhatsApp + feedback accesible siguen viviendo en la isla
+ * `ContactForm` (tarea 7.1), compuesta por la sección editorial `Contact.astro`.
+ * La isla se hidrata estilo `client:visible` (§6.2): el custom element
+ * `<contact-form>` se observa a sí mismo y solo cablea el comportamiento al
+ * acercarse al viewport.
+ *
+ * Numeración editorial: como única sección de la página, abre el índice (01).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Contact from "../../components/Contact.astro";
+import { useTranslations } from "../../lib/i18n";
+
+const t = useTranslations("es");
+---
+
+<BaseLayout lang="es" title={t.nav_contact} description={t.contact_lead}>
+  <main id="main" tabindex="-1">
+    <Contact lang="es" index="01" />
+  </main>
+</BaseLayout>

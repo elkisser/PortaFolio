@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Chromora: de una descripción en lenguaje natural a una paleta accesible">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Fondo (ink-900) -->
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+
+  <!-- Rejilla tenue (hairlines de firma) -->
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <!-- Índice editorial -->
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">01 — CHROMORA</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">AI · COLOR SYSTEM</text>
+
+  <!-- Prompt (entrada en lenguaje natural) -->
+  <text x="120" y="220" class="mono" font-size="20" fill="#a6a5a0">PROMPT</text>
+  <rect x="120" y="244" width="1360" height="96" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <text x="152" y="304" class="body" font-size="34" fill="#f3f2ee">atardecer sobre un mar en calma, cálido pero accesible</text>
+  <rect x="1408" y="268" width="48" height="48" rx="6" fill="#e8b75c"/>
+  <text x="1432" y="301" class="display" font-size="30" fill="#14110a" text-anchor="middle">→</text>
+
+  <!-- Paleta generada (6 swatches, ratio consistente) -->
+  <text x="120" y="430" class="mono" font-size="20" fill="#a6a5a0">PALETA GENERADA · ESPACIO LCH</text>
+  <g>
+    <rect x="120"  y="456" width="213" height="240" rx="6" fill="#10243f"/>
+    <rect x="347"  y="456" width="213" height="240" rx="6" fill="#2f5e7e"/>
+    <rect x="574"  y="456" width="213" height="240" rx="6" fill="#5d8aa3"/>
+    <rect x="801"  y="456" width="213" height="240" rx="6" fill="#e8b75c"/>
+    <rect x="1028" y="456" width="213" height="240" rx="6" fill="#d9613c"/>
+    <rect x="1255" y="456" width="225" height="240" rx="6" fill="#f3f2ee"/>
+  </g>
+
+  <!-- Etiquetas LCH bajo cada swatch -->
+  <g class="mono" font-size="18" fill="#a6a5a0">
+    <text x="120"  y="730">L 18 C 28</text>
+    <text x="347"  y="730">L 40 C 26</text>
+    <text x="574"  y="730">L 58 C 18</text>
+    <text x="801"  y="730">L 76 C 52</text>
+    <text x="1028" y="730">L 56 C 58</text>
+    <text x="1255" y="730">L 96 C 02</text>
+  </g>
+
+  <!-- Pie: contraste verificado -->
+  <text x="120" y="848" class="mono" font-size="20" fill="#5fd38a">CONTRASTE AA VERIFICADO</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">NL → paleta · Chroma.js</text>
+</svg>
