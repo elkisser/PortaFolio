@@ -1,0 +1,16 @@
+---
+/**
+ * Arrow — flecha del set propio. Apunta a la derecha por defecto (uso editorial
+ * "ver más →"); rotar con `transform` para otras direcciones. Esquinas vivas:
+ * la punta es una unión miter, coherente con las hairlines (design.md §4.5).
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <line x1="3" y1="12" x2="20" y2="12"></line>
+  <polyline points="13 5 20 12 13 19"></polyline>
+</Icon>

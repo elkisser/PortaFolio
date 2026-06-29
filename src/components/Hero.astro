@@ -1,0 +1,382 @@
+---
+/**
+ * Hero — opening editorial del portfolio (design.md §5.3, §4.5, §4.6; Req 3.1–3.4).
+ *
+ * NO es un hero típico (Req 3.2): nada de título gigante + 2 botones, **sin glow
+ * radial** y **sin typing effect**. En su lugar, una composición tipográfica
+ * **asimétrica** sobre la rejilla de 12 columnas que responde de un vistazo a:
+ * quién es, qué hace, por qué contratarlo y qué construye (Req 3.1).
+ *
+ *   1. **Identidad** (mono): nombre · rol · ubicación · estado "disponible"
+ *      (señalado con `--live`, no solo por color → punto + texto).
+ *   2. **Declaración** (display, escala media-alta, `<h1>`): una frase con
+ *      criterio (design.md §5.3), no un eslogan vacío.
+ *   3. **Contexto** (mono discreto): lead de apoyo + enlaces a GitHub y CV +
+ *      CTA al índice de Work.
+ *   4. **Prueba inmediata** (mini-índice `id="work"`): 3–4 case studies
+ *      destacados visibles above the fold — *el trabajo es el héroe*. La
+ *      selección es pura y defensiva (`selectFeaturedWork`): si aún no hay
+ *      destacados (solo el placeholder hasta la tarea 13), degrada con elegancia.
+ *
+ * HTML 100% ESTÁTICO (Req 3.3): este componente no embarca ninguna isla ni JS.
+ * El gesto de entrada es un **reveal por máscara** (`clip-path`) en CSS puro
+ * (design.md §4.5, firma de movimiento). El sistema de animaciones general
+ * (Motion, tarea 9) es independiente; el Hero no lo necesita.
+ *
+ * Reduced-motion (Req 3.4): la animación de reveal se declara SOLO bajo
+ * `@media (prefers-reduced-motion: no-preference)`. Por tanto, el estado de
+ * reposo (sin animación) ya muestra TODO el contenido visible, sin recortes; no
+ * hay forma de que un elemento quede permanentemente invisible (Req 10.4).
+ *
+ * Wiring de enlaces (defensivo): el CTA y los ítems del mini-índice apuntan al
+ * índice de Work localizado (`/work`); la sección lleva `id="work"` para que el
+ * scrollspy de la nav (`#work`) tenga un objetivo en la home (Req 4.1). Las
+ * páginas de detalle por slug llegan en la tarea 11 (ver nota al pie del bloque).
+ */
+import Section from "./primitives/Section.astro";
+import Grid from "./primitives/Grid.astro";
+import Text from "./primitives/Text.astro";
+import Mono from "./primitives/Mono.astro";
+import Arrow from "./icons/Arrow.astro";
+import ExternalLink from "./icons/ExternalLink.astro";
+import { getCollection } from "astro:content";
+import {
+  useTranslations,
+  localizedPath,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../lib/i18n";
+import { selectFeaturedWork } from "../lib/hero";
+
+interface Props {
+  /** Idioma de la página → copy localizado y destinos de los enlaces. */
+  lang?: string;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+const t = useTranslations(lang);
+
+// Prueba inmediata: case studies destacados del idioma activo (design.md §5.3).
+// Selección pura y defensiva; tolera colección con solo el placeholder.
+const allWork = await getCollection("work");
+const featured = selectFeaturedWork(allWork, lang, 4);
+
+// Destinos (defensivos): índice de Work localizado + enlaces de contexto.
+const workHref = localizedPath("/work", lang);
+const githubUrl = "https://github.com/elkisser";
+const cvHref = `/documentos/cv-sebastian-kisser-${lang}.pdf`;
+
+// Etiquetas técnicas para el mini-índice (categorías en mono, separadas por ·).
+const categoryLabel = (categories: readonly string[]): string =>
+  categories.join(" · ");
+---
+
+<Section as="header" class="hero" aria-labelledby="hero-declaration">
+  <Grid class="hero__grid">
+    <!-- 1. Identidad (mono): nombre · rol · ubicación · estado disponible. -->
+    <p class="hero__identity reveal reveal--1">
+      <Mono class="hero__name">Sebastián Kisser</Mono>
+      <Mono class="hero__sep" aria-hidden="true">·</Mono>
+      <Mono>{t.hero_role}</Mono>
+      <Mono class="hero__sep" aria-hidden="true">·</Mono>
+      <Mono>{t.hero_loc}</Mono>
+      <Mono class="hero__sep" aria-hidden="true">·</Mono>
+      <span class="hero__status">
+        <span class="hero__status-dot" aria-hidden="true"></span>
+        <Mono>{t.hero_status}</Mono>
+      </span>
+    </p>
+
+    <!-- 2. Declaración (display, h1): una frase con criterio (design.md §5.3). -->
+    <h1 id="hero-declaration" class="hero__declaration reveal reveal--2">
+      <Text as="span" font="display" step="4">{t.hero_declaration}</Text>
+    </h1>
+
+    <!-- 3. Contexto: lead de apoyo + enlaces discretos + CTA al índice de Work. -->
+    <div class="hero__context reveal reveal--3">
+      <Text class="hero__lead" tone="dim" step="1" measure>{t.hero_lead}</Text>
+
+      <div class="hero__actions">
+        <a class="hero__cta" href={workHref}>
+          <Mono>{t.hero_cta_work}</Mono>
+          <Arrow size={18} class="hero__cta-arrow" />
+        </a>
+
+        <a
+          class="hero__meta-link"
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Mono>{t.hero_github}</Mono>
+          <ExternalLink size={14} />
+        </a>
+
+        <a class="hero__meta-link" href={cvHref} target="_blank" rel="noopener noreferrer">
+          <Mono>{t.hero_cta_cv}</Mono>
+          <ExternalLink size={14} />
+        </a>
+      </div>
+    </div>
+  </Grid>
+</Section>
+
+<!-- 4. Prueba inmediata: mini-índice de destacados. `id="work"` = objetivo del
+     scrollspy de la nav en la home (Req 4.1). Se omite si no hay entradas. -->
+{
+  featured.length > 0 && (
+    <div id="work">
+      <Section index="01" label={t.nav_work} class="hero-proof">
+        <ol class="proof__list">
+          {featured.map((entry, i) => (
+            <li class="proof__item reveal">
+              <a class="proof__link" href={workHref}>
+                <Mono class="proof__num" accent>
+                  {String(i + 1).padStart(2, "0")}
+                </Mono>
+                <span class="proof__body">
+                  <Text as="span" font="display" step="2" class="proof__title">
+                    {entry.data.title}
+                  </Text>
+                  <Mono class="proof__meta">
+                    {entry.data.year} · {categoryLabel(entry.data.category)}
+                  </Mono>
+                </span>
+                <Arrow size={20} class="proof__arrow" />
+              </a>
+            </li>
+          ))}
+        </ol>
+      </Section>
+    </div>
+  )
+}
+
+<style>
+  /* ---------------------------------------------------------------------------
+     Hero — composición asimétrica sobre la rejilla de 12 columnas (design.md
+     §4.3/§4.5). En desktop el contenido ocupa columnas desplazadas (no centrado).
+     --------------------------------------------------------------------------- */
+  .hero {
+    padding-block: var(--space-4xl) var(--space-2xl);
+  }
+
+  .hero__grid {
+    row-gap: var(--space-xl);
+  }
+
+  /* Identidad: fila mono, envuelve en pantallas chicas. Span editorial ancho. */
+  .hero__identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-xs);
+    margin: 0;
+    grid-column: 1 / -1;
+  }
+
+  .hero__name {
+    color: var(--paper);
+  }
+
+  .hero__sep {
+    color: var(--line);
+  }
+
+  /* Estado "disponible": punto + texto (no depende solo del color — Req 10/a11y). */
+  .hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .hero__status-dot {
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background-color: var(--live);
+    /* Halo sutil del estado; estático (sin animación) → ok con reduced-motion. */
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--live) 22%, transparent);
+  }
+
+  /* Declaración: titular display, asimétrico (no ocupa las 12 columnas). */
+  .hero__declaration {
+    grid-column: 1 / -1;
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  /* Contexto: lead + acciones; alineado a una sub-columna para romper la simetría. */
+  .hero__context {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .hero__lead {
+    margin: 0;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-lg);
+  }
+
+  /* CTA primario: hairline inferior ámbar, sin relleno (lenguaje editorial). */
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .hero__cta :global(.hero__cta-arrow) {
+    color: var(--amber);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .hero__cta:hover :global(.hero__cta-arrow) {
+    transform: translateX(3px);
+  }
+
+  /* Enlaces de contexto (GitHub, CV): mono discreto. */
+  .hero__meta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    color: var(--paper-dim);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .hero__meta-link:hover {
+    color: var(--paper);
+  }
+
+  /* Desktop: composición asimétrica intencional sobre 12 columnas. */
+  @media (min-width: 768px) {
+    .hero__identity {
+      grid-column: 1 / 10;
+    }
+
+    .hero__declaration {
+      grid-column: 1 / 11;
+      max-width: none;
+    }
+
+    .hero__context {
+      grid-column: 1 / 9;
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+     Mini-índice de prueba (case studies destacados). Lista editorial con número
+     de índice mono + título display + metadatos mono y flecha "ir a".
+     --------------------------------------------------------------------------- */
+  .hero-proof {
+    padding-block: 0 var(--space-4xl);
+  }
+
+  .proof__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .proof__item {
+    border-block-start: 1px solid var(--line);
+  }
+
+  .proof__item:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .proof__link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-md);
+    padding-block: var(--space-md);
+    text-decoration: none;
+    color: var(--paper);
+    transition: padding-inline var(--dur-fast) var(--ease);
+  }
+
+  .proof__num {
+    align-self: start;
+  }
+
+  .proof__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  .proof__title {
+    color: var(--paper);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .proof__link:hover .proof__title {
+    color: var(--amber);
+  }
+
+  .proof__arrow {
+    color: var(--paper-dim);
+    transition: transform var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+
+  .proof__link:hover .proof__arrow {
+    color: var(--amber);
+    transform: translateX(4px);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Reveal por máscara (clip-path) — gesto de entrada característico (§4.5).
+     CSS puro, sin JS. Se declara SOLO bajo `no-preference`: así el estado de
+     reposo (cuando NO hay animación, incluido reduced-motion) muestra TODO el
+     contenido visible y accesible (Req 3.4 / 10.4). El `from` recortado solo
+     existe dentro de la animación, nunca como estado permanente.
+     --------------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: hero-mask-reveal var(--dur-slow) var(--ease) both;
+    }
+
+    /* Cascada editorial: identidad → declaración → contexto → prueba. */
+    .reveal--1 {
+      animation-delay: 0ms;
+    }
+    .reveal--2 {
+      animation-delay: 90ms;
+    }
+    .reveal--3 {
+      animation-delay: 180ms;
+    }
+    .proof__item.reveal {
+      animation-delay: 260ms;
+    }
+
+    @keyframes hero-mask-reveal {
+      from {
+        clip-path: inset(0 0 100% 0);
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+</style>

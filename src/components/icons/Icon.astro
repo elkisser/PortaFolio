@@ -1,0 +1,57 @@
+---
+/**
+ * Icon — base del set de iconografía propio (design.md §4.5).
+ *
+ * Decisión de identidad: NO usamos una librería genérica (Feather/Lucide
+ * "pegada"), que es lo primero que delata un template (Req 2.2). Cada icono del
+ * set envuelve este primitivo pasando su geometría por `slot`.
+ *
+ * Firma visual:
+ *  - Trazo de 1.5px (`stroke-width`) sobre rejilla de 24, sin relleno.
+ *  - Esquinas vivas: `stroke-linejoin: miter` + `stroke-linecap: square`,
+ *    coherentes con las hairlines de 1px (design.md §4.5), no redondeadas.
+ *  - `stroke: currentColor` para heredar el color del texto contenedor.
+ *
+ * Accesibilidad: decorativo por defecto (`aria-hidden`, `focusable="false"`).
+ * Si se pasa `title`, el icono pasa a ser significativo (`role="img"` +
+ * `aria-label`) para usarse de forma autónoma (p. ej. botón solo-icono).
+ */
+export interface Props {
+  /** Lado del cuadro del icono en px (viewBox 24×24). */
+  size?: number;
+  /** Nombre accesible. Si se define, el icono deja de ser decorativo. */
+  title?: string;
+  class?: string;
+}
+
+const { size = 24, title, class: className, ...rest }: Props = Astro.props;
+const labelled = Boolean(title);
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  role={labelled ? "img" : undefined}
+  aria-label={labelled ? title : undefined}
+  aria-hidden={labelled ? undefined : "true"}
+  focusable="false"
+  class:list={["icon", className]}
+  {...rest}
+>
+  <slot />
+</svg>
+
+<style>
+  .icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex: none;
+  }
+</style>

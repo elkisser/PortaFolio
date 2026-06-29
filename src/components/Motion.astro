@@ -1,0 +1,192 @@
+---
+/**
+ * Motion — isla orquestadora de *reveals* del portfolio (design.md §6.2, §9.3,
+ * §10; Req 10.2/10.3/10.4).
+ *
+ * Responsabilidad: revelar las secciones marcadas con `[data-reveal]` a medida
+ * que entran en viewport, con la **firma de movimiento** del sistema (reveal por
+ * máscara / `clip-path`, mismo `--ease` y duraciones que el Hero — design.md
+ * §4.5). Filosofía **CSS-first, JS solo como orquestador/fallback** (§10):
+ *
+ *   - Si el navegador soporta *scroll-driven animations* (`animation-timeline:
+ *     view()`), el reveal se hace **100% en CSS** y la isla NO observa nada.
+ *     Doc/soporte: https://developer.mozilla.org/docs/Web/CSS/animation-timeline/view
+ *     · https://caniuse.com/mdn-css_properties_animation-timeline (~83% global →
+ *     justifica el fallback).
+ *   - Si no hay soporte CSS pero sí `IntersectionObserver`, la isla orquesta el
+ *     reveal con IO (oculto → visible al intersecar, una sola vez).
+ *   - Bajo `prefers-reduced-motion: reduce` **o** sin `IntersectionObserver`,
+ *     TODO queda visible de inmediato y NO se observa nada (Property 6 / Req 10.3).
+ *
+ * La DECISIÓN es lógica pura testeada en `lib/motion.ts` (`planReveal`); la isla
+ * solo lee el entorno (`detectEnv`) y aplica el plan al DOM.
+ *
+ * Hidratación `client:idle` (§6.2): custom element `motion-reveal` que arranca en
+ * `requestIdleCallback` (equivalente vanilla, sin runtime de framework; coste
+ * objetivo < 4 KB). Sin JS o antes de hidratar, **todo `[data-reveal]` permanece
+ * visible** (progressive enhancement): el estado oculto solo lo introduce la isla
+ * en modo `observe`, y SOLO bajo `no-preference`. Así ningún contenido queda
+ * permanentemente invisible ni inaccesible por teclado (Req 10.4).
+ *
+ * Cohesión con el Hero (Req: no romper su comportamiento): el Hero usa su propio
+ * reveal de entrada *on-load* con la clase `.reveal` (CSS puro, independiente);
+ * Motion usa el atributo `[data-reveal]` para el reveal *on-scroll*. No colisionan
+ * y comparten el MISMO gesto (máscara `clip-path` + `--ease` + `--dur-slow`), de
+ * modo que el lenguaje de movimiento es uniforme en todo el sitio.
+ *
+ * Uso: las secciones optan por el reveal añadiendo `data-reveal` al elemento que
+ * debe revelarse al entrar en viewport. Esta isla, montada una vez en
+ * `BaseLayout`, los descubre en toda la página.
+ */
+---
+
+<motion-reveal hidden aria-hidden="true"></motion-reveal>
+
+<style is:global>
+  /* ===========================================================================
+     Sistema de reveal por scroll — firma de movimiento (design.md §4.5, §10).
+     Estado por defecto: TODO `[data-reveal]` es visible (no-JS / pre-hidratación
+     safe). Los estados ocultos/animados se activan SOLO bajo `no-preference` y
+     solo cuando la isla marca el modo en `:root[data-motion]`.
+     =========================================================================== */
+  @media (prefers-reduced-motion: no-preference) {
+    /* --- Camino A: scroll-driven CSS (animation-timeline: view()) ----------- */
+    @supports (animation-timeline: view()) {
+      :root[data-motion="css"] [data-reveal] {
+        animation: motion-reveal linear both;
+        animation-timeline: view();
+        /* Revela mientras el elemento entra: del 5% de "entry" al 30% de "cover". */
+        animation-range: entry 5% cover 30%;
+      }
+    }
+
+    /* --- Camino B: fallback con IntersectionObserver ------------------------ */
+    /* Estado inicial oculto: SOLO los elementos que la isla marca (los que aún
+       no están en viewport al hidratar), para no esconder contenido ya visible
+       (sin "flash"). */
+    :root[data-motion="observe"] [data-reveal][data-reveal-hidden] {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(0.75rem);
+    }
+
+    /* Reveal al intersecar: mismo gesto de máscara que el Hero. */
+    :root[data-motion="observe"] [data-reveal][data-revealed] {
+      animation: motion-reveal var(--dur-slow) var(--ease) both;
+    }
+  }
+
+  /* Gesto de firma: reveal por máscara (clip-path), coherente con `hero-mask-reveal`. */
+  @keyframes motion-reveal {
+    from {
+      clip-path: inset(0 0 100% 0);
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Cinturón de seguridad (Req 10.2/10.4): bajo reduced-motion, ningún
+     `[data-reveal]` puede quedar oculto, pase lo que pase con los atributos. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-reveal][data-reveal-hidden] {
+      opacity: 1 !important;
+      clip-path: none !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { planReveal, detectEnv } from "../lib/motion";
+
+  /**
+   * `<motion-reveal>` — comportamiento vanilla de la isla de animaciones. Se
+   * hidrata en *idle* (equivalente a `client:idle` sin runtime de framework) para
+   * no competir con el FCP (design.md §6.2). Descubre los `[data-reveal]` de la
+   * página, resuelve el plan con `planReveal` (lógica pura) y lo aplica.
+   */
+  class MotionReveal extends HTMLElement {
+    private observer: IntersectionObserver | null = null;
+
+    connectedCallback(): void {
+      const idle: (cb: () => void) => void =
+        "requestIdleCallback" in window
+          ? (cb) => window.requestIdleCallback(cb)
+          : (cb) => window.setTimeout(cb, 1);
+      idle(() => this.init());
+    }
+
+    disconnectedCallback(): void {
+      this.observer?.disconnect();
+      this.observer = null;
+    }
+
+    private init(): void {
+      const root = document.documentElement;
+      const targets = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-reveal]"),
+      );
+
+      const plan = planReveal(targets, detectEnv());
+
+      // `immediate` (reduced-motion o sin IO): todo visible, NADA observado
+      // (Property 6 / Req 10.3). No se crea ningún observer.
+      if (plan.strategy === "immediate") {
+        root.setAttribute("data-motion", "immediate");
+        return;
+      }
+
+      // `css-scroll`: el CSS (`animation-timeline: view()`) revela; la isla no
+      // observa nada. Solo marca el modo para activar las reglas CSS.
+      if (plan.strategy === "css-scroll") {
+        root.setAttribute("data-motion", "css");
+        return;
+      }
+
+      // `observe`: orquestar el reveal con IntersectionObserver.
+      root.setAttribute("data-motion", "observe");
+      this.observer = new IntersectionObserver(this.onIntersect, {
+        rootMargin: "0px 0px -10% 0px",
+        threshold: 0.1,
+      });
+
+      for (const el of plan.toObserve) {
+        // No ocultamos lo que ya está en viewport al hidratar (evita "flash" y
+        // garantiza que el contenido above-the-fold nunca desaparece — Req 10.4).
+        if (this.isInViewport(el)) continue;
+        el.setAttribute("data-reveal-hidden", "");
+        this.observer.observe(el);
+      }
+    }
+
+    /** ¿El elemento intersecta el viewport actual? (decisión runtime, no pura). */
+    private isInViewport(el: HTMLElement): boolean {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const vw = window.innerWidth || document.documentElement.clientWidth;
+      return rect.top < vh && rect.bottom > 0 && rect.left < vw && rect.right > 0;
+    }
+
+    private onIntersect = (entries: IntersectionObserverEntry[]): void => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        // Revelar (POSTCONDICIÓN) y dejar de observar (INVARIANTE: 1 vez).
+        el.removeAttribute("data-reveal-hidden");
+        el.setAttribute("data-revealed", "");
+        this.observer?.unobserve(el);
+      }
+    };
+  }
+
+  if (!customElements.get("motion-reveal")) {
+    customElements.define("motion-reveal", MotionReveal);
+  }
+</script>

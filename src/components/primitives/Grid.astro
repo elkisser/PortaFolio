@@ -1,0 +1,43 @@
+---
+/**
+ * Grid — rejilla de 12 columnas con gutters fluidos (design.md §4.3 / §4.5).
+ *
+ * Base de la composición asimétrica del sistema: las celdas se colocan con
+ * `grid-column` desde el consumidor. En viewports angostos colapsa a 1 columna.
+ */
+import "../../styles/tokens.css";
+
+interface Props {
+  /** Número de columnas (por defecto 12, la rejilla editorial del sistema). */
+  cols?: number;
+  /** Etiqueta HTML del contenedor. */
+  as?: keyof HTMLElementTagNameMap;
+  class?: string;
+}
+
+const { cols = 12, as: Tag = "div", class: className, ...rest }: Props = Astro.props;
+---
+
+<Tag
+  class:list={["grid", className]}
+  style={`--_cols:${cols}`}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(var(--_cols, var(--grid-cols)), minmax(0, 1fr));
+    gap: var(--grid-gutter);
+    width: 100%;
+  }
+
+  /* Hasta tablet la rejilla de 12 col colapsa a una sola columna fluida. */
+  @media (max-width: 767px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

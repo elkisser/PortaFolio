@@ -1,0 +1,22 @@
+---
+/**
+ * Home in English (`/en`) — real, indexable route (Req 8.1, design.md §5.1).
+ *
+ * Wired to `BaseLayout` with `lang="en"` so `<html lang>`, Open Graph metadata
+ * and `hreflang` tags are emitted correctly per language. The opening is the
+ * definitive `Hero` (task 8): identity + declaration + proof (featured mini-index)
+ * + context, static HTML with a CSS mask reveal. The rest of the slice-1 content
+ * (About, Contact) arrives in later tasks.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../../components/Hero.astro";
+import { useTranslations } from "../../lib/i18n";
+
+const t = useTranslations("en");
+---
+
+<BaseLayout lang="en" title="Home" description={t.hero_lead}>
+  <main id="main" tabindex="-1">
+    <Hero lang="en" />
+  </main>
+</BaseLayout>

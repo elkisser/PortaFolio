@@ -1,0 +1,17 @@
+---
+/**
+ * Demo — demo en vivo. Ventana de navegador (marco + barra superior) con un
+ * triángulo de "play": una app desplegada que se puede ver en funcionamiento.
+ * Marco y triángulo con esquinas vivas (design.md §4.5).
+ */
+import Icon from "./Icon.astro";
+import type { Props } from "./Icon.astro";
+
+const props: Props = Astro.props;
+---
+
+<Icon {...props}>
+  <rect x="3" y="5" width="18" height="14"></rect>
+  <line x1="3" y1="9" x2="21" y2="9"></line>
+  <polygon points="11 12 15 14 11 16"></polygon>
+</Icon>

@@ -1,0 +1,519 @@
+---
+/**
+ * Nav — isla de navegación del portfolio (design.md §5.1, §6.2; Req 4.1, 4.4).
+ *
+ * Responsabilidad: navegación principal con **scrollspy**, **menú móvil
+ * accesible** y **switch de idioma**. Sigue el principio de hidratación de
+ * §6.2: HTML estático que funciona sin JS (los enlaces y el switch de idioma son
+ * anclas/enlaces reales) y un comportamiento vanilla que se hidrata en *idle*
+ * (`requestIdleCallback`), el equivalente vanilla de `client:idle` para una isla
+ * sin runtime de framework. Coste objetivo < 3 KB de JS (§6.2).
+ *
+ * Degradación elegante (Req 4.3/4.4):
+ *  - Sin JS, el menú se muestra estático y los enlaces funcionan; el switch de
+ *    idioma es un `<a href>` computado en build con `switchLocalePath`.
+ *  - El botón hamburguesa y el colapso del menú **solo** se activan una vez
+ *    hidratada la isla (atributo `data-hydrated`), de modo que sin JS el menú
+ *    nunca queda oculto e inaccesible.
+ *
+ * Accesibilidad (Req 4.4, 10.6):
+ *  - 100% operable por teclado; foco visible heredado de `:focus-visible` global.
+ *  - Botón con `aria-expanded` + `aria-controls`; la etiqueta refleja la acción.
+ *  - Menú móvil: foco gestionado, `Escape` cierra, trampa de foco sin fugas,
+ *    `inert` sobre el menú colapsado para que el foco nunca se escape fuera de
+ *    pantalla.
+ *  - `prefers-reduced-motion`: las animaciones de apertura degradan a corte
+ *    (contrato global de `BaseLayout`); la lógica no depende de `transitionend`.
+ *
+ * Iconografía: set propio (`Menu`, `Language`) — design.md §4.5 / Req 2.2.
+ */
+import Menu from "./icons/Menu.astro";
+import Language from "./icons/Language.astro";
+import {
+  useTranslations,
+  localizedPath,
+  switchLocalePath,
+  alternateLocale,
+  isLocale,
+  DEFAULT_LOCALE,
+  type Locale,
+} from "../lib/i18n";
+import { navEntries } from "../lib/nav";
+
+interface Props {
+  /** Idioma de la página → etiquetas y destino del switch de idioma. */
+  lang?: string;
+  /**
+   * Incluir la entrada Playground (design.md §5.1, §5.7). Por defecto `false`:
+   * el Playground es fase 2 y solo se publica si pasa el gate de calidad.
+   */
+  includePlayground?: boolean;
+}
+
+const { lang: rawLang = DEFAULT_LOCALE, includePlayground = false }: Props = Astro.props;
+const lang: Locale = isLocale(rawLang) ? rawLang : DEFAULT_LOCALE;
+
+const t = useTranslations(lang);
+const entries = navEntries(t, includePlayground);
+
+// Switch de idioma computado en build: enlace real al idioma alterno para esta
+// misma ruta (degrada sin JS). `Astro.url.pathname` es conocido en salida estática.
+const altLang = alternateLocale(lang);
+const altHref = switchLocalePath(Astro.url.pathname, lang);
+const homeHref = localizedPath("/", lang);
+---
+
+<site-nav
+  class="nav"
+  data-mobile-query="(max-width: 767px)"
+>
+  <div class="nav__bar">
+    <a class="nav__brand" href={homeHref} aria-label={`Sebastián Kisser — ${t.nav_work}`}>
+      SK
+    </a>
+
+    <button
+      type="button"
+      class="nav__toggle"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label={t.menu_open}
+      data-nav-toggle
+      data-label-open={t.menu_open}
+      data-label-close={t.menu_close}
+    >
+      <Menu />
+    </button>
+  </div>
+
+  <nav id="nav-menu" class="nav__menu" aria-label={t.nav_work} data-nav-menu>
+    <ul class="nav__list">
+      {
+        entries.map((entry) => (
+          <li class="nav__item">
+            <a class="nav__link" href={entry.href} data-nav-link data-target={entry.id}>
+              {entry.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      class="nav__lang"
+      href={altHref}
+      hreflang={altLang}
+      lang={altLang}
+      aria-label={`${t.lang_switch_label}: ${altLang.toUpperCase()}`}
+      data-nav-link
+    >
+      <Language size={18} />
+      <span aria-hidden="true">{altLang.toUpperCase()}</span>
+    </a>
+  </nav>
+</site-nav>
+
+<style>
+  /* ---------------------------------------------------------------------------
+     Estructura base (mobile-first). Sin JS, todo es visible y usable: el menú se
+     muestra apilado y el botón hamburguesa queda oculto (progressive enhancement).
+     --------------------------------------------------------------------------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: block;
+    background-color: color-mix(in srgb, var(--ink-900) 88%, transparent);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .nav__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .nav__brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--step-1);
+    letter-spacing: var(--tracking-display);
+    text-decoration: none;
+    color: var(--paper);
+  }
+
+  /* Botón hamburguesa: oculto por defecto; solo aparece hidratado + mobile. */
+  .nav__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xs);
+    color: var(--paper);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    cursor: pointer;
+  }
+
+  .nav__toggle:hover {
+    border-color: var(--amber);
+  }
+
+  .nav__menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: 0 var(--space-md) var(--space-sm);
+  }
+
+  .nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__link {
+    display: inline-block;
+    padding: var(--space-3xs) 0;
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--paper-dim);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .nav__link:hover {
+    color: var(--paper);
+  }
+
+  /* Indicador de scrollspy (Req 4.1): no depende solo del color (subrayado). */
+  .nav__link[aria-current="true"] {
+    color: var(--amber);
+    box-shadow: inset 0 -1px 0 0 var(--amber);
+  }
+
+  .nav__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    margin-inline-start: auto;
+    padding: var(--space-3xs) var(--space-2xs);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-decoration: none;
+    color: var(--paper-dim);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+
+  .nav__lang:hover {
+    color: var(--paper);
+    border-color: var(--amber);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Mobile + hidratado: el botón aparece y el menú se vuelve un panel colapsable.
+     Sin `[data-hydrated]` (sin JS) el menú permanece visible y accesible.
+     --------------------------------------------------------------------------- */
+  @media (max-width: 767px) {
+    .nav[data-hydrated] .nav__toggle {
+      display: inline-flex;
+    }
+
+    .nav[data-hydrated] .nav__menu {
+      position: fixed;
+      inset: calc(var(--space-2xl)) 0 auto 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      padding: var(--space-lg) var(--space-md) var(--space-xl);
+      background-color: var(--ink-800);
+      border-block-end: 1px solid var(--line);
+      opacity: 0;
+      transform: translateY(-8px);
+      visibility: hidden;
+      transition:
+        opacity var(--dur-fast) var(--ease),
+        transform var(--dur-fast) var(--ease),
+        visibility 0s linear var(--dur-fast);
+    }
+
+    .nav[data-hydrated][data-open] .nav__menu {
+      opacity: 1;
+      transform: none;
+      visibility: visible;
+      transition:
+        opacity var(--dur-fast) var(--ease),
+        transform var(--dur-fast) var(--ease),
+        visibility 0s;
+    }
+
+    .nav[data-hydrated] .nav__list {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+
+    .nav[data-hydrated] .nav__lang {
+      margin-inline-start: 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+     Desktop: barra y menú en una sola fila; el botón nunca aparece.
+     --------------------------------------------------------------------------- */
+  @media (min-width: 768px) {
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: var(--maxw);
+      margin-inline: auto;
+      padding-inline: var(--space-md);
+    }
+
+    .nav__bar {
+      padding-inline: 0;
+    }
+
+    .nav__menu {
+      padding: 0;
+      flex-wrap: nowrap;
+      flex: 1;
+      justify-content: flex-end;
+      gap: var(--space-lg);
+    }
+  }
+
+  /* Reduced-motion: el contrato global de BaseLayout ya neutraliza las
+     animaciones; aquí lo reforzamos quitando la transición de visibilidad para
+     que el panel aparezca/desaparezca de inmediato (sin retraso). */
+  @media (prefers-reduced-motion: reduce) {
+    .nav[data-hydrated] .nav__menu,
+    .nav[data-hydrated][data-open] .nav__menu {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { pickActiveSection, type SectionVisibility } from "../lib/nav";
+
+  /**
+   * `<site-nav>` — comportamiento vanilla de la isla de navegación. Se hidrata en
+   * *idle* (equivalente a `client:idle` sin runtime de framework) para no competir
+   * con el FCP (design.md §6.2).
+   */
+  class SiteNav extends HTMLElement {
+    private toggle: HTMLButtonElement | null = null;
+    private menu: HTMLElement | null = null;
+    private links: HTMLAnchorElement[] = [];
+    private mql: MediaQueryList | null = null;
+    private observer: IntersectionObserver | null = null;
+    private ratios = new Map<string, number>();
+    private open = false;
+
+    connectedCallback(): void {
+      const idle: (cb: () => void) => void =
+        "requestIdleCallback" in window
+          ? (cb) => window.requestIdleCallback(cb)
+          : (cb) => window.setTimeout(cb, 1);
+      idle(() => this.init());
+    }
+
+    disconnectedCallback(): void {
+      this.observer?.disconnect();
+      this.mql?.removeEventListener("change", this.onMediaChange);
+    }
+
+    private init(): void {
+      this.toggle = this.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+      this.menu = this.querySelector<HTMLElement>("[data-nav-menu]");
+      this.links = Array.from(this.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
+
+      const query = this.dataset.mobileQuery ?? "(max-width: 767px)";
+      this.mql = window.matchMedia(query);
+
+      // Marca la isla como hidratada: habilita el colapso del menú en mobile sin
+      // romper la versión sin JS (CSS keya por `[data-hydrated]`).
+      this.setAttribute("data-hydrated", "");
+
+      this.toggle?.addEventListener("click", this.onToggleClick);
+      this.menu?.addEventListener("click", this.onMenuClick);
+      document.addEventListener("keydown", this.onKeydown);
+      document.addEventListener("click", this.onDocumentClick);
+      this.mql.addEventListener("change", this.onMediaChange);
+
+      this.syncMenuForViewport();
+      this.setupScrollspy();
+    }
+
+    /* ---- Menú móvil ---------------------------------------------------------- */
+
+    private get isMobile(): boolean {
+      return this.mql?.matches ?? false;
+    }
+
+    private onToggleClick = (): void => {
+      this.setOpen(!this.open);
+    };
+
+    private onMenuClick = (event: MouseEvent): void => {
+      // Cerrar al activar un enlace en mobile (navegación dentro de la página).
+      const target = event.target as HTMLElement | null;
+      if (this.isMobile && target?.closest("[data-nav-link]")) {
+        this.setOpen(false);
+      }
+    };
+
+    private onKeydown = (event: KeyboardEvent): void => {
+      if (!this.open) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        this.setOpen(false);
+        this.toggle?.focus();
+        return;
+      }
+      if (event.key === "Tab") {
+        this.trapFocus(event);
+      }
+    };
+
+    private onDocumentClick = (event: MouseEvent): void => {
+      if (!this.open) return;
+      if (!this.contains(event.target as Node)) {
+        this.setOpen(false);
+      }
+    };
+
+    private onMediaChange = (): void => {
+      this.syncMenuForViewport();
+    };
+
+    /** Ajusta el estado del menú al cambiar entre mobile y desktop. */
+    private syncMenuForViewport(): void {
+      if (this.isMobile) {
+        // En mobile, el menú colapsado no debe ser focuseable (sin fugas de foco).
+        if (!this.open) this.menu?.setAttribute("inert", "");
+      } else {
+        // En desktop el menú siempre está visible e interactivo.
+        this.open = false;
+        this.removeAttribute("data-open");
+        this.menu?.removeAttribute("inert");
+        this.toggle?.setAttribute("aria-expanded", "false");
+        this.updateToggleLabel();
+      }
+    }
+
+    private setOpen(next: boolean): void {
+      if (next === this.open) return;
+      this.open = next;
+      this.toggle?.setAttribute("aria-expanded", String(next));
+      this.updateToggleLabel();
+
+      if (next) {
+        this.removeAttribute("data-open"); // reset antes de re-aplicar
+        this.setAttribute("data-open", "");
+        this.menu?.removeAttribute("inert");
+        // Mueve el foco al primer enlace del menú (gestión de foco).
+        this.links[0]?.focus();
+      } else {
+        this.removeAttribute("data-open");
+        if (this.isMobile) this.menu?.setAttribute("inert", "");
+      }
+    }
+
+    private updateToggleLabel(): void {
+      if (!this.toggle) return;
+      const label = this.open
+        ? this.toggle.dataset.labelClose
+        : this.toggle.dataset.labelOpen;
+      if (label) this.toggle.setAttribute("aria-label", label);
+    }
+
+    /** Trampa de foco dentro del menú abierto (sin fugas). */
+    private trapFocus(event: KeyboardEvent): void {
+      const focusables = this.focusableInMenu();
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    private focusableInMenu(): HTMLElement[] {
+      if (!this.menu) return [];
+      return Array.from(
+        this.menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+      ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+    }
+
+    /* ---- Scrollspy ----------------------------------------------------------- */
+
+    private setupScrollspy(): void {
+      if (!("IntersectionObserver" in window)) return;
+
+      // Resuelve defensivamente las secciones objetivo: solo observa las que
+      // existen (las secciones llegan en tareas posteriores — wiring defensivo).
+      const targets: HTMLElement[] = [];
+      for (const link of this.links) {
+        const id = link.dataset.target;
+        if (!id) continue;
+        const section = document.getElementById(id);
+        if (section) targets.push(section);
+      }
+      if (targets.length === 0) return;
+
+      this.observer = new IntersectionObserver(
+        (observed) => {
+          for (const entry of observed) {
+            this.ratios.set(entry.target.id, entry.intersectionRatio);
+          }
+          const sections: SectionVisibility[] = targets.map((section) => ({
+            id: section.id,
+            ratio: this.ratios.get(section.id) ?? 0,
+          }));
+          this.highlight(pickActiveSection(sections));
+        },
+        { threshold: [0, 0.25, 0.5, 0.75, 1] },
+      );
+
+      for (const section of targets) this.observer.observe(section);
+    }
+
+    private highlight(activeId: string | null): void {
+      for (const link of this.links) {
+        const id = link.dataset.target;
+        if (!id) continue;
+        if (id === activeId) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      }
+    }
+  }
+
+  if (!customElements.get("site-nav")) {
+    customElements.define("site-nav", SiteNav);
+  }
+</script>

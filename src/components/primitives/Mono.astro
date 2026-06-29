@@ -1,0 +1,37 @@
+---
+/**
+ * Mono — nota al margen / etiqueta técnica en JetBrains Mono (design.md §4.5).
+ *
+ * Firma visual: uppercase + letter-spacing 0.08em para metadatos, año, rol,
+ * stack e índices. Inline por defecto (`span`).
+ */
+import "../../styles/tokens.css";
+
+interface Props {
+  /** Etiqueta HTML (por defecto `span`, inline). */
+  as?: keyof HTMLElementTagNameMap;
+  /** Pinta el texto con el acento ámbar (jerarquía, no decoración). */
+  accent?: boolean;
+  class?: string;
+}
+
+const { as: Tag = "span", accent = false, class: className, ...rest }: Props = Astro.props;
+---
+
+<Tag class:list={["mono", { accent }, className]} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .mono {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--paper-dim);
+  }
+
+  .mono.accent {
+    color: var(--amber);
+  }
+</style>
