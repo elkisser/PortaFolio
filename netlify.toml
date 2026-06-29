@@ -1,0 +1,38 @@
+# =============================================================================
+# netlify.toml — Configuración de build y deploy en Netlify
+# -----------------------------------------------------------------------------
+# El portfolio es un sitio Astro de salida estática (`output: 'static'`), así que
+# NO necesita adaptador SSR: Netlify solo construye y sirve `dist/`.
+#
+# Doc verificada: https://docs.astro.build/en/guides/deploy/netlify/ (sitio
+# estático: build command `npm run build`, publish `dist`).
+# =============================================================================
+
+[build]
+  # `npm run build` dispara el prebuild (`fetch-github.mjs`, con fallback sin
+  # token) y luego `astro build`. Publica el directorio estático `dist/`.
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # package.json exige Node >=20.3.0; fijamos la versión para builds reproducibles.
+  NODE_VERSION = "20"
+
+# Redirección de la raíz al idioma por defecto a nivel de servidor (más limpio
+# que el meta-refresh del index): las rutas reales viven bajo /es y /en
+# (astro:i18n, prefixDefaultLocale: true). 302 para no fijar la elección en caché
+# del navegador si más adelante se agrega negociación por idioma.
+[[redirects]]
+  from = "/"
+  to = "/es/"
+  status = 302
+  force = true
+
+# Caché inmutable para los assets con hash de Astro (Req 13.4). Netlify también
+# lee `public/_headers` (copiado a `dist/_headers`); se declara aquí además para
+# tener la regla versionada junto al resto de la config de deploy. El HTML no se
+# cachea de forma persistente para que cada publicación se vea de inmediato.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

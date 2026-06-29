@@ -1,10 +1,11 @@
 # =============================================================================
-# Cloudflare Pages — headers de caché (Req 13.4, design.md §5.9 / ADR 0002)
+# Headers de caché por ruta (Req 13.4)
 # -----------------------------------------------------------------------------
-# Este archivo lo emite Astro a la raíz de `dist/` (todo lo de `public/` se
-# copia tal cual) y Cloudflare Pages lo lee desde la raíz del directorio de
-# salida para aplicar headers por ruta.
-# Doc verificada: https://developers.cloudflare.com/pages/configuration/headers/
+# Este archivo lo emite Astro a la raíz de `dist/` (todo lo de `public/` se copia
+# tal cual). Tanto Netlify como Cloudflare Pages leen un `_headers` desde la raíz
+# del directorio de salida para aplicar headers por ruta (formato compatible).
+# En Netlify, las reglas equivalentes también viven en `netlify.toml`.
+# Doc: https://docs.netlify.com/routing/headers/
 #
 # Regla de caché (Req 13.4): los assets con hash en el nombre (fingerprint) son
 # inmutables — su contenido nunca cambia para una misma URL, así que se sirven
