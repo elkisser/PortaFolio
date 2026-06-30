@@ -1,50 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Prode: flujo de datos desde las APIs deportivas hasta la puntuación en tiempo real">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Arquitectura de Prode: de la API deportiva a Supabase y a la puntuación automática en tiempo real">
   <defs>
     <style>
       .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
       .display { font-family: "Space Grotesk", system-ui, sans-serif; }
       .body { font-family: "Inter", system-ui, sans-serif; }
     </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M0 0 L8 5 L0 10" fill="none" stroke="#e8b75c" stroke-width="1.5"/>
+    </marker>
   </defs>
 
   <rect width="1600" height="900" fill="#0a0a0b"/>
-
   <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
-    <line x1="120" y1="0" x2="120" y2="900"/>
-    <line x1="1480" y1="0" x2="1480" y2="900"/>
-    <line x1="0" y1="120" x2="1600" y2="120"/>
-    <line x1="0" y1="780" x2="1600" y2="780"/>
+    <line x1="120" y1="120" x2="1480" y2="120"/>
+    <line x1="120" y1="780" x2="1480" y2="780"/>
   </g>
 
   <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">02 — PRODE</text>
-  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">FLUJO DE DATOS</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">ARQUITECTURA · REALTIME</text>
 
-  <text x="120" y="220" class="mono" font-size="20" fill="#a6a5a0">DE LA API AL PUNTAJE, EN TIEMPO REAL</text>
+  <!-- Flujo: API deportiva -> Supabase -> Scoring -> Cliente -->
+  <!-- Nodo 1: API deportiva -->
+  <rect x="120" y="380" width="300" height="140" rx="10" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+  <text x="270" y="438" class="display" font-size="28" fill="#f3f2ee" text-anchor="middle">API deportiva</text>
+  <text x="270" y="474" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">RESULTADOS EN VIVO</text>
 
-  <!-- Nodos del flujo -->
-  <g>
-    <rect x="120" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="270" y="430" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Sports API</text>
-    <text x="270" y="466" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">resultados reales</text>
+  <line x1="420" y1="450" x2="540" y2="450" stroke="#e8b75c" stroke-width="2" marker-end="url(#arrow)"/>
 
-    <rect x="560" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="710" y="424" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Supabase</text>
-    <text x="710" y="458" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">auth · postgres</text>
-    <text x="710" y="486" class="mono" font-size="16" fill="#5fd38a" text-anchor="middle">realtime</text>
-
-    <rect x="1000" y="360" width="300" height="160" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="1150" y="424" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Puntuación</text>
-    <text x="1150" y="458" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">automática</text>
-    <text x="1150" y="486" class="mono" font-size="16" fill="#e8b75c" text-anchor="middle">+3 pts</text>
+  <!-- Nodo 2: Supabase -->
+  <rect x="560" y="300" width="380" height="300" rx="10" fill="#101012" stroke="#e8b75c" stroke-opacity="0.45"/>
+  <text x="750" y="352" class="display" font-size="30" fill="#f3f2ee" text-anchor="middle">Supabase</text>
+  <g class="mono" font-size="18">
+    <rect x="600" y="380" width="300" height="56" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.1)"/>
+    <text x="620" y="414" fill="#f3f2ee">Auth</text>
+    <rect x="600" y="448" width="300" height="56" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.1)"/>
+    <text x="620" y="482" fill="#f3f2ee">Postgres</text>
+    <rect x="600" y="516" width="300" height="56" rx="6" fill="#0a0a0b" stroke="rgba(232,183,92,0.5)"/>
+    <text x="620" y="550" fill="#e8b75c">Realtime</text>
   </g>
 
-  <!-- Conectores -->
-  <g stroke="#e8b75c" stroke-width="2" fill="none">
-    <line x1="420" y1="440" x2="540" y2="440"/>
-    <path d="M540 440 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
-    <line x1="860" y1="440" x2="980" y2="440"/>
-    <path d="M980 440 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
-  </g>
+  <line x1="940" y1="450" x2="1060" y2="450" stroke="#e8b75c" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <text x="120" y="848" class="mono" font-size="20" fill="#a6a5a0">SIN POLLING MANUAL: LA UI SE ACTUALIZA POR SUSCRIPCIÓN</text>
+  <!-- Nodo 3: Scoring automático -->
+  <rect x="1080" y="380" width="300" height="140" rx="10" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+  <text x="1230" y="438" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">Puntuación</text>
+  <text x="1230" y="474" class="mono" font-size="16" fill="#5fd38a" text-anchor="middle">AUTOMÁTICA</text>
+
+  <!-- Retorno realtime al cliente (sin polling) -->
+  <path d="M1230 520 L1230 660 L750 660 L750 600" fill="none" stroke="#e8b75c" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)"/>
+  <text x="990" y="700" class="mono" font-size="18" fill="#a6a5a0" text-anchor="middle">PUSH REALTIME AL CLIENTE · SIN POLLING MANUAL</text>
+
+  <text x="120" y="848" class="body" font-size="22" fill="#a6a5a0">Las predicciones se puntúan solas cuando llega el resultado.</text>
 </svg>

@@ -1,57 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="LuminaEdit: el pipeline de segmentación corre completo en el navegador con aceleración WebGL">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Pipeline de LuminaEdit: imagen en memoria, TensorFlow.js con backend WebGL, máscara de segmentación y PNG transparente, todo dentro del dispositivo">
   <defs>
     <style>
       .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
       .display { font-family: "Space Grotesk", system-ui, sans-serif; }
       .body { font-family: "Inter", system-ui, sans-serif; }
     </style>
+    <marker id="le-arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M0 0 L8 5 L0 10" fill="none" stroke="#e8b75c" stroke-width="1.5"/>
+    </marker>
+    <pattern id="le-checker" width="28" height="28" patternUnits="userSpaceOnUse">
+      <rect width="28" height="28" fill="#15151a"/>
+      <rect width="14" height="14" fill="#1d1d24"/>
+      <rect x="14" y="14" width="14" height="14" fill="#1d1d24"/>
+    </pattern>
   </defs>
 
   <rect width="1600" height="900" fill="#0a0a0b"/>
-
   <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
-    <line x1="120" y1="0" x2="120" y2="900"/>
-    <line x1="1480" y1="0" x2="1480" y2="900"/>
-    <line x1="0" y1="120" x2="1600" y2="120"/>
-    <line x1="0" y1="780" x2="1600" y2="780"/>
+    <line x1="120" y1="120" x2="1480" y2="120"/>
+    <line x1="120" y1="780" x2="1480" y2="780"/>
   </g>
 
   <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">05 — LUMINAEDIT</text>
-  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">PIPELINE EN EL NAVEGADOR</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">PIPELINE · 100% LOCAL</text>
 
-  <text x="120" y="220" class="mono" font-size="20" fill="#a6a5a0">TODO OCURRE EN EL CLIENTE</text>
+  <!-- Límite del dispositivo (todo el proceso vive dentro) -->
+  <rect x="120" y="300" width="1360" height="320" rx="14" fill="none" stroke="rgba(95,211,138,0.45)" stroke-dasharray="10 8"/>
+  <text x="140" y="288" class="mono" font-size="16" fill="#5fd38a">LÍMITE DEL DISPOSITIVO · LA IMAGEN NUNCA SALE</text>
 
-  <g>
-    <rect x="120" y="360" width="280" height="150" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="260" y="430" class="display" font-size="24" fill="#f3f2ee" text-anchor="middle">Imagen</text>
-    <text x="260" y="464" class="mono" font-size="15" fill="#a6a5a0" text-anchor="middle">en memoria</text>
+  <!-- Etapa 1: imagen en memoria -->
+  <rect x="156" y="372" width="260" height="176" rx="10" fill="#2f5e7e"/>
+  <rect x="156" y="372" width="260" height="176" rx="10" fill="none" stroke="rgba(255,255,255,0.12)"/>
+  <circle cx="286" cy="446" r="46" fill="#caa17a"/>
+  <text x="286" y="588" class="mono" font-size="16" fill="#f3f2ee" text-anchor="middle">IMAGEN EN MEMORIA</text>
 
-    <rect x="480" y="360" width="280" height="150" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="620" y="424" class="display" font-size="24" fill="#f3f2ee" text-anchor="middle">Modelo</text>
-    <text x="620" y="458" class="mono" font-size="15" fill="#a6a5a0" text-anchor="middle">TensorFlow.js</text>
-    <text x="620" y="484" class="mono" font-size="15" fill="#e8b75c" text-anchor="middle">backend WebGL</text>
+  <line x1="430" y1="460" x2="500" y2="460" stroke="#e8b75c" stroke-width="2" marker-end="url(#le-arrow)"/>
 
-    <rect x="840" y="360" width="280" height="150" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="980" y="424" class="display" font-size="24" fill="#f3f2ee" text-anchor="middle">Máscara</text>
-    <text x="980" y="458" class="mono" font-size="15" fill="#a6a5a0" text-anchor="middle">segmentación</text>
+  <!-- Etapa 2: TF.js + WebGL -->
+  <rect x="516" y="372" width="280" height="176" rx="10" fill="#101012" stroke="rgba(232,183,92,0.45)"/>
+  <text x="656" y="436" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">TensorFlow.js</text>
+  <rect x="556" y="464" width="200" height="46" rx="6" fill="#0a0a0b" stroke="rgba(232,183,92,0.5)"/>
+  <text x="656" y="494" class="mono" font-size="16" fill="#e8b75c" text-anchor="middle">BACKEND WebGL · GPU</text>
+  <text x="656" y="588" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">INFERENCIA</text>
 
-    <rect x="1200" y="360" width="280" height="150" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="1340" y="424" class="display" font-size="24" fill="#f3f2ee" text-anchor="middle">PNG</text>
-    <text x="1340" y="458" class="mono" font-size="15" fill="#a6a5a0" text-anchor="middle">fondo transparente</text>
-    <text x="1340" y="484" class="mono" font-size="15" fill="#5fd38a" text-anchor="middle">descarga local</text>
-  </g>
+  <line x1="810" y1="460" x2="880" y2="460" stroke="#e8b75c" stroke-width="2" marker-end="url(#le-arrow)"/>
 
-  <g stroke="#e8b75c" stroke-width="2" fill="none">
-    <line x1="400" y1="435" x2="460" y2="435"/>
-    <path d="M460 435 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
-    <line x1="760" y1="435" x2="820" y2="435"/>
-    <path d="M820 435 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
-    <line x1="1120" y1="435" x2="1180" y2="435"/>
-    <path d="M1180 435 l-16 -8 v16 z" fill="#e8b75c" stroke="none"/>
-  </g>
+  <!-- Etapa 3: máscara de segmentación -->
+  <rect x="896" y="372" width="260" height="176" rx="10" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+  <rect x="936" y="392" width="180" height="120" rx="6" fill="#0a0a0b"/>
+  <path d="M1026 412 a34 34 0 0 1 0 68 a44 56 0 0 0 0 -68" fill="#f3f2ee"/>
+  <text x="1026" y="588" class="mono" font-size="16" fill="#a6a5a0" text-anchor="middle">MÁSCARA</text>
 
-  <rect x="120" y="620" width="1360" height="60" rx="6" fill="none" stroke="rgba(255,255,255,0.09)" stroke-dasharray="6 6"/>
-  <text x="800" y="658" class="mono" font-size="18" fill="#5fd38a" text-anchor="middle">LÍMITE DEL DISPOSITIVO — NINGÚN DATO LO CRUZA</text>
+  <line x1="1170" y1="460" x2="1240" y2="460" stroke="#e8b75c" stroke-width="2" marker-end="url(#le-arrow)"/>
 
-  <text x="120" y="848" class="mono" font-size="20" fill="#a6a5a0">PRIVACIDAD POR DISEÑO: SIN BACKEND, SIN SUBIDAS</text>
+  <!-- Etapa 4: PNG transparente -->
+  <rect x="1256" y="372" width="208" height="176" rx="10" fill="url(#le-checker)"/>
+  <rect x="1256" y="372" width="208" height="176" rx="10" fill="none" stroke="#e8b75c" stroke-opacity="0.5"/>
+  <circle cx="1360" cy="446" r="46" fill="#caa17a"/>
+  <text x="1360" y="588" class="mono" font-size="16" fill="#f3f2ee" text-anchor="middle">PNG TRANSPARENTE</text>
+
+  <text x="120" y="848" class="body" font-size="22" fill="#a6a5a0">Segmentación por GPU en el navegador: sin servidor, sin subir la imagen.</text>
 </svg>
