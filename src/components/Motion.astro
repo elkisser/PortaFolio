@@ -55,8 +55,13 @@
       :root[data-motion="css"] [data-reveal] {
         animation: motion-reveal linear both;
         animation-timeline: view();
-        /* Revela mientras el elemento entra: del 5% de "entry" al 30% de "cover". */
-        animation-range: entry 5% cover 30%;
+        /* Revela mientras el elemento entra y COMPLETA al estar totalmente dentro
+           (`entry 100%`). Antes terminaba en `cover 30%`, inalcanzable para el
+           último bloque de la página (no hay scroll suficiente): el reveal quedaba
+           a medias y el clip-path recortaba el contenido inferior (p. ej. los
+           enlaces de un case study). `entry 100%` sí se alcanza al llegar al
+           fondo, así ningún bloque queda parcialmente oculto. */
+        animation-range: entry 5% entry 100%;
         /* Layout-neutral: sólo clip-path/opacity/transform, en su propia capa. */
         will-change: clip-path, opacity, transform;
       }
