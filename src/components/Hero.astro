@@ -40,6 +40,7 @@ import Mono from "./primitives/Mono.astro";
 import Arrow from "./icons/Arrow.astro";
 import Github from "./icons/Github.astro";
 import Download from "./icons/Download.astro";
+import TechMarquee from "./TechMarquee.astro";
 import { getCollection } from "astro:content";
 import {
   useTranslations,
@@ -123,6 +124,10 @@ const categoryLabel = (categories: readonly string[]): string =>
     </div>
   </Grid>
 </Section>
+
+<!-- Stack: cinta de tecnologías entre la declaración y la prueba (design: con qué
+     trabajo, antes de mostrar los proyectos). -->
+<TechMarquee />
 
 <!-- 4. Prueba inmediata: mini-índice de destacados. `id="work"` = objetivo del
      scrollspy de la nav en la home (Req 4.1). Se omite si no hay entradas. -->

@@ -16,7 +16,6 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Hero from "../../components/Hero.astro";
-import TechMarquee from "../../components/TechMarquee.astro";
 import AboutIntro from "../../components/about/AboutIntro.astro";
 import Contact from "../../components/Contact.astro";
 import { useTranslations } from "../../lib/i18n";
@@ -27,7 +26,6 @@ const t = useTranslations("es");
 <BaseLayout lang="es" title="Inicio" description={t.hero_lead}>
   <main id="main" tabindex="-1">
     <Hero lang="es" />
-    <TechMarquee />
     <AboutIntro lang="es" index="02" more />
     <Contact lang="es" index="03" />
   </main>
