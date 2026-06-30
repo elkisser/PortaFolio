@@ -166,7 +166,7 @@ const categoryLabel = (categories: readonly string[]): string =>
      §4.3/§4.5). En desktop el contenido ocupa columnas desplazadas (no centrado).
      --------------------------------------------------------------------------- */
   .hero {
-    padding-block: var(--space-4xl) var(--space-2xl);
+    padding-block: var(--space-2xl) var(--space-xl);
   }
 
   .hero__grid {
@@ -270,6 +270,10 @@ const categoryLabel = (categories: readonly string[]): string =>
 
   /* Desktop: composición asimétrica intencional sobre 12 columnas. */
   @media (min-width: 768px) {
+    .hero {
+      padding-block: var(--space-4xl) var(--space-2xl);
+    }
+
     .hero__identity {
       grid-column: 1 / 10;
     }

@@ -195,6 +195,18 @@ const transitionName = `work-media-${slug}`;
     max-width: var(--measure);
   }
 
+  /* Mobile: resumen recortado a 2 líneas → lista más escaneable (menos densidad).
+     En desktop se muestra completo (el contenido no cambia, solo su presentación). */
+  @media (max-width: 767px) {
+    .card__summary {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+
   .card__meta {
     display: flex;
     flex-wrap: wrap;
