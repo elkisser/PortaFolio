@@ -118,6 +118,7 @@ const collaborations = selectPublishedCollaborations().map((c) => ({
   role: localizedText(c.role, lang),
   stack: c.stack ?? [],
   url: c.url,
+  links: c.links ?? [],
   showPrivateTag: c.private === true && !c.url,
 }));
 const hasCollaborations = collaborations.length > 0;
@@ -293,6 +294,22 @@ const titleId = "gh-evidence-title";
                       <p class="gh__collab-stack">
                         {c.stack.map((tech) => (
                           <Mono class="gh__collab-tech">{tech}</Mono>
+                        ))}
+                      </p>
+                    )}
+
+                    {c.links && c.links.length > 0 && (
+                      <p class="gh__collab-links">
+                        {c.links.map((link) => (
+                          <a
+                            class="gh__collab-dl"
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Mono>{link.label}</Mono>
+                            <ExternalLink size={14} />
+                          </a>
                         ))}
                       </p>
                     )}
@@ -627,6 +644,31 @@ const titleId = "gh-evidence-title";
 
   .gh__collab-tech {
     color: var(--paper-dim);
+  }
+
+  /* Enlaces de descarga/demo de la colaboración: fila de enlaces mono con
+     hairline ámbar inferior (mismo lenguaje que el enlace "Demo" de los repos). */
+  .gh__collab-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    margin: 0;
+    margin-block-start: var(--space-2xs);
+  }
+
+  .gh__collab-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding-block-end: var(--space-3xs);
+    color: var(--paper);
+    text-decoration: none;
+    border-block-end: 1px solid var(--amber);
+    transition: gap var(--dur-fast) var(--ease);
+  }
+
+  .gh__collab-dl:hover {
+    gap: var(--space-2xs);
   }
 
   .gh__empty {

@@ -3,8 +3,9 @@
    -----------------------------------------------------------------------------
    Verifica el contrato de `src/content/data/collaborations.ts`:
    - `selectPublishedCollaborations` solo deja pasar entradas `published: true`.
-   - `Club del Barril` está publicada como colaboración PRIVADA: sin URL pública
-     (no se enlaza a un repo privado que daría 404) y con copy localizado ES/EN.
+   - `Club del Barril` está publicada como colaboración full-stack con enlace
+     público (landing del backoffice) y descargas de la app (Android/iOS), y con
+     copy localizado ES/EN.
    - `localizedText` resuelve copy localizable al idioma pedido, con fallbacks y
      sin devolver cadenas vacías.
    - Invariante universal (fast-check): el resultado es siempre un subconjunto de
@@ -29,13 +30,19 @@ describe("collaborations: fuente curada", () => {
     }
   });
 
-  it("incluye Club del Barril como colaboración PRIVADA publicada", () => {
+  it("incluye Club del Barril como colaboración full-stack publicada", () => {
     const club = COLLABORATIONS.find((c) => c.name === "Club del Barril");
     expect(club).toBeDefined();
     expect(club?.published).toBe(true);
-    expect(club?.private).toBe(true);
-    // Privada: sin URL pública (evita un enlace muerto a un repo 404).
-    expect(club?.url).toBeUndefined();
+    // Producto público (Cerveza Santa Fe): tiene landing pública + descargas.
+    expect(club?.url).toBe("https://club-barril-backoffice-dev.netlify.app/");
+    // Links de descarga de la app (Android + iOS) extraídos de la landing.
+    const labels = (club?.links ?? []).map((l) => l.label);
+    expect(labels).toContain("Google Play");
+    expect(labels).toContain("App Store");
+    for (const link of club?.links ?? []) {
+      expect(link.href).toMatch(/^https:\/\//);
+    }
     // Copy honesto y localizado en ambos idiomas: plataforma completa (no solo
     // backend) — refleja que se construyó la app entera.
     expect(localizedText(club?.description, "es")).toMatch(/fidelización/i);
@@ -44,13 +51,13 @@ describe("collaborations: fuente curada", () => {
     expect(localizedText(club?.role, "en")).toMatch(/full stack/i);
   });
 
-  it("Club del Barril aparece entre las publicadas y se renderiza como privada", () => {
+  it("Club del Barril aparece entre las publicadas con enlace público (sin etiqueta de privado)", () => {
     const published = selectPublishedCollaborations();
     const club = published.find((c) => c.name === "Club del Barril");
     expect(club).toBeDefined();
-    // Sin URL ⟹ la UI mostrará la etiqueta "Repositorio privado" en vez de enlace.
-    expect(club?.url).toBeUndefined();
-    expect(club?.private).toBe(true);
+    // Con URL pública, la UI no muestra la etiqueta "Repositorio privado"
+    // (showPrivateTag = private && !url): hay enlace real, no muerto.
+    expect(club?.url).toBeTruthy();
   });
 });
 
