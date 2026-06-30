@@ -1,0 +1,157 @@
+---
+/**
+ * NavProgress — barra de progreso de navegación (feedback de carga al cambiar de
+ * página con View Transitions / `ClientRouter`).
+ *
+ * Problema que resuelve: entre que el usuario activa un enlace y la página nueva
+ * llega, hay una espera (fetch de la página) sin feedback; en mobile y desktop
+ * "queda raro" esperar sin señal. Esta barra superior aparece al iniciar la
+ * navegación y se completa al cargar, dando feedback inmediato (el prefetch de
+ * `astro.config.mjs` reduce además la espera real).
+ *
+ * Implementación: se engancha a los eventos del ciclo de vida del router
+ * (Astro 5):
+ *   - `astro:before-preparation` → inicia (la navegación arranca).
+ *   - `astro:after-swap`         → la página nueva ya está en el DOM → completa.
+ *   - `astro:page-load`          → red de seguridad para completar/ocultar.
+ * Doc: https://v5.docs.astro.build/en/reference/modules/astro-transitions/
+ *
+ * La barra se crea e inserta en `document.documentElement` (no en el `<body>`),
+ * de modo que SOBREVIVE al swap del body que hace el router; si viviera en el
+ * body desaparecería justo durante la transición.
+ *
+ * Script de módulo (no `is:inline`): Astro lo ejecuta UNA vez y no lo re-ejecuta
+ * en cada navegación, así los listeners a nivel `document` se registran una sola
+ * vez y persisten entre vistas.
+ *
+ * Accesibilidad / reduced-motion: la barra es feedback funcional, no decoración.
+ * Lleva `role="progressbar"` + `aria-hidden` cuando está inactiva. Bajo
+ * `prefers-reduced-motion: reduce`, el contrato global de `BaseLayout` neutraliza
+ * las transiciones: la barra deja de "deslizarse" y simplemente aparece/desaparece,
+ * lo que sigue comunicando que algo está cargando sin movimiento llamativo.
+ */
+---
+
+<style is:global>
+  /* Barra de progreso de navegación. `position: fixed` arriba de todo; un solo
+     acento ámbar (design.md §4.3), sin glow. Se controla por JS vía `--nav-progress`
+     (0–1) y el atributo `data-state` (idle | loading | done). */
+  .nav-progress {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 2000; /* por encima del skip-link (1000) y la nav (100) */
+    block-size: 3px;
+    transform-origin: 0 50%;
+    transform: scaleX(var(--nav-progress, 0));
+    background-color: var(--amber);
+    /* Doble capa de feedback: un leve resplandor de borde derecho sin usar blur
+       decorativo (coherente con "sin glow"): solo un degradado de tinta al final. */
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--amber) 35%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform var(--dur-mid, 500ms) var(--ease, ease),
+      opacity var(--dur-fast, 300ms) var(--ease, ease);
+  }
+
+  .nav-progress[data-state="loading"] {
+    opacity: 1;
+  }
+
+  .nav-progress[data-state="done"] {
+    opacity: 0;
+    /* Al completar, el fade-out espera a que la barra llegue al 100%. */
+    transition:
+      transform var(--dur-fast, 300ms) var(--ease, ease),
+      opacity var(--dur-fast, 300ms) var(--ease, ease) var(--dur-fast, 300ms);
+  }
+</style>
+
+<script>
+  import { transitionEnabledOnThisPage } from "astro:transitions/client";
+
+  /**
+   * Controlador de la barra de progreso de navegación. Crea el elemento una vez
+   * y lo gestiona con los eventos del router. Idempotente: si ya existe la barra
+   * (p. ej. doble ejecución defensiva), no crea otra.
+   */
+  function setupNavProgress(): void {
+    const HALT = 0.9; // tope mientras carga: nunca llega al 100% hasta completar.
+    let bar: HTMLElement | null = null;
+    let trickle: number | undefined;
+    let progress = 0;
+
+    function ensureBar(): HTMLElement {
+      const existing = document.querySelector<HTMLElement>(".nav-progress");
+      if (existing) return existing;
+      const el = document.createElement("div");
+      el.className = "nav-progress";
+      el.setAttribute("role", "progressbar");
+      el.setAttribute("aria-label", "Cargando página");
+      el.setAttribute("aria-hidden", "true");
+      el.dataset.state = "idle";
+      // Se cuelga del <html> para sobrevivir al swap del <body> del router.
+      document.documentElement.appendChild(el);
+      return el;
+    }
+
+    function set(value: number): void {
+      progress = Math.max(0, Math.min(1, value));
+      bar?.style.setProperty("--nav-progress", String(progress));
+      bar?.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
+    }
+
+    function start(): void {
+      bar = ensureBar();
+      window.clearInterval(trickle);
+      set(0.08);
+      bar.dataset.state = "loading";
+      bar.setAttribute("aria-hidden", "false");
+      // "Trickle": avanza despacio hacia el tope para sugerir progreso aunque no
+      // conozcamos el tiempo real de carga.
+      trickle = window.setInterval(() => {
+        const remaining = HALT - progress;
+        if (remaining <= 0.001) return;
+        set(progress + remaining * 0.12);
+      }, 220);
+    }
+
+    function done(): void {
+      if (!bar || bar.dataset.state === "idle") return;
+      window.clearInterval(trickle);
+      set(1);
+      bar.dataset.state = "done";
+      bar.setAttribute("aria-hidden", "true");
+      // Tras el fade-out, resetear para la próxima navegación.
+      window.setTimeout(() => {
+        if (!bar) return;
+        bar.dataset.state = "idle";
+        set(0);
+      }, 400);
+    }
+
+    // Si el navegador no usa View Transitions en esta página, no hay eventos de
+    // router que enganchar: la barra simplemente nunca se activa (sin coste).
+    if (!transitionEnabledOnThisPage()) return;
+
+    document.addEventListener("astro:before-preparation", start);
+    // `after-swap`: la página nueva ya está en el DOM → completar.
+    document.addEventListener("astro:after-swap", done);
+    // Red de seguridad: si algo no disparó `after-swap`, `page-load` cierra.
+    document.addEventListener("astro:page-load", done);
+  }
+
+  // Guard: registrar los listeners una sola vez aunque el script se evalúe de
+  // nuevo (defensivo ante reinyecciones).
+  if (!window.__navProgressReady) {
+    window.__navProgressReady = true;
+    setupNavProgress();
+  }
+
+  declare global {
+    interface Window {
+      __navProgressReady?: boolean;
+    }
+  }
+</script>

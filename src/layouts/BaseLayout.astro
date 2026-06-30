@@ -40,6 +40,7 @@ import {
 import { LOCALES, DEFAULT_LOCALE, localizedPath, type Locale } from "../lib/i18n";
 import Nav from "../components/Nav.astro";
 import Motion from "../components/Motion.astro";
+import NavProgress from "../components/NavProgress.astro";
 
 interface Props {
   /** Título de la página (sin el sufijo del sitio); opcional para la home. */
@@ -172,6 +173,10 @@ const xDefaultHref = absoluteUrl(localizedPath(currentPath, DEFAULT_LOCALE), sit
   </head>
 
   <body>
+    <!-- Barra de progreso de navegación: feedback de carga al cambiar de vista
+         con View Transitions (mobile + desktop). Se cuelga del <html> vía JS. -->
+    <NavProgress />
+
     <!-- Skip-link al contenido principal (a11y). La página provee <main id="main">. -->
     <a class="skip-link" href="#main">Saltar al contenido</a>
 

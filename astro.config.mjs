@@ -11,6 +11,18 @@ export default defineConfig({
   site: 'https://elkisser.github.io',
   integrations: [mdx()],
 
+  // Prefetch: precarga las páginas antes de navegar para eliminar la espera al
+  // cambiar de vista (la demora que se siente con View Transitions). Con
+  // `prefetchAll` todos los enlaces internos se precargan y `defaultStrategy:
+  // 'viewport'` cubre mobile (precarga al entrar el enlace en pantalla, donde no
+  // hay hover) y desktop. La barra de progreso (`NavProgress`) da feedback para
+  // los casos en que el prefetch aún no terminó.
+  // Doc: https://v5.docs.astro.build/en/guides/prefetch/
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
+
   // i18n routing real `/es` `/en` (Req 8.1, design.md §5.1).
   // `prefixDefaultLocale: true` hace que AMBOS idiomas lleven prefijo de URL,
   // produciendo rutas reales e indexables `/es` y `/en` (con
