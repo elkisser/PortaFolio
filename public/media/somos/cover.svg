@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="SoMoS: portada editorial del sitio de una agencia de desarrollo digital">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="SoMoS: agencia digital que desarrolla experiencias web que venden">
   <defs>
     <style>
       .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
@@ -16,37 +16,51 @@
     <line x1="0" y1="780" x2="1600" y2="780"/>
   </g>
 
+  <!-- Índice editorial -->
   <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">06 — SOMOS</text>
-  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">FRONTEND · AGENCIA</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">AGENCIA · ASTRO</text>
 
-  <!-- Barra de navegación de la agencia -->
-  <text x="120" y="206" class="mono" font-size="20" fill="#f3f2ee">SoMoS</text>
-  <g class="mono" font-size="16" fill="#a6a5a0">
-    <text x="1100" y="206">SERVICIOS</text>
-    <text x="1250" y="206">TRABAJOS</text>
-    <text x="1400" y="206">CONTACTO</text>
-  </g>
-  <line x1="120" y1="232" x2="1480" y2="232" stroke="rgba(255,255,255,0.09)"/>
+  <!-- Declaración de marca -->
+  <text x="120" y="232" class="mono" font-size="20" fill="#a6a5a0">SOLUCIONES QUE GENERAN RESULTADOS</text>
+  <text x="120" y="320" class="display" font-size="72" fill="#f3f2ee">Tu ventaja</text>
+  <text x="120" y="404" class="display" font-size="72" fill="#e8b75c">competitiva.</text>
+  <text x="120" y="470" class="body" font-size="26" fill="#a6a5a0">Experiencias digitales que venden: de tiendas</text>
+  <text x="120" y="506" class="body" font-size="26" fill="#a6a5a0">online que convierten a marcas que enamoran.</text>
 
-  <!-- Titular editorial -->
-  <text x="120" y="380" class="display" font-size="92" fill="#f3f2ee">Construimos</text>
-  <text x="120" y="470" class="display" font-size="92" fill="#f3f2ee">productos <tspan fill="#e8b75c">digitales</tspan>.</text>
-  <text x="120" y="540" class="body" font-size="26" fill="#a6a5a0">Estrategia, diseño y desarrollo para marcas que quieren crecer.</text>
-
-  <!-- CTA -->
-  <rect x="120" y="582" width="240" height="56" rx="6" fill="#e8b75c"/>
-  <text x="240" y="618" class="mono" font-size="16" fill="#14110a" text-anchor="middle">EMPEZAR PROYECTO</text>
-
-  <!-- Tarjetas de servicios -->
+  <!-- Métricas (sin vanidad: capacidades) -->
   <g>
-    <rect x="120" y="690" width="420" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="148" y="728" class="body" font-size="22" fill="#f3f2ee">Diseño de producto</text>
-    <rect x="572" y="690" width="420" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="600" y="728" class="body" font-size="22" fill="#f3f2ee">Desarrollo web</text>
-    <rect x="1024" y="690" width="456" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
-    <text x="1052" y="728" class="body" font-size="22" fill="#f3f2ee">Branding e identidad</text>
+    <text x="120" y="606" class="display" font-size="48" fill="#f3f2ee">9+</text>
+    <text x="120" y="640" class="mono" font-size="16" fill="#a6a5a0">PROYECTOS</text>
+    <line x1="300" y1="566" x2="300" y2="648" stroke="rgba(255,255,255,0.1)"/>
+    <text x="348" y="606" class="display" font-size="48" fill="#f3f2ee">6+</text>
+    <text x="348" y="640" class="mono" font-size="16" fill="#a6a5a0">WEB APPS</text>
+    <line x1="540" y1="566" x2="540" y2="648" stroke="rgba(255,255,255,0.1)"/>
+    <text x="588" y="606" class="display" font-size="48" fill="#f3f2ee">3+</text>
+    <text x="588" y="640" class="mono" font-size="16" fill="#a6a5a0">CLIENTES</text>
   </g>
 
-  <text x="120" y="848" class="mono" font-size="20" fill="#5fd38a">TRANSICIONES Y MICROINTERACCIONES CON FRAMER MOTION</text>
-  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Astro 5 · React · TypeScript</text>
+  <!-- Trabajos destacados (columna derecha) -->
+  <text x="960" y="208" class="mono" font-size="20" fill="#a6a5a0">TRABAJOS DESTACADOS</text>
+
+  <rect x="960" y="236" width="520" height="120" rx="8" fill="#101012" stroke="rgba(232,183,92,0.45)"/>
+  <rect x="984" y="260" width="72" height="72" rx="6" fill="#b9824f"/>
+  <circle cx="1020" cy="296" r="22" fill="#8a5a2f"/>
+  <text x="1080" y="292" class="display" font-size="26" fill="#f3f2ee">The Cookie Box</text>
+  <text x="1080" y="324" class="mono" font-size="15" fill="#e8b75c">E-COMMERCE · DESTACADO</text>
+
+  <rect x="960" y="372" width="520" height="120" rx="8" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <rect x="984" y="396" width="72" height="72" rx="6" fill="#161619"/>
+  <text x="1020" y="442" class="display" font-size="30" fill="#d9613c" text-anchor="middle">?</text>
+  <text x="1080" y="428" class="display" font-size="26" fill="#f3f2ee">Yo No Fui</text>
+  <text x="1080" y="460" class="mono" font-size="15" fill="#a6a5a0">REACT APP · IA</text>
+
+  <rect x="960" y="508" width="520" height="120" rx="8" fill="#101012" stroke="rgba(255,255,255,0.09)"/>
+  <rect x="984" y="532" width="72" height="72" rx="6" fill="#2f5e7e"/>
+  <text x="1020" y="578" class="display" font-size="26" fill="#f3f2ee" text-anchor="middle">{ }</text>
+  <text x="1080" y="564" class="display" font-size="26" fill="#f3f2ee">Portfolios &amp; web</text>
+  <text x="1080" y="596" class="mono" font-size="15" fill="#a6a5a0">DISEÑO + DESARROLLO</text>
+
+  <!-- Pie -->
+  <text x="120" y="848" class="display" font-size="26" fill="#f3f2ee">Tu partner tecnológico en Santa Fe.</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Astro · React/Next · Symfony · Tailwind</text>
 </svg>
