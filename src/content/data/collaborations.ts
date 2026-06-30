@@ -125,11 +125,11 @@ export const COLLABORATIONS: readonly Collaboration[] = [
     // Club del Barril — programa de fidelización PÚBLICO y en producción de
     // Cerveza Santa Fe. Sebas participó en la construcción de la aplicación
     // COMPLETA: API (NestJS), panel de administración (backoffice) y app de
-    // socios (publicada en Android e iOS). El backoffice tiene una landing
-    // pública de marketing (club-barril-backoffice-dev.netlify.app) con las
-    // descargas; los REPOS siguen siendo privados/comerciales, pero el producto
-    // es público, así que se enlaza la landing + las tiendas (no hay enlace
-    // muerto y por eso no se muestra la etiqueta "Repositorio privado").
+    // socios (publicada en Android e iOS). El sitio público de marketing
+    // (clubdelbarril.com) tiene las descargas; los REPOS siguen siendo
+    // privados/comerciales, pero el producto es público, así que se enlaza el
+    // sitio + las tiendas (no hay enlace muerto y por eso no se muestra la
+    // etiqueta "Repositorio privado").
     // Stack real verificado en los `package.json` del proyecto.
     name: "Club del Barril",
     description: {
@@ -150,7 +150,7 @@ export const COLLABORATIONS: readonly Collaboration[] = [
       "Tailwind CSS",
       "Firebase",
     ],
-    url: "https://club-barril-backoffice-dev.netlify.app/",
+    url: "https://clubdelbarril.com/",
     links: [
       {
         label: "Google Play",

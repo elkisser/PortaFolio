@@ -129,6 +129,39 @@ const hasLinks = Boolean(data.links.demo ?? data.links.repo);
 
           <Text as="h1" font="display" step="4" class="cs__title">{data.title}</Text>
           <Text class="cs__summary" tone="dim" step="1" measure>{data.summary}</Text>
+
+          <!-- Acciones visibles al entrar (Req 5.2): ir al proyecto en vivo y al
+               código. Externas con rel noopener (Req 12.4). Se repiten al pie en
+               la sección "Enlaces" como cierre editorial. -->
+          {
+            hasLinks && (
+              <div class="cs__actions">
+                {data.links.demo && (
+                  <a
+                    class="cs__action cs__action--primary"
+                    href={data.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Demo size={18} />
+                    <Mono>{t.link_demo}</Mono>
+                    <Arrow size={16} class="cs__action-arrow" />
+                  </a>
+                )}
+                {data.links.repo && (
+                  <a
+                    class="cs__action"
+                    href={data.links.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Repo size={18} />
+                    <Mono>{t.link_code}</Mono>
+                  </a>
+                )}
+              </div>
+            )
+          }
         </header>
 
         <!-- Medio principal (hero): porta el `transition:name` del morph y reserva
@@ -369,6 +402,58 @@ const hasLinks = Boolean(data.links.demo ?? data.links.repo);
 
   .cs__summary {
     margin: 0;
+  }
+
+  /* Acciones del header: demo (primaria, relleno ámbar) + repo (hairline).
+     Visibles al entrar, sin scrollear hasta el pie. */
+  .cs__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+    margin-block-start: var(--space-xs);
+  }
+
+  .cs__action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-md);
+    color: var(--paper);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
+  }
+
+  .cs__action:hover {
+    border-color: var(--amber);
+  }
+
+  /* Primaria (demo en vivo): relleno ámbar; el Mono hereda la tinta del acento
+     (si no, quedaría gris claro casi ilegible sobre el ámbar). */
+  .cs__action--primary {
+    color: var(--amber-ink);
+    background-color: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .cs__action--primary :global(.mono) {
+    color: var(--amber-ink);
+  }
+
+  .cs__action--primary:hover {
+    background-color: var(--amber-hi);
+    border-color: var(--amber-hi);
+  }
+
+  .cs__action :global(.cs__action-arrow) {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .cs__action--primary:hover :global(.cs__action-arrow) {
+    transform: translateX(3px);
   }
 
   /* Medio principal: aspecto consistente, radius bajo, sin sombras (CLS 0). */

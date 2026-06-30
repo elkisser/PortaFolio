@@ -34,8 +34,8 @@ describe("collaborations: fuente curada", () => {
     const club = COLLABORATIONS.find((c) => c.name === "Club del Barril");
     expect(club).toBeDefined();
     expect(club?.published).toBe(true);
-    // Producto público (Cerveza Santa Fe): tiene landing pública + descargas.
-    expect(club?.url).toBe("https://club-barril-backoffice-dev.netlify.app/");
+    // Producto público (Cerveza Santa Fe): tiene sitio público + descargas.
+    expect(club?.url).toBe("https://clubdelbarril.com/");
     // Links de descarga de la app (Android + iOS) extraídos de la landing.
     const labels = (club?.links ?? []).map((l) => l.label);
     expect(labels).toContain("Google Play");
