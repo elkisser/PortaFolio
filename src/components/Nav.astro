@@ -305,9 +305,11 @@ const homeHref = localizedPath("/", lang);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: var(--maxw);
-      margin-inline: auto;
-      padding-inline: var(--space-md);
+      /* Barra full-width: el fondo y la hairline inferior llegan a los bordes del
+         viewport; el contenido se centra en una columna de `--maxw` con padding
+         dinámico (sin wrapper extra). Antes `.nav` tenía `max-width`, así que la
+         barra se "ajustaba al contenido" y no tocaba los bordes en pantallas anchas. */
+      padding-inline: max(var(--space-md), calc((100% - var(--maxw)) / 2));
     }
 
     .nav__bar {

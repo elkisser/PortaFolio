@@ -1,0 +1,139 @@
+---
+/**
+ * TechMarquee — cinta (slider) de tecnologías en movimiento, debajo del Hero.
+ *
+ * Recupera el "tech marquee" del sitio previo (commit 44d7de9), reconstruido con
+ * el LENGUAJE editorial del sistema: etiqueta fija en mono (como los índices de
+ * sección "01 — Work"), separadores en el único cálido (ámbar), hairlines de 1px
+ * y máscara de desvanecido en el borde. A pedido del usuario: aunque design.md
+ * §5.2 lo había marcado para eliminar, se reintegra como gesto de identidad.
+ *
+ * 100% CSS: sin JS ni isla (cero coste de bundle). La cinta repite la secuencia
+ * dos veces y se desplaza `-50%` para un loop sin costuras. Decorativo
+ * (`aria-hidden`): el stack accesible y con contexto vive en About (Stack), así
+ * que la cinta no duplica ruido para lectores de pantalla. Respeta
+ * `prefers-reduced-motion`: se detiene y queda legible (Req 10.2).
+ */
+const TECHS = [
+  "PHP",
+  "Symfony",
+  "React",
+  "Next.js",
+  "Astro",
+  "TypeScript",
+  "Tailwind CSS",
+  "Node.js",
+  "MySQL",
+  "PostgreSQL",
+  "Firebase",
+  "Supabase",
+  "Doctrine",
+  "UX / UI",
+];
+
+// Secuencia duplicada → loop sin costuras con translateX(-50%).
+const SEQUENCE = [...TECHS, ...TECHS];
+---
+
+<div class="techbar" aria-hidden="true">
+  <!-- Etiqueta fija: motivo de índice editorial en mono (no se desplaza). -->
+  <span class="techbar__tag">STACK</span>
+
+  <div class="marquee">
+    <div class="marquee__track">
+      {
+        SEQUENCE.map((tech) => (
+          <Fragment>
+            <span class="marquee__item">{tech}</span>
+            <i class="marquee__sep">✦</i>
+          </Fragment>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .techbar {
+    position: relative;
+    /* Hairlines estructurales arriba y abajo (firma del sistema). */
+    border-block: 1px solid var(--line);
+    background-color: var(--ink-900);
+  }
+
+  /* Etiqueta "STACK": fija a la izquierda, alineada a la columna de contenido
+     (--maxw) con padding dinámico, fondo sólido para tapar el texto que pasa por
+     detrás y hairline vertical de separación. Lenguaje mono + ámbar del sistema. */
+  .techbar__tag {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding-inline: max(var(--space-md), calc((100% - var(--maxw)) / 2)) var(--space-md);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--amber);
+    background-color: var(--ink-900);
+    border-inline-end: 1px solid var(--line);
+  }
+
+  .marquee {
+    overflow: hidden;
+    padding-block: var(--space-lg);
+    /* Desvanecido en el borde derecho: la cinta "sale" sin corte duro. */
+    -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, #000 86%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    gap: clamp(var(--space-lg), 4vw, var(--space-2xl));
+    width: max-content;
+    animation: tech-marquee 48s linear infinite;
+  }
+
+  /* Pausa al pasar el cursor: invita a leer sin perseguir el texto. */
+  .techbar:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--paper-dim);
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .techbar:hover .marquee__item {
+    color: var(--paper);
+  }
+
+  /* Separador: el único cálido del sistema (ámbar). */
+  .marquee__sep {
+    color: var(--amber);
+    font-size: 0.8rem;
+    font-style: normal;
+  }
+
+  @keyframes tech-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Reduced-motion (Req 10.2): la cinta se detiene; el contenido queda visible. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+      transform: none;
+    }
+  }
+</style>
