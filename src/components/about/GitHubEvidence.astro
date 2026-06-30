@@ -678,6 +678,19 @@ const titleId = "gh-evidence-title";
     align-items: flex-start;
   }
 
+  /* Mobile: descripciones de repos y colaboraciones recortadas a 2 líneas para
+     reducir densidad; completas en desktop (el contenido no cambia). */
+  @media (max-width: 767px) {
+    .gh__repo-desc,
+    .gh__collab-desc {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+
   /* Desktop: la lista de repos respira con la columna de número desplazada. */
   @media (min-width: 768px) {
     .gh__item-main {

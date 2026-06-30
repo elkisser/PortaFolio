@@ -121,8 +121,8 @@ const hasLinks = Boolean(data.links.demo ?? data.links.repo);
         <header class="cs__header" data-reveal>
           <p class="cs__identity">
             <Mono accent>{String(data.year)}</Mono>
-            <Mono class="cs__sep" aria-hidden="true">/</Mono>
-            <Mono>{data.role}</Mono>
+            <Mono class="cs__sep cs__sep--role" aria-hidden="true">/</Mono>
+            <Mono class="cs__role-meta">{data.role}</Mono>
             <Mono class="cs__sep" aria-hidden="true">/</Mono>
             <Mono>{categoryLabel}</Mono>
           </p>
@@ -402,6 +402,16 @@ const hasLinks = Boolean(data.links.demo ?? data.links.repo);
 
   .cs__summary {
     margin: 0;
+  }
+
+  /* Mobile: el rol completo (a veces una oración larga) se omite de la línea de
+     metadatos para no saturar; sigue visible en la sección "Rol". Queda año /
+     categoría, más escaneable. */
+  @media (max-width: 767px) {
+    .cs__role-meta,
+    .cs__sep--role {
+      display: none;
+    }
   }
 
   /* Acciones del header: demo (primaria, relleno ámbar) + repo (hairline).
