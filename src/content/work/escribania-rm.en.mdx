@@ -1,0 +1,45 @@
+---
+# Media decision (§2.5): composed SVG mockups (not raw screenshots) representing
+# the guided capture and the Form 08 generation, faithful to the deployed app
+# (escribania-lp.vercel.app). 16:9 ratio, alt and dimensions for CLS 0.
+title: "Escribanía RM"
+year: 2026
+category: ["fullstack", "tooling"]
+summary: "Platform for notary offices that digitizes vehicle transfers: guided capture and generation of the official Form 08 as a PDF."
+problem: "Notary offices fill in the vehicle transfer Form 08 by hand: it's slow, error-prone and hard to reuse across cases. The capture needed to be digitized and the official Form 08 generated without errors, accessible from any device."
+role: "Full Stack — platform design, data model, authentication and the official Form 08 PDF generation engine."
+decisions:
+  - decision: "Next.js 16 (App Router) with Supabase for data and authentication"
+    rationale: "A single stack for the UI, protected routes and persistence; Supabase provides managed auth and Postgres, with no custom backend to build and maintain for a small team."
+  - decision: "PDF generation with pdf-lib, mapping each field to its legal position on Form 08"
+    rationale: "The official form has fixed positions; mapping the data to coordinates produces a valid, submittable PDF without fragile templates or manual cropping."
+  - decision: "Step-by-step capture with a drafts system"
+    rationale: "A case gathers a lot of data (seller, buyer, vehicle); splitting capture into steps and saving drafts avoids losing progress and reduces typing errors."
+challenges:
+  - "Precisely mapping each value to its legal position on the official Form 08."
+  - "Designing a mobile-first capture flow that's genuinely usable both in the office and in the field."
+result: "The office enters the data once and gets the official Form 08 as a print-ready PDF, with history and drafts; fewer input errors and markedly faster paperwork."
+stack: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS", "Framer Motion", "pdf-lib"]
+media:
+  - type: "image"
+    src: "/media/escribania-rm/cover.svg"
+    alt: "Escribanía RM: a guided step-by-step capture (seller, buyer and vehicle) that generates the official Form 08 as a PDF on the right."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/escribania-rm/form.svg"
+    alt: "Detail of Escribanía RM's mapping: captured data is placed at the legal coordinates of Form 08 and exported with pdf-lib."
+    width: 1600
+    height: 900
+links:
+  demo: "https://escribania-lp.vercel.app/"
+  repo: "https://github.com/elkisser/escribania-lp"
+featured: true
+order: 2
+lang: en
+---
+
+Escribanía RM digitizes a notary office's most repetitive task: car and
+motorcycle transfers. Instead of typing Form 08 by hand, the operator enters the
+data through a guided flow and the platform generates the official Form 08 as a
+PDF, with history and drafts to resume any case.

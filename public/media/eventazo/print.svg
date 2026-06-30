@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Layout de impresión A4 de Eventazo: cinco tickets horizontales más dos verticales rotados al costado, siete por página con líneas de corte">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="120" x2="1480" y2="120"/>
+    <line x1="120" y1="780" x2="1480" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">05 — EVENTAZO</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">IMPRESIÓN A4 · 7 POR PÁGINA</text>
+
+  <!-- Hoja A4 (vertical) con los tickets -->
+  <rect x="600" y="170" width="424" height="600" rx="6" fill="#f3f2ee"/>
+  <rect x="600" y="170" width="424" height="600" rx="6" fill="none" stroke="#e8b75c" stroke-opacity="0.5"/>
+  <text x="612" y="196" class="mono" font-size="13" fill="#8a8980">A4 · 210 × 297 mm</text>
+
+  <!-- 5 tickets horizontales (columna izquierda) -->
+  <g>
+    <rect x="616" y="212" width="270" height="100" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+    <rect x="616" y="324" width="270" height="100" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+    <rect x="616" y="436" width="270" height="100" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+    <rect x="616" y="548" width="270" height="100" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+    <rect x="616" y="660" width="270" height="94" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+  </g>
+  <!-- numeritos + talón (divisoria 72/28) en cada ticket horizontal -->
+  <g>
+    <line x1="820" y1="212" x2="820" y2="312" stroke="#d8c9a3" stroke-dasharray="4 4"/>
+    <line x1="820" y1="324" x2="820" y2="424" stroke="#d8c9a3" stroke-dasharray="4 4"/>
+    <line x1="820" y1="436" x2="820" y2="536" stroke="#d8c9a3" stroke-dasharray="4 4"/>
+    <line x1="820" y1="548" x2="820" y2="648" stroke="#d8c9a3" stroke-dasharray="4 4"/>
+    <line x1="820" y1="660" x2="820" y2="754" stroke="#d8c9a3" stroke-dasharray="4 4"/>
+  </g>
+  <g class="mono" font-size="13" fill="#14110a">
+    <text x="632" y="268">RIFA · H1</text><text x="806" y="268" text-anchor="end" fill="#b06a2c">001</text>
+    <text x="632" y="380">RIFA · H2</text><text x="806" y="380" text-anchor="end" fill="#b06a2c">002</text>
+    <text x="632" y="492">RIFA · H3</text><text x="806" y="492" text-anchor="end" fill="#b06a2c">003</text>
+    <text x="632" y="604">RIFA · H4</text><text x="806" y="604" text-anchor="end" fill="#b06a2c">004</text>
+    <text x="632" y="714">RIFA · H5</text><text x="806" y="714" text-anchor="end" fill="#b06a2c">005</text>
+  </g>
+
+  <!-- 2 tickets verticales rotados (columna derecha) -->
+  <g>
+    <rect x="906" y="212" width="100" height="260" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+    <rect x="906" y="484" width="100" height="270" rx="4" fill="#fbf5e7" stroke="#d8c9a3"/>
+  </g>
+  <g class="mono" font-size="13" fill="#14110a">
+    <text x="956" y="345" text-anchor="middle" transform="rotate(90 956 345)">RIFA · V1</text>
+    <text x="956" y="620" text-anchor="middle" transform="rotate(90 956 620)">RIFA · V2</text>
+  </g>
+  <g class="mono" font-size="12" fill="#b06a2c">
+    <text x="990" y="232" text-anchor="end" transform="rotate(90 990 232)">006</text>
+    <text x="990" y="504" text-anchor="end" transform="rotate(90 990 504)">007</text>
+  </g>
+
+  <!-- Anotaciones laterales -->
+  <text x="200" y="300" class="display" font-size="34" fill="#f3f2ee">5 horizontales</text>
+  <text x="200" y="344" class="display" font-size="34" fill="#f3f2ee">+ 2 verticales</text>
+  <text x="200" y="392" class="mono" font-size="18" fill="#e8b75c">= 7 POR PÁGINA</text>
+  <text x="200" y="470" class="body" font-size="20" fill="#a6a5a0">130 × 50 mm cada uno;</text>
+  <text x="200" y="498" class="body" font-size="20" fill="#a6a5a0">rotar al costado aprovecha</text>
+  <text x="200" y="526" class="body" font-size="20" fill="#a6a5a0">el papel sobrante.</text>
+
+  <text x="1120" y="300" class="display" font-size="40" fill="#f3f2ee">900</text>
+  <text x="1120" y="338" class="mono" font-size="16" fill="#a6a5a0">TICKETS</text>
+  <text x="1120" y="410" class="display" font-size="40" fill="#e8b75c">129</text>
+  <text x="1120" y="448" class="mono" font-size="16" fill="#a6a5a0">PÁGINAS</text>
+  <text x="1120" y="520" class="mono" font-size="15" fill="#5fd38a">NUMERACIÓN ÚNICA</text>
+  <text x="1120" y="548" class="mono" font-size="15" fill="#5fd38a">LÍNEAS DE CORTE</text>
+
+  <text x="120" y="848" class="body" font-size="22" fill="#a6a5a0">El generador acomoda los tickets para gastar el mínimo de hojas.</text>
+</svg>

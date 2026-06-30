@@ -1,0 +1,44 @@
+---
+# Decisión de medios (§2.5): mockups SVG compuestos que representan el generador
+# y el layout de impresión A4, fieles a la app desplegada (eventazo.netlify.app).
+# Relación 16:9, alt y dimensiones para CLS 0.
+title: "Eventazo"
+year: 2026
+category: ["tooling", "frontend"]
+summary: "Generador profesional de rifas: crea cientos de tickets numerados y los exporta a PDF optimizado para impresión A4, con vista previa en vivo."
+problem: "Armar una rifa para una institución implica numerar y diseñar cientos de tickets a mano y acomodarlos para imprimir sin desperdiciar papel. Hacía falta generarlos rápido, con numeración única y un layout A4 listo para imprimir y cortar."
+role: "Desarrollo end-to-end: UI de configuración, vista previa en vivo y el motor de generación masiva de PDF en el cliente."
+decisions:
+  - decision: "Generación del PDF en el cliente con pdf-lib"
+    rationale: "Permite generar cientos de tickets sin servidor ni costos, y que el usuario imprima al instante desde el navegador, sin subir datos a ningún lado."
+  - decision: "Layout A4 combinando tickets horizontales y verticales"
+    rationale: "Rotar tickets en el costado aprovecha el espacio sobrante de la hoja: con 130×50 mm entran 7 por página, bajando cientos de hojas a la mínima cantidad."
+  - decision: "Estado global con Zustand y vista previa en tiempo real"
+    rationale: "La configuración (tamaño, márgenes, numeración) se refleja al instante en la vista previa sin re-renderizar todo el PDF en cada cambio, manteniendo la UI fluida."
+challenges:
+  - "Generar cientos de tickets sin bloquear la interfaz, con barra de progreso en tiempo real."
+  - "Garantizar numeración única y líneas de corte precisas para recortar los tickets."
+result: "Una institución genera 900 tickets numerados en un PDF de ~129 páginas, listo para imprimir y cortar, en segundos y desde el navegador."
+stack: ["Next.js", "TypeScript", "Tailwind CSS", "Zustand", "pdf-lib"]
+media:
+  - type: "image"
+    src: "/media/eventazo/cover.svg"
+    alt: "Eventazo: panel de configuración de la rifa a la izquierda y la vista previa de un ticket con su lista de premios y talón de control a la derecha."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/eventazo/print.svg"
+    alt: "Layout de impresión A4 de Eventazo: cinco tickets horizontales más dos verticales rotados al costado, siete por página con líneas de corte."
+    width: 1600
+    height: 900
+links:
+  demo: "https://eventazo.netlify.app/"
+  repo: "https://github.com/elkisser/Eventazo"
+featured: true
+order: 5
+lang: es
+---
+
+Eventazo convierte el armado de una rifa en un trámite de minutos: se configura
+el evento, los premios y la numeración, se previsualiza el ticket en vivo y se
+exporta un PDF listo para imprimir en A4 y cortar, todo en el navegador.

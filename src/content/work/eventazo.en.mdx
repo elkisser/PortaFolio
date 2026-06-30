@@ -1,0 +1,44 @@
+---
+# Media decision (§2.5): composed SVG mockups representing the generator and the
+# A4 print layout, faithful to the deployed app (eventazo.netlify.app). 16:9
+# ratio, alt and dimensions for CLS 0.
+title: "Eventazo"
+year: 2026
+category: ["tooling", "frontend"]
+summary: "Professional raffle generator: builds hundreds of numbered tickets and exports them to a print-ready A4 PDF, with a live preview."
+problem: "Putting together a raffle for an institution means numbering and laying out hundreds of tickets by hand and arranging them to print without wasting paper. They needed to be generated fast, with unique numbering and a print-and-cut-ready A4 layout."
+role: "End-to-end development: the configuration UI, the live preview and the client-side mass PDF generation engine."
+decisions:
+  - decision: "Client-side PDF generation with pdf-lib"
+    rationale: "It generates hundreds of tickets with no server or cost, and lets the user print instantly from the browser without uploading data anywhere."
+  - decision: "A4 layout combining horizontal and vertical tickets"
+    rationale: "Rotating tickets on the side uses the leftover space on the sheet: at 130×50 mm, 7 fit per page, cutting hundreds of sheets down to the minimum."
+  - decision: "Global state with Zustand and a real-time preview"
+    rationale: "The configuration (size, margins, numbering) is reflected instantly in the preview without re-rendering the whole PDF on every change, keeping the UI smooth."
+challenges:
+  - "Generating hundreds of tickets without blocking the UI, with a real-time progress bar."
+  - "Guaranteeing unique numbering and precise cut lines to trim the tickets."
+result: "An institution generates 900 numbered tickets in a ~129-page PDF, ready to print and cut, in seconds and from the browser."
+stack: ["Next.js", "TypeScript", "Tailwind CSS", "Zustand", "pdf-lib"]
+media:
+  - type: "image"
+    src: "/media/eventazo/cover.svg"
+    alt: "Eventazo: a raffle configuration panel on the left and the live preview of a ticket with its prize list and control stub on the right."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/eventazo/print.svg"
+    alt: "Eventazo's A4 print layout: five horizontal tickets plus two vertical ones rotated on the side, seven per page with cut lines."
+    width: 1600
+    height: 900
+links:
+  demo: "https://eventazo.netlify.app/"
+  repo: "https://github.com/elkisser/Eventazo"
+featured: true
+order: 5
+lang: en
+---
+
+Eventazo turns building a raffle into a matter of minutes: configure the event,
+prizes and numbering, preview the ticket live, and export a print-ready A4 PDF to
+cut — all in the browser.

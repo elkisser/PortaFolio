@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Mapeo de Escribanía RM: los datos cargados se posicionan en las coordenadas legales del Formulario 08 y se exportan con pdf-lib">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+    <marker id="erm2-arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M0 0 L8 5 L0 10" fill="none" stroke="#e8b75c" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="120" x2="1480" y2="120"/>
+    <line x1="120" y1="780" x2="1480" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">02 — ESCRIBANÍA RM</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">MAPEO · COORDENADAS LEGALES</text>
+
+  <!-- Izquierda: datos estructurados (de Supabase) -->
+  <text x="120" y="208" class="mono" font-size="20" fill="#a6a5a0">DATOS DEL TRÁMITE</text>
+  <rect x="120" y="236" width="520" height="470" rx="8" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+  <g class="mono" font-size="18">
+    <text x="148" y="290" fill="#a6a5a0">vendedor.nombre</text><text x="620" y="290" fill="#f3f2ee" text-anchor="end">"Pérez, Juan…"</text>
+    <line x1="148" y1="310" x2="612" y2="310" stroke="rgba(255,255,255,0.06)"/>
+    <text x="148" y="350" fill="#a6a5a0">vendedor.dni</text><text x="620" y="350" fill="#f3f2ee" text-anchor="end">28114502</text>
+    <line x1="148" y1="370" x2="612" y2="370" stroke="rgba(255,255,255,0.06)"/>
+    <text x="148" y="410" fill="#a6a5a0">comprador.nombre</text><text x="620" y="410" fill="#f3f2ee" text-anchor="end">"Gómez, María…"</text>
+    <line x1="148" y1="430" x2="612" y2="430" stroke="rgba(255,255,255,0.06)"/>
+    <text x="148" y="470" fill="#a6a5a0">vehiculo.dominio</text><text x="620" y="470" fill="#f3f2ee" text-anchor="end">"AB123CD"</text>
+    <line x1="148" y1="490" x2="612" y2="490" stroke="rgba(255,255,255,0.06)"/>
+    <text x="148" y="530" fill="#a6a5a0">vehiculo.marca</text><text x="620" y="530" fill="#f3f2ee" text-anchor="end">"Toyota"</text>
+    <line x1="148" y1="550" x2="612" y2="550" stroke="rgba(255,255,255,0.06)"/>
+    <text x="148" y="590" fill="#a6a5a0">vehiculo.modelo</text><text x="620" y="590" fill="#f3f2ee" text-anchor="end">"Corolla XEI"</text>
+  </g>
+  <text x="148" y="666" class="mono" font-size="15" fill="#5fd38a">SUPABASE · POSTGRES</text>
+
+  <!-- Centro: pdf-lib mapea a coordenadas -->
+  <line x1="660" y1="460" x2="740" y2="460" stroke="#e8b75c" stroke-width="2" marker-end="url(#erm2-arrow)"/>
+  <text x="700" y="430" class="mono" font-size="15" fill="#e8b75c" text-anchor="middle">pdf-lib</text>
+  <text x="700" y="500" class="mono" font-size="13" fill="#a6a5a0" text-anchor="middle">(x, y)</text>
+
+  <!-- Derecha: el 08 con campos posicionados exactos -->
+  <text x="820" y="208" class="mono" font-size="20" fill="#e8b75c">FORMULARIO 08 OFICIAL</text>
+  <rect x="820" y="236" width="560" height="470" rx="6" fill="#f3f2ee"/>
+  <rect x="820" y="236" width="560" height="470" rx="6" fill="none" stroke="#e8b75c" stroke-opacity="0.5"/>
+  <!-- celdas del formulario con campos posicionados -->
+  <g stroke="#cfcdc4" fill="none">
+    <rect x="848" y="276" width="504" height="64"/>
+    <rect x="848" y="340" width="252" height="64"/>
+    <rect x="1100" y="340" width="252" height="64"/>
+    <rect x="848" y="404" width="504" height="64"/>
+    <rect x="848" y="468" width="168" height="120"/>
+    <rect x="1016" y="468" width="168" height="120"/>
+    <rect x="1184" y="468" width="168" height="120"/>
+  </g>
+  <g class="mono" font-size="11" fill="#9a9890">
+    <text x="856" y="294">APELLIDO Y NOMBRE</text>
+    <text x="856" y="358">DNI</text>
+    <text x="1108" y="358">CUIT</text>
+    <text x="856" y="422">DOMINIO / MARCA / MODELO</text>
+  </g>
+  <g class="body" font-size="16" fill="#1d1d1d">
+    <text x="856" y="326">Pérez, Juan Carlos</text>
+    <text x="856" y="390">28.114.502</text>
+    <text x="1108" y="390">20-28114502-3</text>
+    <text x="856" y="454">AB 123 CD · Toyota · Corolla XEI</text>
+  </g>
+  <!-- resaltes ámbar que muestran el "encaje" exacto -->
+  <g fill="none" stroke="#e8b75c" stroke-width="2" stroke-dasharray="4 4">
+    <rect x="848" y="276" width="504" height="64"/>
+    <rect x="848" y="404" width="504" height="64"/>
+  </g>
+
+  <text x="120" y="848" class="body" font-size="22" fill="#a6a5a0">Cada campo cae en su coordenada legal: un 08 válido, sin plantillas frágiles.</text>
+</svg>

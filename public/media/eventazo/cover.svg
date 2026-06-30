@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Eventazo: panel de configuración de la rifa a la izquierda y vista previa de un ticket con premios y talón de control a la derecha">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">05 — EVENTAZO</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">TOOLING · GENERADOR DE RIFAS</text>
+
+  <!-- Izquierda: panel de configuración -->
+  <text x="120" y="208" class="mono" font-size="20" fill="#a6a5a0">CONFIGURACIÓN</text>
+  <rect x="120" y="236" width="520" height="500" rx="8" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+  <g>
+    <text x="148" y="288" class="mono" font-size="14" fill="#a6a5a0">EVENTO</text>
+    <rect x="148" y="300" width="464" height="48" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <text x="168" y="330" class="body" font-size="18" fill="#f3f2ee">Gran Rifa Día del Padre</text>
+
+    <text x="148" y="384" class="mono" font-size="14" fill="#a6a5a0">N° INICIAL</text>
+    <rect x="148" y="396" width="220" height="48" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <text x="168" y="426" class="body" font-size="18" fill="#f3f2ee">001</text>
+    <text x="392" y="384" class="mono" font-size="14" fill="#a6a5a0">TOTAL</text>
+    <rect x="392" y="396" width="220" height="48" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <text x="412" y="426" class="body" font-size="18" fill="#f3f2ee">900</text>
+
+    <text x="148" y="480" class="mono" font-size="14" fill="#a6a5a0">TICKET (mm)</text>
+    <rect x="148" y="492" width="220" height="48" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <text x="168" y="522" class="body" font-size="18" fill="#f3f2ee">130 × 50</text>
+    <text x="392" y="480" class="mono" font-size="14" fill="#a6a5a0">VALOR</text>
+    <rect x="392" y="492" width="220" height="48" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <text x="412" y="522" class="body" font-size="18" fill="#f3f2ee">$3.000</text>
+
+    <!-- barra de progreso de generación -->
+    <text x="148" y="588" class="mono" font-size="14" fill="#a6a5a0">GENERANDO PDF…</text>
+    <rect x="148" y="600" width="464" height="12" rx="6" fill="#0a0a0b" stroke="rgba(255,255,255,0.12)"/>
+    <rect x="148" y="600" width="320" height="12" rx="6" fill="#e8b75c"/>
+    <text x="612" y="588" class="mono" font-size="14" fill="#e8b75c" text-anchor="end">620 / 900</text>
+
+    <rect x="148" y="640" width="464" height="56" rx="6" fill="#e8b75c"/>
+    <text x="380" y="675" class="mono" font-size="16" fill="#14110a" text-anchor="middle">GENERAR PDF</text>
+  </g>
+
+  <!-- Derecha: vista previa del ticket -->
+  <text x="820" y="208" class="mono" font-size="20" fill="#e8b75c">VISTA PREVIA EN VIVO</text>
+  <rect x="820" y="236" width="560" height="500" rx="8" fill="#0e1424" stroke="#e8b75c" stroke-opacity="0.45"/>
+  <!-- sección principal (72%) -->
+  <text x="848" y="296" class="display" font-size="30" fill="#f4cd7e">Gran Rifa Día del Padre</text>
+  <text x="848" y="324" class="mono" font-size="14" fill="#9fb0cf">ESCUELA N° 71 "PEDRO GOYENA" · SORTEO 19/06/2026</text>
+  <line x1="848" y1="340" x2="1352" y2="340" stroke="rgba(255,255,255,0.12)"/>
+  <text x="848" y="372" class="mono" font-size="14" fill="#9fb0cf">PREMIOS</text>
+  <g class="body" font-size="16" fill="#e7ecf6">
+    <text x="848" y="402">1° Parrilla y accesorios</text>
+    <text x="848" y="430">3° Asado Battisti</text>
+    <text x="848" y="458">5° Cena para dos</text>
+    <text x="1110" y="402">2° Olla</text>
+    <text x="1110" y="430">4° Almuerzo en Garden</text>
+    <text x="1110" y="458">6° Juego de mate</text>
+  </g>
+  <text x="848" y="520" class="display" font-size="40" fill="#f4cd7e">N° 001</text>
+  <text x="1352" y="520" class="display" font-size="34" fill="#e7ecf6" text-anchor="end">$3.000</text>
+  <!-- línea de corte hacia el talón -->
+  <line x1="848" y1="556" x2="1352" y2="556" stroke="#9fb0cf" stroke-width="1.5" stroke-dasharray="8 8"/>
+  <text x="1352" y="552" class="mono" font-size="12" fill="#9fb0cf" text-anchor="end">✂ LÍNEA DE CORTE</text>
+  <!-- talón de control (28%) -->
+  <text x="848" y="596" class="mono" font-size="13" fill="#9fb0cf">TALÓN DE CONTROL</text>
+  <g class="body" font-size="15" fill="#c7d2e6">
+    <text x="848" y="630">Nombre: ____________________</text>
+    <text x="848" y="660">Teléfono: ___________________</text>
+  </g>
+  <text x="1352" y="660" class="display" font-size="28" fill="#f4cd7e" text-anchor="end">N° 001</text>
+
+  <text x="120" y="848" class="display" font-size="26" fill="#f3f2ee">Cientos de tickets numerados, listos para imprimir.</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Next.js · Zustand · pdf-lib</text>
+</svg>

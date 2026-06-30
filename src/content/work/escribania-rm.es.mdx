@@ -1,0 +1,45 @@
+---
+# Decisión de medios (§2.5): mockups SVG compuestos (no capturas crudas) que
+# representan la carga guiada y la generación del Formulario 08, fieles a la app
+# desplegada (escribania-lp.vercel.app). Relación 16:9, alt y dimensiones para CLS 0.
+title: "Escribanía RM"
+year: 2026
+category: ["fullstack", "tooling"]
+summary: "Plataforma para escribanías que digitaliza la transferencia vehicular: carga guiada y generación del Formulario 08 oficial en PDF."
+problem: "Las escribanías completan el Formulario 08 de transferencia vehicular a mano: es lento, propenso a errores de tipeo y difícil de reutilizar entre trámites. Había que digitalizar la carga y generar el 08 oficial sin errores, accesible desde cualquier dispositivo."
+role: "Full Stack — diseño de la plataforma, modelo de datos, autenticación y el motor de generación del PDF oficial del Formulario 08."
+decisions:
+  - decision: "Next.js 16 (App Router) con Supabase para datos y autenticación"
+    rationale: "Un solo stack para la UI, las rutas protegidas y la persistencia; Supabase aporta auth y Postgres gestionados, sin montar y mantener un backend propio para un equipo chico."
+  - decision: "Generación del PDF con pdf-lib mapeando cada campo a su posición legal en el 08"
+    rationale: "El formulario oficial tiene posiciones fijas; mapear los datos a coordenadas produce un PDF válido para presentar, sin plantillas frágiles ni recortes manuales."
+  - decision: "Carga por pasos con sistema de borradores"
+    rationale: "Un trámite reúne muchos datos (vendedor, comprador, vehículo); segmentar la carga y poder guardar borradores evita perder progreso y reduce los errores de tipeo."
+challenges:
+  - "Mapear con precisión cada dato a la posición legal del Formulario 08 oficial."
+  - "Diseñar una carga mobile-first realmente usable tanto en la oficina como en el campo."
+result: "La escribanía carga los datos una vez y obtiene el 08 oficial en PDF listo para imprimir, con historial y borradores; menos errores de carga y trámites notablemente más rápidos."
+stack: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS", "Framer Motion", "pdf-lib"]
+media:
+  - type: "image"
+    src: "/media/escribania-rm/cover.svg"
+    alt: "Escribanía RM: carga guiada por pasos (vendedor, comprador y vehículo) que genera el Formulario 08 oficial en PDF a la derecha."
+    width: 1600
+    height: 900
+  - type: "image"
+    src: "/media/escribania-rm/form.svg"
+    alt: "Detalle del mapeo de Escribanía RM: los datos cargados se posicionan en las coordenadas legales del Formulario 08 y se exportan con pdf-lib."
+    width: 1600
+    height: 900
+links:
+  demo: "https://escribania-lp.vercel.app/"
+  repo: "https://github.com/elkisser/escribania-lp"
+featured: true
+order: 2
+lang: es
+---
+
+Escribanía RM digitaliza el trámite más repetitivo de una escribanía: la
+transferencia de autos y motos. En lugar de tipear el Formulario 08 a mano, el
+operador carga los datos guiado por pasos y la plataforma genera el 08 oficial
+en PDF, con historial y borradores para retomar cualquier trámite.

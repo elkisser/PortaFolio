@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Escribanía RM: carga guiada por pasos que genera el Formulario 08 oficial en PDF">
+  <defs>
+    <style>
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+      .display { font-family: "Space Grotesk", system-ui, sans-serif; }
+      .body { font-family: "Inter", system-ui, sans-serif; }
+    </style>
+    <marker id="erm-arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+      <path d="M0 0 L8 5 L0 10" fill="none" stroke="#e8b75c" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0a0a0b"/>
+  <g stroke="rgba(255,255,255,0.05)" stroke-width="1">
+    <line x1="120" y1="0" x2="120" y2="900"/>
+    <line x1="1480" y1="0" x2="1480" y2="900"/>
+    <line x1="0" y1="120" x2="1600" y2="120"/>
+    <line x1="0" y1="780" x2="1600" y2="780"/>
+  </g>
+
+  <text x="120" y="92" class="mono" font-size="22" fill="#a6a5a0">02 — ESCRIBANÍA RM</text>
+  <text x="1480" y="92" class="mono" font-size="22" fill="#e8b75c" text-anchor="end">FULL STACK · TRÁMITES 08</text>
+
+  <!-- Izquierda: carga guiada por pasos -->
+  <text x="120" y="208" class="mono" font-size="20" fill="#a6a5a0">CARGA GUIADA</text>
+
+  <!-- Stepper -->
+  <g>
+    <circle cx="148" cy="262" r="18" fill="#0a0a0b" stroke="#5fd38a" stroke-width="2"/>
+    <path d="M140 262 l6 6 l10 -12" fill="none" stroke="#5fd38a" stroke-width="2.5" stroke-linecap="square"/>
+    <text x="182" y="269" class="mono" font-size="18" fill="#a6a5a0">VENDEDOR</text>
+
+    <circle cx="148" cy="318" r="18" fill="#e8b75c"/>
+    <text x="148" y="325" class="display" font-size="20" fill="#14110a" text-anchor="middle">2</text>
+    <text x="182" y="325" class="mono" font-size="18" fill="#f3f2ee">COMPRADOR</text>
+
+    <circle cx="148" cy="374" r="18" fill="#0a0a0b" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+    <text x="148" y="381" class="display" font-size="20" fill="#a6a5a0" text-anchor="middle">3</text>
+    <text x="182" y="381" class="mono" font-size="18" fill="#a6a5a0">VEHÍCULO</text>
+    <line x1="148" y1="280" x2="148" y2="300" stroke="rgba(255,255,255,0.15)"/>
+    <line x1="148" y1="336" x2="148" y2="356" stroke="rgba(255,255,255,0.15)"/>
+  </g>
+
+  <!-- Campos del paso activo -->
+  <g>
+    <rect x="120" y="430" width="540" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+    <text x="144" y="460" class="mono" font-size="14" fill="#a6a5a0">APELLIDO Y NOMBRE</text>
+    <text x="144" y="482" class="body" font-size="20" fill="#f3f2ee">Pérez, Juan Carlos</text>
+    <rect x="120" y="502" width="262" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+    <text x="144" y="532" class="mono" font-size="14" fill="#a6a5a0">DNI</text>
+    <text x="144" y="554" class="body" font-size="20" fill="#f3f2ee">28.114.502</text>
+    <rect x="398" y="502" width="262" height="60" rx="6" fill="#101012" stroke="rgba(255,255,255,0.12)"/>
+    <text x="422" y="532" class="mono" font-size="14" fill="#a6a5a0">CUIT / CUIL</text>
+    <text x="422" y="554" class="body" font-size="20" fill="#f3f2ee">20-28114502-3</text>
+    <rect x="120" y="588" width="540" height="52" rx="6" fill="#e8b75c"/>
+    <text x="390" y="621" class="mono" font-size="16" fill="#14110a" text-anchor="middle">GUARDAR Y SIGUIENTE</text>
+  </g>
+
+  <!-- Flecha al PDF -->
+  <line x1="700" y1="430" x2="780" y2="430" stroke="#e8b75c" stroke-width="2" marker-end="url(#erm-arrow)"/>
+
+  <!-- Derecha: Formulario 08 generado (PDF) -->
+  <text x="820" y="208" class="mono" font-size="20" fill="#e8b75c">FORMULARIO 08 · PDF</text>
+  <rect x="820" y="236" width="560" height="500" rx="8" fill="#f3f2ee"/>
+  <rect x="820" y="236" width="560" height="500" rx="8" fill="none" stroke="#e8b75c" stroke-opacity="0.5"/>
+  <text x="850" y="290" class="display" font-size="24" fill="#14110a">Solicitud Tipo "08"</text>
+  <text x="850" y="316" class="mono" font-size="13" fill="#6b6a66">TRANSFERENCIA DE AUTOMOTOR</text>
+  <line x1="850" y1="334" x2="1350" y2="334" stroke="#d9d7cf"/>
+  <g class="body" font-size="15" fill="#3a3a3a">
+    <text x="850" y="372">Vendedor: Pérez, Juan Carlos — DNI 28.114.502</text>
+    <text x="850" y="408">Comprador: Gómez, María Elena — DNI 30.992.187</text>
+    <text x="850" y="444">Dominio: AB 123 CD     Marca: Toyota     Año: 2019</text>
+    <text x="850" y="480">Modelo: Corolla XEI 1.8 CVT</text>
+  </g>
+  <rect x="850" y="510" width="500" height="1" fill="#d9d7cf"/>
+  <g stroke="#b9b7af"><rect x="850" y="540" width="230" height="80" rx="4" fill="none"/><rect x="1120" y="540" width="230" height="80" rx="4" fill="none"/></g>
+  <text x="858" y="636" class="mono" font-size="12" fill="#8a8980">FIRMA VENDEDOR</text>
+  <text x="1128" y="636" class="mono" font-size="12" fill="#8a8980">FIRMA COMPRADOR</text>
+  <rect x="850" y="664" width="160" height="44" rx="6" fill="#14110a"/>
+  <text x="930" y="692" class="mono" font-size="14" fill="#f3f2ee" text-anchor="middle">DESCARGAR PDF</text>
+
+  <text x="120" y="848" class="display" font-size="26" fill="#f3f2ee">Cargás una vez; sale el 08 oficial listo para presentar.</text>
+  <text x="1480" y="848" class="body" font-size="22" fill="#a6a5a0" text-anchor="end">Next.js · Supabase · pdf-lib</text>
+</svg>
